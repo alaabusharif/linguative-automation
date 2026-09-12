@@ -1,0 +1,88 @@
+name: Lead scouting crawler
+
+# Runs crawler/run.py on a schedule from a normal GitHub-hosted runner, which
+# has ordinary internet access — unlike a sandboxed Claude Code session,
+# nothing here is blocked by a network egress policy. See README.md's
+# "Lead-scouting" section for the full picture (this is the "Alternative:
+# crawler/" path made automatic).
+
+on:
+  schedule:
+    # 06:17 UTC daily. Off the hour on purpose so this doesn't pile up with
+    # every other workflow on the planet scheduled for a round hour.
+    - cron: "17 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore previous snapshots
+        uses: actions/cache/restore@v4
+        with:
+          path: data/snapshots
+          key: lead-scouting-snapshots-${{ github.run_id }}
+          restore-keys: |
+            lead-scouting-snapshots-
+
+      - name: Run crawler
+        id: crawl
+        run: |
+          python3 -m crawler.run | tee crawler_output.txt
+          flagged=$(grep -oP 'Flagged: \K[0-9]+' crawler_output.txt || echo 0)
+          echo "flagged=$flagged" >> "$GITHUB_OUTPUT"
+
+      - name: Save snapshots for next run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/snapshots
+          key: lead-scouting-snapshots-${{ github.run_id }}
+
+      - name: Post findings to a tracking issue
+        if: steps.crawl.outputs.flagged != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('data/leads/latest.md', 'utf8');
+            const title = 'Lead scouting: new candidates';
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'lead-scouting',
+            });
+            let issueNumber = issues.find((i) => i.title === title)?.number;
+
+            if (!issueNumber) {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: 'Tracking issue for the automated lead-scouting crawler. Each run that finds new candidates posts a comment below — review and decide what becomes a HubSpot Company/Deal.',
+                labels: ['lead-scouting'],
+              });
+              issueNumber = created.data.number;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body,
+            });
