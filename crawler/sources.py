@@ -11,6 +11,10 @@ Each source is a dict:
              the intended events/news/tenders listing. Sources found via
              web search and not yet hand-checked are marked False so a
              fetch failure is expected/understood rather than alarming.
+  known_issue - optional. Set when a fetch failure has already been
+             diagnosed (bot-blocking, bad SSL cert, wrong path) so the next
+             person doesn't have to re-diagnose it from scratch. Remove
+             once the source is confirmed working.
 
 This list seeds from organizations already in HubSpot as leads (so we know
 they're relevant) plus general Jordan tender portals. Add to it as new
@@ -44,30 +48,48 @@ SOURCES = [
     {
         "key": "british_council_jordan",
         "name": "British Council Jordan",
-        "url": "https://www.britishcouncil.jo/en",
+        "url": "https://www.britishcouncil.jo/en/events",
         "category": "cultural_institute",
         "verified": False,
+        "known_issue": "Returned 403 on both / and /en as of 2026-09-12 — "
+        "looks like bot-blocking (Cloudflare or similar), not a wrong path. "
+        "Switched to the dedicated events page in case that's treated "
+        "differently; if it still 403s, this needs a different fetch "
+        "strategy (e.g. a real browser via Playwright), not another URL.",
     },
     {
         "key": "goethe_institut_jordan",
         "name": "Goethe-Institut Jordan",
-        "url": "https://www.goethe.de/ins/jo/en/index.html",
+        "url": "https://www.goethe.de/ins/jo/en/ver.cfm",
         "category": "cultural_institute",
         "verified": False,
+        "known_issue": "Original /index.html path 403'd as of 2026-09-12 — "
+        "switched to the actual events listing page (ver.cfm), which is "
+        "also just a better target if it works. Same bot-blocking risk as "
+        "British Council above if goethe.de blocks non-browser requests "
+        "site-wide.",
     },
     {
         "key": "ifpo_amman",
         "name": "Institut Français du Proche-Orient (Ifpo) - Amman",
-        "url": "https://www.ifporient.org/en/amman/",
+        "url": "https://www.ifporient.org/a-propos/antennes/amman/",
         "category": "cultural_institute",
         "verified": False,
+        "known_issue": "Original /en/amman/ path failed SSL cert "
+        "verification as of 2026-09-12 (CERTIFICATE_VERIFY_FAILED) — a "
+        "site-side cert config issue, not something a different path "
+        "necessarily fixes. Switched to the French-language Amman page "
+        "found via search; re-check if this still fails.",
     },
     {
         "key": "german_embassy_amman",
         "name": "German Embassy Amman",
-        "url": "https://amman.diplo.de/jo-en",
+        "url": "https://amman.diplo.de/jo-en/",
         "category": "embassy",
         "verified": False,
+        "known_issue": "Original /jo-en (no trailing slash) 404'd as of "
+        "2026-09-12. Added a trailing slash since diplo.de sites are "
+        "sometimes strict about it; re-check if this still 404s.",
     },
     {
         "key": "mercy_corps_jordan",
