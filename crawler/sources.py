@@ -23,7 +23,7 @@ SOURCES = [
     {
         "key": "eurocham_jordan",
         "name": "EuroCham Jordan",
-        "url": "https://eurochamjo.org/",
+        "url": "https://www.eurocham.jo/",
         "category": "chamber",
         "verified": False,
     },
@@ -113,9 +113,9 @@ SOURCES = [
     },
     # --- Tender portals (not yet represented by any HubSpot lead) ---
     {
-        "key": "jordan_gtu_eprocurement",
-        "name": "Jordan Government Tenders Unit (gtu.gov.jo)",
-        "url": "https://gtu.gov.jo/",
+        "key": "jordan_gtd_eprocurement",
+        "name": "Jordan Government Tenders Directorate (gtd.gov.jo)",
+        "url": "http://www.gtd.gov.jo/",
         "category": "tender_portal",
         "verified": False,
     },
