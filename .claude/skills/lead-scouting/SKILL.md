@@ -63,10 +63,15 @@ and reviewed, but not validated end-to-end from within a sandboxed session.)
    (nav menus, footers, cookie notices) — only report content that reads
    like an actual new event or tender announcement.
 
+3a. While you have the page content in front of you, note any contact
+   info visible (email, phone, "contact us" details) — a lead is only
+   useful if there's a way to actually reach the organization. Say
+   explicitly when none was found rather than leaving it out silently.
+
 4. Write `data/leads/latest.md`, replacing its previous contents, with:
    - `## New content worth reviewing` — one subsection per source with
-     new findings: what's new, and your service-line assessment with brief
-     reasoning.
+     new findings: what's new, your service-line assessment with brief
+     reasoning, and any contact info found (or "none found" if so).
    - `## First-time checks` — sources checked for the first time this run
      (baseline only, nothing to compare yet).
    - `## Sources that failed to fetch` — with the reason.

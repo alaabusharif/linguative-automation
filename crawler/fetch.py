@@ -33,6 +33,7 @@ class FetchResult:
     error: str | None = None
     new_lines: list[str] | None = None
     is_first_run: bool = False
+    full_text: str = ""
 
 
 def fetch_html(url: str) -> str:
@@ -71,7 +72,9 @@ def check_source(key: str, url: str) -> FetchResult:
 
     if not path.exists():
         path.write_text(text, encoding="utf-8")
-        return FetchResult(key=key, url=url, ok=True, is_first_run=True, new_lines=[])
+        return FetchResult(
+            key=key, url=url, ok=True, is_first_run=True, new_lines=[], full_text=text
+        )
 
     previous_lines = path.read_text(encoding="utf-8").splitlines()
     current_lines = text.splitlines()
@@ -85,4 +88,4 @@ def check_source(key: str, url: str) -> FetchResult:
     new_lines = [line for line in new_lines if line]
 
     path.write_text(text, encoding="utf-8")
-    return FetchResult(key=key, url=url, ok=True, new_lines=new_lines)
+    return FetchResult(key=key, url=url, ok=True, new_lines=new_lines, full_text=text)

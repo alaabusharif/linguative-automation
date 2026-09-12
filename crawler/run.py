@@ -16,6 +16,7 @@ from __future__ import annotations
 import datetime as dt
 from pathlib import Path
 
+from crawler.contacts import extract_contacts
 from crawler.fetch import check_source
 from crawler.services import EVENT_SIGNAL_WORDS, SERVICE_LINES
 from crawler.sources import SOURCES
@@ -47,6 +48,17 @@ def has_event_signal(lines: list[str]) -> bool:
     return bool(match_keywords(lines, EVENT_SIGNAL_WORDS))
 
 
+def format_contacts(contacts: dict[str, list[str]]) -> str:
+    if not contacts:
+        return "Contact info: none found on the page — check it manually before reaching out"
+    parts = []
+    if contacts.get("emails"):
+        parts.append("email(s) " + ", ".join(contacts["emails"]))
+    if contacts.get("phones"):
+        parts.append("phone(s) " + ", ".join(contacts["phones"]))
+    return "Contact info: " + "; ".join(parts)
+
+
 def run() -> None:
     timestamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     report_lines = [f"# Lead scouting report — {timestamp}", ""]
@@ -64,7 +76,8 @@ def run() -> None:
             continue
 
         if result.is_first_run:
-            first_runs.append(source)
+            contacts = extract_contacts(result.full_text)
+            first_runs.append((source, contacts))
             continue
 
         if not result.new_lines:
@@ -78,12 +91,13 @@ def run() -> None:
             quiet.append(source)
             continue
 
-        flagged.append((source, result.new_lines, tags))
+        contacts = extract_contacts(result.full_text)
+        flagged.append((source, result.new_lines, tags, contacts))
 
     if flagged:
         report_lines.append("## New content worth reviewing")
         report_lines.append("")
-        for source, new_lines, tags in flagged:
+        for source, new_lines, tags, contacts in flagged:
             report_lines.append(f"### {source['name']} ({source['url']})")
             if tags:
                 tag_names = ", ".join(sorted(tags))
@@ -93,6 +107,7 @@ def run() -> None:
                     "Possible service fit: none matched — review manually, "
                     "generic event language only"
                 )
+            report_lines.append(format_contacts(contacts))
             report_lines.append("")
             report_lines.append("New lines since last check (truncated to 15):")
             for line in new_lines[:15]:
@@ -107,8 +122,8 @@ def run() -> None:
     if first_runs:
         report_lines.append("## First-time checks (no baseline yet, nothing to diff)")
         report_lines.append("")
-        for source in first_runs:
-            report_lines.append(f"- {source['name']} ({source['url']})")
+        for source, contacts in first_runs:
+            report_lines.append(f"- {source['name']} ({source['url']}) — {format_contacts(contacts)}")
         report_lines.append("")
 
     if errors:

@@ -20,49 +20,62 @@ tenders that might need one of Linguative's services:
 It does **not** create HubSpot records or decide fit on its own. Each run
 produces `data/leads/latest.md`: a report of what's new on each source page
 since the last run, with an assessment of which service line(s) it might
-need. A person (or a follow-up review step with HubSpot access) reads that
-report and decides what becomes a Company/Deal — in particular, "Match
-Type" on a Deal stays a human judgment call, never something automated here.
+need and any contact info (email/phone) found on the page (`crawler/contacts.py`
+— a coarse regex pass, not a verified directory entry: still needs a human
+to confirm it's the right contact before anyone reaches out). A person (or
+a follow-up review step with HubSpot access) reads that report and decides
+what becomes a Company/Deal — in particular, "Match Type" on a Deal stays a
+human judgment call, never something automated here.
 
-There are two implementations, for two different ways of running this:
+The actual crawling logic lives in `crawler/` (Python, `requests` +
+BeautifulSoup, keyword-based service tagging). It **cannot run inside a
+sandboxed Claude Code session** — outbound requests to arbitrary hosts get
+blocked by network policy there (confirmed for both raw HTTP and Claude's
+own WebFetch tool). It needs to run somewhere with normal internet access.
+Two ways to do that:
 
-### Primary: `.claude/skills/lead-scouting/SKILL.md` (runs inside Claude)
+### Recommended: `.github/workflows/lead-scouting.yml` (automatic)
 
-A skill a Claude Code session (including a scheduled one) can invoke
-directly. It fetches each source with the **WebFetch** tool instead of raw
-HTTP, which matters because Claude Code sessions route outbound HTTP through
-a proxy that blocks arbitrary destination hosts — WebFetch goes through
-Anthropic's own infrastructure instead, so it isn't subject to that block.
-It also judges service-line fit with actual reasoning about each new
-listing, rather than keyword matching.
+Runs `crawler/run.py` on a GitHub-hosted runner once a day (06:17 UTC) plus
+on manual trigger. GitHub's runners have ordinary internet access, so
+nothing here is blocked the way it is in a Claude session. It:
 
-To run it now, ask Claude (in a session with access to this repo) to "run
-the lead-scouting skill". To run it on a recurring cadence, set up a
-recurring scheduled task on your Claude account with a prompt like "Run the
-lead-scouting skill" pointed at this repo — see the skill file's
-"Scheduling this" section for why a session-local cron isn't a substitute.
+- Keeps `data/snapshots/` between runs using GitHub's build cache (so it
+  can tell what's *new* each day, not just what's on the page right now).
+- Posts a comment on a tracking issue (labeled `lead-scouting`, created
+  automatically) **only** on days something new was actually flagged — a
+  quiet day produces no comment, so the issue doesn't turn into noise.
 
-### Alternative: `crawler/` (a plain Python script)
+One-time setup required: go to **Settings → Actions → General → Workflow
+permissions** on this repo and select **"Read and write permissions"**
+(default is usually read-only, which would silently stop the workflow from
+posting to issues). Nothing else to configure — the workflow will start
+firing on its own schedule once that's flipped, and you can also trigger it
+immediately from the **Actions** tab → "Lead scouting crawler" → "Run
+workflow" to test it without waiting for the schedule.
 
-Same idea, implemented with `requests` + BeautifulSoup and keyword matching
-instead of an LLM's judgment. Useful if you'd rather run this from your own
-machine or a scheduled CI job (e.g. GitHub Actions) than depend on a Claude
-session being scheduled.
+### Manual: run it yourself
 
 ```
 pip install -r requirements.txt
 python3 -m crawler.run
 ```
 
-The first run against any given source just saves a baseline snapshot and
-reports nothing (there's nothing to diff against yet) — that's expected.
+Useful for a one-off check, or for testing changes to `crawler/sources.py`
+before they go live in the scheduled run. First run against any given
+source just saves a baseline snapshot and reports nothing (nothing to diff
+against yet) — that's expected. Hand-check sources marked `verified: False`
+in `crawler/sources.py` — several were found via web search and not yet
+confirmed to be the right events/news page.
 
-**This script cannot run inside a sandboxed Claude Code session** — that's
-exactly why the skill above exists as the primary path. Run it once from an
-environment with normal outbound internet access and hand-check the sources
-that fail (see `verified: False` in `crawler/sources.py`; several site paths
-were found via web search and not yet confirmed to be the right events/news
-page).
+### Unverified: `.claude/skills/lead-scouting/SKILL.md`
+
+An attempt at a Claude-native version using the WebFetch tool instead of
+raw HTTP. Tested live against 5 real domains from a sandboxed session and
+all 5 failed (WebFetch is also subject to a network egress block there) —
+so this is **not currently a working path**, kept in the repo mainly as a
+documented dead end and a starting point if someone wants to retry it with
+a WebSearch-based approach instead (see the skill file for details).
 
 ### Adding or fixing sources
 
