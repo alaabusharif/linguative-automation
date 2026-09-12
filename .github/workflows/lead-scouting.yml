@@ -52,6 +52,14 @@ jobs:
           path: data/snapshots
           key: lead-scouting-snapshots-${{ github.run_id }}
 
+      - name: Upload report as an artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lead-scouting-report
+          path: data/leads/latest.md
+          retention-days: 30
+
       - name: Post findings to a tracking issue
         if: steps.crawl.outputs.flagged != '0'
         uses: actions/github-script@v7
