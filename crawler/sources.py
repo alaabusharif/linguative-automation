@@ -29,7 +29,7 @@ SOURCES = [
         "name": "EuroCham Jordan",
         "url": "https://www.eurocham.jo/",
         "category": "chamber",
-        "verified": False,
+        "verified": True,
     },
     {
         "key": "amcham_jordan",
@@ -51,11 +51,10 @@ SOURCES = [
         "url": "https://www.britishcouncil.jo/en/events",
         "category": "cultural_institute",
         "verified": False,
-        "known_issue": "Returned 403 on both / and /en as of 2026-09-12 — "
-        "looks like bot-blocking (Cloudflare or similar), not a wrong path. "
-        "Switched to the dedicated events page in case that's treated "
-        "differently; if it still 403s, this needs a different fetch "
-        "strategy (e.g. a real browser via Playwright), not another URL.",
+        "known_issue": "CONFIRMED 2026-09-12: 403 on /, /en, AND /en/events "
+        "— this is site-wide bot-blocking (Cloudflare or similar), not a "
+        "path problem. A different URL will not fix this. Needs a real "
+        "browser (e.g. Playwright) to fetch at all, or drop this source.",
     },
     {
         "key": "goethe_institut_jordan",
@@ -63,11 +62,9 @@ SOURCES = [
         "url": "https://www.goethe.de/ins/jo/en/ver.cfm",
         "category": "cultural_institute",
         "verified": False,
-        "known_issue": "Original /index.html path 403'd as of 2026-09-12 — "
-        "switched to the actual events listing page (ver.cfm), which is "
-        "also just a better target if it works. Same bot-blocking risk as "
-        "British Council above if goethe.de blocks non-browser requests "
-        "site-wide.",
+        "known_issue": "CONFIRMED 2026-09-12: 403 on both /index.html and "
+        "the dedicated events page /ver.cfm — site-wide bot-blocking, same "
+        "as British Council above. A different URL will not fix this.",
     },
     {
         "key": "ifpo_amman",
@@ -75,11 +72,12 @@ SOURCES = [
         "url": "https://www.ifporient.org/a-propos/antennes/amman/",
         "category": "cultural_institute",
         "verified": False,
-        "known_issue": "Original /en/amman/ path failed SSL cert "
-        "verification as of 2026-09-12 (CERTIFICATE_VERIFY_FAILED) — a "
-        "site-side cert config issue, not something a different path "
-        "necessarily fixes. Switched to the French-language Amman page "
-        "found via search; re-check if this still fails.",
+        "known_issue": "CONFIRMED 2026-09-12: SSL cert verification fails "
+        "on both /en/amman/ and /a-propos/antennes/amman/ — this is the "
+        "site's own broken cert chain, not a path issue. The only fix is a "
+        "deliberate, scoped exception to skip cert verification for this "
+        "one source (not a decision to make silently — flag it for "
+        "approval), or drop this source.",
     },
     {
         "key": "german_embassy_amman",
@@ -87,9 +85,10 @@ SOURCES = [
         "url": "https://amman.diplo.de/jo-en/",
         "category": "embassy",
         "verified": False,
-        "known_issue": "Original /jo-en (no trailing slash) 404'd as of "
-        "2026-09-12. Added a trailing slash since diplo.de sites are "
-        "sometimes strict about it; re-check if this still 404s.",
+        "known_issue": "CONFIRMED 2026-09-12: 404 on /jo-en and /jo-en/ "
+        "(trailing slash didn't help). The working path structure needs "
+        "more digging (diplo.de sites often nest under a long slug, not a "
+        "bare language-root) — low priority for one embassy site.",
     },
     {
         "key": "mercy_corps_jordan",
@@ -139,6 +138,6 @@ SOURCES = [
         "name": "Jordan Government Tenders Directorate (gtd.gov.jo)",
         "url": "http://www.gtd.gov.jo/",
         "category": "tender_portal",
-        "verified": False,
+        "verified": True,
     },
 ]
