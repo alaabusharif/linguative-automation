@@ -92,3 +92,22 @@ once you've confirmed the URL is right).
 
 Service-line keyword hints live in `crawler/services.py` — they're a coarse
 first pass to flag candidate pages, not a verdict.
+
+## Lead-to-deal
+
+`.claude/skills/lead-to-deal/SKILL.md` is the next step after lead-scouting:
+it reads the "Lead scouting: new candidates" GitHub issue, checks each new
+entry against HubSpot for duplicates, and proposes a Company + Deal (RFQ
+Pipeline, stage "New") for approval — nothing gets created without a human
+saying yes. It never sets "Match Type" or drafts a proposal; those stay
+separate steps.
+
+Run it by asking Claude (in a session with access to both this repo and
+HubSpot) to "process new leads." Unlike `lead-scouting`, this isn't a good
+fit for a fully unattended schedule — it asks for approval on every
+proposed record, so whatever triggers it needs to be able to surface that
+approval prompt to a person rather than silently skip it.
+
+State (which issue comments have already been turned into a proposal) lives
+in `data/leads/processed_comments.json`, committed to the repo so it
+persists across runs.
