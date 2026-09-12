@@ -2,11 +2,11 @@
 
 Automation for Linguative's RFQ/lead pipeline in HubSpot.
 
-## Lead-scouting crawler
+## Lead-scouting
 
-`crawler/` checks a list of Jordan-based organizations (chambers, cultural
-institutes, embassies, NGOs, conference organizers, tender portals) for new
-events or tenders that might need one of Linguative's services:
+Checks a list of Jordan-based organizations (chambers, cultural institutes,
+embassies, NGOs, conference organizers, tender portals) for new events or
+tenders that might need one of Linguative's services:
 
 - Translation
 - Certified / legal translation
@@ -18,14 +18,36 @@ events or tenders that might need one of Linguative's services:
 - Desktop publishing
 
 It does **not** create HubSpot records or decide fit on its own. Each run
-produces `data/leads/latest.md`: a diff-based report of what's new on each
-source page since the last run, tagged with which service line(s) the new
-text plausibly matches. A person (or a follow-up review step with HubSpot
-access) reads that report and decides what becomes a Company/Deal — in
-particular, "Match Type" on a Deal stays a human judgment call, never
-something the crawler sets.
+produces `data/leads/latest.md`: a report of what's new on each source page
+since the last run, with an assessment of which service line(s) it might
+need. A person (or a follow-up review step with HubSpot access) reads that
+report and decides what becomes a Company/Deal — in particular, "Match
+Type" on a Deal stays a human judgment call, never something automated here.
 
-### Running it
+There are two implementations, for two different ways of running this:
+
+### Primary: `.claude/skills/lead-scouting/SKILL.md` (runs inside Claude)
+
+A skill a Claude Code session (including a scheduled one) can invoke
+directly. It fetches each source with the **WebFetch** tool instead of raw
+HTTP, which matters because Claude Code sessions route outbound HTTP through
+a proxy that blocks arbitrary destination hosts — WebFetch goes through
+Anthropic's own infrastructure instead, so it isn't subject to that block.
+It also judges service-line fit with actual reasoning about each new
+listing, rather than keyword matching.
+
+To run it now, ask Claude (in a session with access to this repo) to "run
+the lead-scouting skill". To run it on a recurring cadence, set up a
+recurring scheduled task on your Claude account with a prompt like "Run the
+lead-scouting skill" pointed at this repo — see the skill file's
+"Scheduling this" section for why a session-local cron isn't a substitute.
+
+### Alternative: `crawler/` (a plain Python script)
+
+Same idea, implemented with `requests` + BeautifulSoup and keyword matching
+instead of an LLM's judgment. Useful if you'd rather run this from your own
+machine or a scheduled CI job (e.g. GitHub Actions) than depend on a Claude
+session being scheduled.
 
 ```
 pip install -r requirements.txt
@@ -34,33 +56,13 @@ python3 -m crawler.run
 
 The first run against any given source just saves a baseline snapshot and
 reports nothing (there's nothing to diff against yet) — that's expected.
-Later runs report new lines since the previous snapshot.
 
-### Known limitation: where this can actually run
-
-**This script cannot run inside a sandboxed Claude Code session** (the kind
-this repo was built in). Those sessions route outbound HTTPS through a
-policy-enforcing proxy that only allows package registries and Anthropic's
-own APIs — arbitrary destination hosts (every source in `crawler/sources.py`)
-get a `403` policy denial. That's a hard org-level restriction, not a bug to
-route around.
-
-This code is meant to run somewhere with normal outbound internet access:
-your own machine, a scheduled CI job (e.g. a GitHub Actions cron workflow),
-or any server you control. It has not yet been run end-to-end against the
-real sites because of the sandbox restriction above — run it once from an
-unrestricted environment and hand-check the sources that fail (see
-`verified: False` in `crawler/sources.py`; several site paths were found via
-web search and not yet confirmed to be the right events/news page).
-
-If instead you want this to run *as a Claude scheduled task* (like the
-existing routine that already populated some HubSpot leads with "automated
-Jordan event-scouting routine" in their description), that needs a
-different implementation: one that uses Claude's own WebFetch/WebSearch
-tools instead of raw HTTP requests, since those aren't subject to the same
-proxy allowlist. That's a separate, agent-driven approach rather than a
-standalone script — worth doing only if you'd rather not manage a server/CI
-job for this.
+**This script cannot run inside a sandboxed Claude Code session** — that's
+exactly why the skill above exists as the primary path. Run it once from an
+environment with normal outbound internet access and hand-check the sources
+that fail (see `verified: False` in `crawler/sources.py`; several site paths
+were found via web search and not yet confirmed to be the right events/news
+page).
 
 ### Adding or fixing sources
 
