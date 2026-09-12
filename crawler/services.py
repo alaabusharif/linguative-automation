@@ -1,12 +1,27 @@
 """Linguative's service lines and the keyword hints used to flag which of
 them a scouted event/tender page plausibly needs.
 
+This list was corrected against linguative.net (the company's own site) —
+event/conference management and editing/proofreading were missing from an
+earlier version built off an incomplete rate card. Re-check against the
+site if this list is being extended again; don't just extrapolate from
+what's already here.
+
 Keyword matching is a coarse first pass, not a verdict — it tags candidate
 pages so a human (or a follow-up review step) knows what to look for. It
 never decides Match Type or creates HubSpot records by itself.
 """
 
 SERVICE_LINES = {
+    "event_conference_management": [
+        "event management", "conference management", "event planning",
+        "conference coordination", "delegate management", "event logistics",
+        "onsite event support", "event production",
+    ],
+    "editing_proofreading": [
+        "editing", "proofreading", "copyediting", "copy editing",
+        "revision service", "manuscript review",
+    ],
     "translation": [
         "translation", "translate", "translated", "translator",
         "document translation",

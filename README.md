@@ -12,10 +12,16 @@ tenders that might need one of Linguative's services:
 - Certified / legal translation
 - Interpretation
 - AV equipment
+- Event / conference management
+- Editing / proofreading
 - Localization
 - Subtitling / voiceover
 - Transcription
 - Desktop publishing
+
+(Verified against [linguative.net](https://linguative.net) — event/conference
+management in particular is a headline service that was missing from an
+earlier version of this list.)
 
 It does **not** create HubSpot records or decide fit on its own. Each run
 produces `data/leads/latest.md`: a report of what's new on each source page
