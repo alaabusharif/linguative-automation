@@ -45,6 +45,10 @@ jobs:
           flagged=$(grep -oP 'Flagged: \K[0-9]+' crawler_output.txt || echo 0)
           echo "flagged=$flagged" >> "$GITHUB_OUTPUT"
 
+      - name: Print report to the job log
+        if: always()
+        run: cat data/leads/latest.md
+
       - name: Save snapshots for next run
         if: always()
         uses: actions/cache/save@v4
