@@ -19,11 +19,15 @@ those stay separate, later, human-gated steps.
    `.github/workflows/lead-scouting.yml`). If it doesn't exist, there's
    nothing to process — say so and stop.
 
-2. Read `data/leads/processed_comments.json` in this repo (create it with
-   an empty list if missing). It's the list of comment IDs on that issue
-   already turned into a proposal (approved or explicitly declined) — skip
-   these. This file is the only state this skill tracks; it's what stops
-   the same lead being proposed twice across runs.
+2. Read `data/leads/processed_comments.json` in this repo (create it as
+   `[]` if missing). Each entry is `{comment_id, issue_number,
+   processed_at, entries: [{source, outcome, reason}]}` — one record per
+   already-handled comment, with per-source-entry outcomes
+   (`created` / `declined` / `duplicate`) and a short reason. Skip any
+   comment whose ID is already in this file. This file is the only state
+   this skill tracks and the audit trail of why each lead was or wasn't
+   turned into a Deal; it's what stops the same lead being proposed twice
+   across runs.
 
 3. Read all comments on the issue. For each comment not in the processed
    list, parse its "## New content worth reviewing" section — one
