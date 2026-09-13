@@ -10,5 +10,22 @@
         "reason": "False positive — flagged content was page navigation text (\"Home\", \"About JCC\", \"Board Members\", \"Commercial delegations\"), not a real new event or tender. Company already exists in HubSpot from a prior routine with a legitimate opportunity (Jordan-Brazil trade delegation); no Deal was created off this noisy diff."
       }
     ]
+  },
+  {
+    "comment_id": 5652007589,
+    "issue_number": 2,
+    "processed_at": "2026-09-13T09:09:37Z",
+    "entries": [
+      {
+        "source": "Jordan-EU Investment Conference (JEIC) 2026",
+        "outcome": "created",
+        "reason": "Existing Company (447726913730) had a stale 21 Apr 2026 date; updated its description with the confirmed 19 Nov 2026 reschedule and service-fit assessment. No Deal created (matches existing pattern — this Company has none either)."
+      },
+      {
+        "source": "High-Level Conference on Humanity in War",
+        "outcome": "created",
+        "reason": "No existing Company matched a search for \"ICRC Humanity in War\". Created Company 447756672199 (\"Humanity in War Conference 2026 (Jordan MOFA / ICRC)\") with event date, organizers, and service-fit assessment logged in the description. No Contact created (no individual name available). No Deal created, consistent with sibling leads."
+      }
+    ]
   }
 ]
