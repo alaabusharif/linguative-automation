@@ -27,5 +27,17 @@
         "reason": "No existing Company matched a search for \"ICRC Humanity in War\". Created Company 447756672199 (\"Humanity in War Conference 2026 (Jordan MOFA / ICRC)\") with event date, organizers, and service-fit assessment logged in the description. No Contact created (no individual name available). No Deal created, consistent with sibling leads."
       }
     ]
+  },
+  {
+    "comment_id": 5645799262,
+    "issue_number": 2,
+    "processed_at": "2026-09-15T00:00:00Z",
+    "entries": [
+      {
+        "source": "Jordan Chamber of Commerce",
+        "outcome": "declined",
+        "reason": "Same false positive as comment 5645281954 — flagged content is page navigation text (\"Home\", \"About JCC\", \"Board Members\", \"Commercial delegations\"), not a real new event or tender. No action needed; already declined once for this exact pattern. The two first-time-check entries in this comment (EuroCham Jordan, Jordan Government Tenders Directorate) were baselines only, nothing to action."
+      }
+    ]
   }
 ]
