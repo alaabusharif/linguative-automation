@@ -1,0 +1,12 @@
+Lead-scouting snapshot: german_embassy_amman (German Embassy Amman)
+Method: WebSearch (WebFetch blocked; site also known to 404 on known
+paths per crawler/sources.py known_issue)
+Date: 2026-09-15
+
+Findings:
+- No specific 2026 event listing surfaced via search. General contact/
+  background info only.
+- Contact found: Benghasi Street 25, Jabal Amman; phone +962 6 590 1170;
+  email info@amman.diplo.de. Most embassy services are appointment-based.
+
+Sources: auswaertiges-amt.de, embassypages.com

@@ -1,0 +1,19 @@
+Lead-scouting snapshot: mercy_corps_jordan (Mercy Corps Jordan)
+Method: WebSearch (WebFetch blocked in this environment)
+Date: 2026-09-15
+
+Findings:
+- Organizational rebrand: Mercy Corps begins rebranding to "Prosper
+  Global" starting September 2026 — worth tracking in case the name
+  changes in future scouting runs / HubSpot records.
+- Validation workshop (May 2026) with Ministry of Environment under the
+  Tabeaa Project — Local Advocacy Committees reviewing/refining advocacy
+  plans; implementation runs mid-May to end of Nov 2026.
+- Climate Resilience Roundtable (Aug 2026) with Ministry of Environment
+  and Al Hussein Technical University — public-private roundtable on
+  climate-smart solutions, govt/private-sector/financing attendees.
+- Active tenders page exists: jordan.mercycorps.org/tenders — solicits
+  quotations from qualified vendors on an ongoing basis (worth checking
+  directly for open vendor RFQs in future runs).
+
+Sources: jordan.mercycorps.org, petra.gov.jo

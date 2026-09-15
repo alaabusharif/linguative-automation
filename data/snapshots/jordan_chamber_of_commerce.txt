@@ -1,0 +1,18 @@
+Lead-scouting snapshot: jordan_chamber_of_commerce (Jordan Chamber of Commerce)
+Method: WebSearch (WebFetch blocked in this environment)
+Date: 2026-09-15
+
+Findings:
+- Amman Chamber of Commerce has scheduled outbound international trade
+  exhibitions through 2026: Morocco (Jul 1-4), India (Jul 14-17 and Dec
+  4-9), China (Sep 16-18), Turkey (Sep 29-Oct 2), Iraq (Dec 15-18) —
+  outbound delegations, not Amman-hosted.
+- Food Expo 2026 (Damascus) — Jordanian pavilion opened by JCC chairman.
+- Franchise & Trade Agencies Expo 2026 — hosted in Amman, June 9-10 2026,
+  organized by Bana Conferences and Exhibitions + Iraqi Business Council
+  in Jordan.
+- JCC delegation participated in Islamic Chamber of Commerce 41st General
+  Assembly and Makkah Halal Forum 2026 (3rd edition) — outbound, Mecca.
+- Events listing page: https://ammanchamber.org.jo/en/events
+
+Sources: petra.gov.jo, ammanchamber.org.jo, ibcjordan.org

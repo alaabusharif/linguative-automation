@@ -1,0 +1,16 @@
+Lead-scouting snapshot: gh4t (Global Horizon Training Center (GH4T))
+Method: WebSearch (WebFetch blocked in this environment)
+Date: 2026-09-15
+
+Findings:
+- Address: 6 Beirut Street, Fifth Circle, Abdoun, P.O. Box 831370, 11183
+  Amman, Jordan.
+- Multi-city training provider (Amman, London, Paris, Cairo, Istanbul,
+  Barcelona, Madrid, Rome, Amsterdam, Dubai, Kuwait, Muscat, Salalah).
+- 2026 Amman courses found: "Financial Evaluation and Modeling", "Agile
+  Thinking in a Changing Business World", "Enhancing the Skills of
+  Training Coordinators" (Amman, Mar 8-12 2026).
+- Routine recurring training courses, similar profile to gentex_training —
+  no standout large multilingual event identified this run.
+
+Sources: gh4t.com, gh4tplus.com

@@ -1,0 +1,19 @@
+Lead-scouting snapshot: horeca_jordan (HORECA Jordan)
+Method: WebSearch (WebFetch blocked in this environment)
+Date: 2026-09-15
+
+Findings:
+- HORECA Jordan 2026 (11th edition) — October 11-13 2026, Jordan
+  International Exhibition Center, Mecca Mall, Amman. Premier annual
+  hospitality/foodservice exhibition. 17,000+ visitors expected,
+  10,000+ sqm, 300+ exhibitors, 600+ brands. International participation
+  from Palestine, Iraq, Egypt plus international pavilions. Full calendar
+  of talks, shows, competitions alongside the exhibition floor.
+- This is a large, imminent (< 1 month out from this run), multinational
+  trade exhibition with a conference/talks program — strong candidate for
+  on-site interpretation/AV and exhibitor material translation, though the
+  short lead time (event is in ~4 weeks) limits what Linguative could
+  realistically pitch for THIS edition; worth flagging early for the 2027
+  edition instead.
+
+Sources: hospitalitynewsmag.com, tradeindia.com, withorbital.com, horeca-jordan.com

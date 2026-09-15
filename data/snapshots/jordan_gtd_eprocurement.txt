@@ -1,0 +1,19 @@
+Lead-scouting snapshot: jordan_gtd_eprocurement (Jordan Government Tenders
+Directorate, gtd.gov.jo)
+Method: WebSearch (WebFetch blocked in this environment)
+Date: 2026-09-15
+
+Findings:
+- Confirmed live: gtd.gov.jo serves Arabic/English tender listings;
+  established 1982, under Ministry of Public Works and Housing. Example
+  tender found: Central Bid No. 72/2026 — Maintenance of Various Parts of
+  the Jordan Valley Road (civil works, not language-services relevant).
+- No translation/interpretation-specific tender surfaced via search this
+  run. This portal covers general government procurement (mostly civil
+  works/goods) rather than event/conference or language-services RFQs —
+  UNGM (ILO/UNDP/UNHCR notices) proved a much richer source for
+  interpretation/event-management RFQs this run (see look-alike
+  prospects section of latest.md). Consider adding UNGM Jordan-filtered
+  notices as a dedicated source in a future update to sources.py.
+
+Sources: gtd.gov.jo, jordan.gov.jo, portal.jordan.gov.jo

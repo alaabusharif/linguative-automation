@@ -1,0 +1,27 @@
+Lead-scouting snapshot: jeic_2026 (Jordan-EU Investment Conference (JEIC) 2026)
+Method: WebSearch (WebFetch blocked in this environment)
+Date: 2026-09-15
+
+Findings:
+- Confirmed date: 19 November 2026, at King Hussein Bin Talal Convention
+  Center (KHTCC), Dead Sea, Jordan. Rescheduled from an original April
+  2026 date due to regional logistical challenges.
+- Under Royal Patronage of King Abdullah II; European Commission President
+  Ursula von der Leyen confirmed to attend. Marks operational launch of
+  the EU-Jordan Strategic and Comprehensive Partnership, mobilizing a
+  EUR 3 billion EU support package.
+- Audience: "select group of major" global companies/investors, European
+  financial/development institution reps, public and private sector
+  leaders. Sectors: green energy, water, digital infrastructure, critical
+  minerals, IT/digital services, mining, food processing, agriculture,
+  tourism.
+- This is a high-profile bilingual/multilingual (EN/AR/FR likely, given EU
+  and Jordanian officials) diplomatic-investment conference roughly 2
+  months out from this run — strong candidate for simultaneous
+  interpretation, AV/booth equipment, and delegate document translation.
+- App exists: "JO-EU Investment Conference" (Google Play) — event has an
+  official companion app, suggesting a formally organized, well-resourced
+  event.
+
+Sources: north-africa-middle-east-gulf.ec.europa.eu, petra.gov.jo,
+eeas.europa.eu, jeic.invest.jo

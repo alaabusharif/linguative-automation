@@ -1,0 +1,17 @@
+Lead-scouting snapshot: british_council_jordan (British Council Jordan)
+Method: WebSearch (WebFetch blocked in this environment; site is also
+known to 403-block direct fetches per crawler/sources.py known_issue)
+Date: 2026-09-15
+
+Findings:
+- MENA UK Study Tour 2026 (12th edition) — Jan 18-24 2026, London/Cambridge.
+  17 Jordanian partner schools, 46 senior education leaders + Ministry of
+  Education reps from Egypt, Jordan, Saudi Arabia, Iraq, Morocco, Lebanon.
+  Theme: "Where Vision Meets Practice: Leadership, Wellbeing and AI for
+  Safer, Smarter Schools." This is an outbound UK-based tour, not an
+  Amman-hosted event.
+- Search noted the live events page (britishcouncil.jo/en/events) "shows
+  there are no events listed at the moment" as of the search snapshot.
+- Contact found: +962 6 460 3420 (British Council Jordan phone).
+
+Sources: britishcouncil.jo/en/about/press, zawya.com

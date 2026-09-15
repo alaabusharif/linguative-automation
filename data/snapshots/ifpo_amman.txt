@@ -1,0 +1,23 @@
+Lead-scouting snapshot: ifpo_amman (Institut Français du Proche-Orient - Amman)
+Method: WebSearch (WebFetch blocked; site also known to fail SSL cert
+verification per crawler/sources.py known_issue)
+Date: 2026-09-15
+
+Findings:
+- Workshop "Field practices and epistemological issues, Palestine and
+  Jordan" — July 1 2026, Amman (preceded by a June 30 2026 presentation of
+  journal REMMM at the French Institute of Amman). Academic workshop,
+  submission deadline was 27 March 2026.
+- "Energy Across Scales: City, Transition, Region" conference — Sat 22
+  Aug 2026, Amman. Co-organized with Sciences Po CERI, CBRL, and the Arab
+  Center for Research in Amman. Academic/policy conference on energy
+  urbanism, renewables, political economy of energy.
+- July 2026 intensive Arabic course sessions (Beirut + Amman), native
+  Lebanese/Jordanian/Syrian instructors.
+- Theatre-related events, April 2026 (HunaʿAmmān performance, collective
+  writing session).
+- These are academic/research-institute scale events — smaller audiences
+  than trade/diplomatic conferences, but multi-lingual (French/Arabic/
+  English) academic content that could need translation/proofreading.
+
+Sources: ifporient.org (workshop, conference, and Amman antenna pages)
