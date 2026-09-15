@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+/**
+ * Linguative design tokens.
+ * Palette: deep navy / champagne gold / warm ivory / restrained charcoal.
+ * Scale: golden ratio (phi ≈ 1.618) drives the type and spacing steps below —
+ * applied to layout rhythm and hierarchy, not to every value.
+ */
+:root {
+  /* Navy */
+  --color-navy-950: #060d1c;
+  --color-navy-900: #0a1730;
+  --color-navy-800: #122448;
+  --color-navy-700: #1b3260;
+  --color-navy-600: #274177;
+
+  /* Champagne gold */
+  --color-gold-100: #f4ead2;
+  --color-gold-200: #e8d6a9;
+  --color-gold-400: #cdab6c;
+  --color-gold-500: #bd9a56;
+  --color-gold-600: #a3813f;
+  --color-gold-700: #7c6330;
+
+  /* Warm ivory */
+  --color-ivory-50: #fbf9f4;
+  --color-ivory-100: #f6f1e6;
+  --color-ivory-200: #eee5d1;
+
+  /* Restrained charcoal */
+  --color-charcoal-900: #1c1c1f;
+  --color-charcoal-700: #38393e;
+  --color-charcoal-500: #63656c;
+  --color-charcoal-300: #9a9ca3;
+
+  --color-background: var(--color-ivory-50);
+  --color-foreground: var(--color-navy-950);
+
+  /* Golden-ratio type scale (phi = 1.618), base = 1rem body copy */
+  --text-eyebrow: 0.618rem;
+  --text-small: 0.85rem;
+  --text-body: 1rem;
+  --text-lead: 1.272rem;
+  --text-h4: 1.618rem;
+  --text-h3: 2.058rem;
+  --text-h2: 2.618rem;
+  --text-h1: 3.5rem;
+  --text-display: 4.236rem;
+  --text-display-lg: 5.883rem;
+
+  /* Golden-ratio spacing scale */
+  --space-3xs: 0.236rem;
+  --space-2xs: 0.382rem;
+  --space-xs: 0.618rem;
+  --space-sm: 1rem;
+  --space-md: 1.618rem;
+  --space-lg: 2.618rem;
+  --space-xl: 4.236rem;
+  --space-2xl: 6.854rem;
+  --space-3xl: 11.09rem;
+
+  /* Golden-section content widths */
+  --width-content: 76.4rem;
+  --width-narrow: 47.2rem;
+  --width-minor: 29.2rem;
+}
+
+@theme inline {
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-navy-700: var(--color-navy-700);
+  --color-navy-600: var(--color-navy-600);
+
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+
+  --color-ivory-50: var(--color-ivory-50);
+  --color-ivory-100: var(--color-ivory-100);
+  --color-ivory-200: var(--color-ivory-200);
+
+  --color-charcoal-900: var(--color-charcoal-900);
+  --color-charcoal-700: var(--color-charcoal-700);
+  --color-charcoal-500: var(--color-charcoal-500);
+  --color-charcoal-300: var(--color-charcoal-300);
+
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+
+  --text-eyebrow: var(--text-eyebrow);
+  --text-small: var(--text-small);
+  --text-body: var(--text-body);
+  --text-lead: var(--text-lead);
+  --text-h4: var(--text-h4);
+  --text-h3: var(--text-h3);
+  --text-h2: var(--text-h2);
+  --text-h1: var(--text-h1);
+  --text-display: var(--text-display);
+  --text-display-lg: var(--text-display-lg);
+
+}
+
+/**
+ * The --space-* custom properties above are intentionally NOT fed into
+ * Tailwind's own --spacing-* theme namespace: Tailwind v4 reuses that
+ * single namespace for every sizing utility (w-*, max-w-*, p-*, gap-*,
+ * etc.), and named keys here (sm, md, lg, xl, 2xl...) collide with and
+ * silently override Tailwind's own built-in sizes of the same name. Use
+ * the golden-ratio tokens via arbitrary values instead, e.g.
+ * `max-w-[var(--width-minor)]` or `p-[var(--space-lg)]`.
+ */
+
+@layer base {
+  * {
+    border-color: var(--color-navy-900);
+    border-color: color-mix(in oklab, var(--color-navy-900) 12%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-size: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--color-navy-950);
+    overflow-wrap: break-word;
+  }
+
+  ::selection {
+    background: var(--color-gold-200);
+    color: var(--color-navy-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-600);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @keyframes reveal-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .reveal-in {
+    animation: reveal-in 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
