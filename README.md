@@ -28,10 +28,19 @@ produces `data/leads/latest.md`: a report of what's new on each source page
 since the last run, with an assessment of which service line(s) it might
 need and any contact info (email/phone) found on the page (`crawler/contacts.py`
 — a coarse regex pass, not a verified directory entry: still needs a human
-to confirm it's the right contact before anyone reaches out). A person (or
-a follow-up review step with HubSpot access) reads that report and decides
-what becomes a Company/Deal — in particular, "Match Type" on a Deal stays a
-human judgment call, never something automated here.
+to confirm it's the right contact before anyone reaches out).
+
+Apollo.io is connected as a Claude connector and would be a natural fit for
+replacing that regex pass with verified contact enrichment, but it's
+**blocked on billing** — Apollo's enrichment/search endpoints require a
+paid Apollo plan, which this account doesn't have yet. Revisit once that's
+sorted; until then `crawler/contacts.py` stays the only contact-finding
+path.
+
+A person (or a follow-up review step with HubSpot access) reads that
+report and decides what becomes a Company/Deal — in particular, "Match
+Type" on a Deal stays a human judgment call, never something automated
+here.
 
 The actual crawling logic lives in `crawler/` (Python, `requests` +
 BeautifulSoup, keyword-based service tagging). It **cannot run inside a
