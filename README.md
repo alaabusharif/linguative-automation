@@ -74,14 +74,11 @@ against yet) — that's expected. Hand-check sources marked `verified: False`
 in `crawler/sources.py` — several were found via web search and not yet
 confirmed to be the right events/news page.
 
-### Unverified: `.claude/skills/lead-scouting/SKILL.md`
-
-An attempt at a Claude-native version using the WebFetch tool instead of
-raw HTTP. Tested live against 5 real domains from a sandboxed session and
-all 5 failed (WebFetch is also subject to a network egress block there) —
-so this is **not currently a working path**, kept in the repo mainly as a
-documented dead end and a starting point if someone wants to retry it with
-a WebSearch-based approach instead (see the skill file for details).
+A Claude-native version using the WebFetch tool instead of raw HTTP was
+tried and removed: tested live against 5 real domains from a sandboxed
+session, all 5 failed (WebFetch is subject to the same network egress
+block there). If someone wants to retry it, a WebSearch-based approach
+would be the next thing to try, not another WebFetch attempt.
 
 ### Adding or fixing sources
 
