@@ -77,6 +77,34 @@ When a Company lead has no Contact, search for one instead of leaving it
 blank — but treat "found a name" and "confirmed a name" as different
 things, and only ever propose what you actually confirmed.
 
+- **Start with Apollo.io when the session has it connected** (skip this
+  entirely for embassies, government bodies, and NGOs — the rule below
+  already routes those to a role-based inbox regardless of what Apollo
+  returns, so a lookup there would just spend credits on an answer this
+  skill won't use). For a chamber, conference organizer, or training
+  provider with a known domain:
+  1. `apollo_organizations_lookup` (free) on that domain to confirm the
+     org exists in Apollo and grab its `organization_id` — also useful for
+     filling in the Company proposal's industry/size if those are blank.
+  2. `apollo_mixed_people_api_search` filtered to that `organization_id`
+     and roles likely to triage an RFQ (events, marketing, communications,
+     partnerships, procurement — not engineering/finance). This is a paid
+     search; confirm the credit cost with the human before running it, as
+     the tool itself requires.
+  3. `apollo_people_match` on the best candidate to reveal a verified work
+     email. Do not turn on `reveal_phone_number` or either
+     `run_waterfall_*` flag for this workflow — this team's waterfall is
+     disabled anyway, and an RFQ outreach only needs an email, so there's
+     no reason to spend the extra (and here, unusable) credits on a phone.
+
+  A matched Apollo record with `email_status: verified` counts as **one**
+  credible, structured source — not an automatic `verified (3+ sources)`.
+  Apollo's own data can be as stale as anything else for a role that
+  turns over (same reasoning as the staff-turnover note below), so still
+  corroborate with at least one open-web source (the org's own site or a
+  LinkedIn result) before proposing a named Contact, and note in the
+  proposal's description that Apollo was one of the sources checked and
+  what its status/confidence was.
 - **Corroborate across several independent sources, not one.** A single
   mention (one LinkedIn result, one old press release) is not enough to
   propose a named individual — people change roles and organizations
