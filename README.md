@@ -111,3 +111,24 @@ approval prompt to a person rather than silently skip it.
 State (which issue comments have already been turned into a proposal) lives
 in `data/leads/processed_comments.json`, committed to the repo so it
 persists across runs.
+
+## LinkedIn content design
+
+A weekly Cowork routine (configured in claude.ai's scheduled-routines
+settings, not in this repo) that:
+
+- Reads this week's entry from the "Linguative Content" Google Doc — a
+  dated log of LinkedIn post drafts that rotates across three themes: Case
+  Studies, Certified Translation Topics, and Behind-the-Scenes Event
+  Planning.
+- Creates a matching visual design in Canva. No formal Canva brand
+  kit/template exists for Linguative yet, so the routine copies the most
+  recent prior week's LinkedIn graphic (same navy background, teal accent
+  frame, wordmark, hashtag footer) and swaps in the new week's headline,
+  quote, and hashtags.
+- Saves the result as a Canva draft for review. It never publishes or
+  exports anything — a person reviews and does that manually.
+
+There's nothing to configure in this repo for it since it doesn't run as a
+GitHub Action or a `.claude/skills/` file — it's listed here only so all of
+Linguative's automations are documented in one place.
