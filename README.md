@@ -33,6 +33,13 @@ a follow-up review step with HubSpot access) reads that report and decides
 what becomes a Company/Deal — in particular, "Match Type" on a Deal stays a
 human judgment call, never something automated here.
 
+The regex pass stays deliberately dumb on purpose: `crawler/run.py` runs
+unattended on a GitHub-hosted runner with no human present and no Apollo
+credentials, so it can't be the place that spends paid enrichment credits.
+Verifying/enriching a contact with Apollo.io happens one stage later, in
+`lead-to-deal` (see below), where a human is already approving each
+proposal and can see the credit cost before it's spent.
+
 The actual crawling logic lives in `crawler/` (Python, `requests` +
 BeautifulSoup, keyword-based service tagging). It **cannot run inside a
 sandboxed Claude Code session** — outbound requests to arbitrary hosts get
@@ -98,6 +105,15 @@ entry against HubSpot for duplicates, and proposes a Company + Deal (RFQ
 Pipeline, stage "New") for approval — nothing gets created without a human
 saying yes. It never sets "Match Type" or drafts a proposal; those stay
 separate steps.
+
+When a candidate has no Contact yet, this is also where Apollo.io comes
+in (when the session has it connected): it looks up the organization,
+searches for a plausible RFQ-triaging role at it, and reveals a verified
+work email for the best match — one credible source among several, not an
+automatic confirmation. It's skipped for embassies/government/NGO bodies,
+which default to a role-based inbox regardless. See "Contact research" in
+the skill file for the full tier logic and why this stage (not the daily
+crawler) is where Apollo runs.
 
 Run it by asking Claude (in a session with access to both this repo and
 HubSpot) to "process new leads." Unlike `lead-scouting`, this isn't a good

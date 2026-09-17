@@ -4,6 +4,12 @@ This is a coarse regex pass over the page, not a verified directory entry —
 a matched email or phone number still needs a human to confirm it's the
 right contact before anyone reaches out. Its only job is to save someone
 from having to re-open the page themselves to find a way in.
+
+This module runs unattended in `crawler/run.py` on a GitHub-hosted runner,
+so it never calls a paid enrichment service (no human present to see or
+approve the cost). Verifying what this finds — or finding a contact this
+missed — against Apollo.io happens one stage later, in the `lead-to-deal`
+skill's "Contact research" step, where a human approves each proposal.
 """
 
 from __future__ import annotations
