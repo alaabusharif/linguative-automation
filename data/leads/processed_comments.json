@@ -39,5 +39,51 @@
         "reason": "No existing Company matched a search for \"European Union Delegation Jordan\" or \"College of Europe\". Created Company 448156450006 (\"EU Delegation to Jordan — Capacity Building Programme for Jordanian Diplomats and Civil Servants\") with programme dates, organizers, and service-fit assessment logged in the description. No Contact created (role-based contact only, no named individual confirmed). No Deal created, consistent with sibling leads (JEIC, Humanity in War). User approved creation in chat after the lead-scouting run flagged it via issue comment, since the unattended scheduled run that found it could not itself supply the required human approval."
       }
     ]
+  },
+  {
+    "comment_id": 5645799262,
+    "issue_number": 2,
+    "processed_at": "2026-09-18T00:00:00Z",
+    "entries": [
+      {
+        "source": "Jordan Chamber of Commerce",
+        "outcome": "declined",
+        "reason": "Same page-navigation-text false positive as comment 5645281954 (already declined for that reason)."
+      },
+      {
+        "source": "EuroCham Jordan",
+        "outcome": "duplicate",
+        "reason": "Company already exists in HubSpot (id 447758250220, domain eurochamjo.org) — first-time-check baseline only, no new event/tender on the page."
+      },
+      {
+        "source": "Jordan Government Tenders Directorate (gtd.gov.jo)",
+        "outcome": "declined",
+        "reason": "This is a tender-aggregator portal, not an organization/prospect itself — no Company created from a source listing, consistent with how the other tender portal (gtd) is treated as an out-of-scope category for this skill. No contact info was found on the page either."
+      }
+    ]
+  },
+  {
+    "comment_id": 5676584691,
+    "issue_number": 2,
+    "processed_at": "2026-09-18T00:00:00Z",
+    "entries": [
+      {
+        "source": "n/a — bookkeeping/status comment",
+        "outcome": "declined",
+        "reason": "Comment doesn't match the expected '## New content worth reviewing' format — it's a manual status report noting no new leads met the bar this pass, plus a note that comment 5645799262 had been marked processed on a side branch not yet merged to main. No proposal to make; 5645799262 is now processed directly above."
+      }
+    ]
+  },
+  {
+    "comment_id": 5726909217,
+    "issue_number": 2,
+    "processed_at": "2026-09-18T00:00:00Z",
+    "entries": [
+      {
+        "source": "n/a — resolution/bookkeeping comment",
+        "outcome": "duplicate",
+        "reason": "This comment just confirms the outcome of comment 5726877430 (EU Delegation / College of Europe), which is already recorded as its own processed entry above. Nothing further to action."
+      }
+    ]
   }
 ]
