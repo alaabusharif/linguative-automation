@@ -27,5 +27,17 @@
         "reason": "No existing Company matched a search for \"ICRC Humanity in War\". Created Company 447756672199 (\"Humanity in War Conference 2026 (Jordan MOFA / ICRC)\") with event date, organizers, and service-fit assessment logged in the description. No Contact created (no individual name available). No Deal created, consistent with sibling leads."
       }
     ]
+  },
+  {
+    "comment_id": 5726877430,
+    "issue_number": 2,
+    "processed_at": "2026-09-18T07:44:27Z",
+    "entries": [
+      {
+        "source": "EU Delegation to Jordan / College of Europe — Capacity Building Programme for Jordanian Diplomats and Civil Servants",
+        "outcome": "created",
+        "reason": "No existing Company matched a search for \"European Union Delegation Jordan\" or \"College of Europe\". Created Company 448156450006 (\"EU Delegation to Jordan — Capacity Building Programme for Jordanian Diplomats and Civil Servants\") with programme dates, organizers, and service-fit assessment logged in the description. No Contact created (role-based contact only, no named individual confirmed). No Deal created, consistent with sibling leads (JEIC, Humanity in War). User approved creation in chat after the lead-scouting run flagged it via issue comment, since the unattended scheduled run that found it could not itself supply the required human approval."
+      }
+    ]
   }
 ]
