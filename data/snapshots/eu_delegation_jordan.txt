@@ -1,0 +1,23 @@
+Lead-scouting snapshot: eu_delegation_jordan (Delegation of the EU to Jordan)
+Method: WebSearch (WebFetch blocked; not yet added to crawler/sources.py
+— found via general "embassy events Jordan" search, not a tracked source)
+Date: 2026-09-18
+
+Findings:
+- "Strengthening EU-Jordan Ties" Capacity Building Programme for
+  Jordanian Diplomats and Civil Servants, 2nd edition. EU Delegation to
+  Jordan (SHARAKA programme funding) + College of Europe (Bruges).
+  Amman kick-off 8-9 Sep 2026 (~20 officials). Bruges/Brussels leg 28
+  Sep - 7 Oct 2026. Programme runs through 2027, 3rd edition still to
+  come; builds on a 1st edition in autumn 2025; up to 60 Jordanian
+  civil servants/diplomats total.
+- Also confirmed (matches prior JEIC finding): Jordan-EU Investment
+  Conference 2026, 19 Nov, Dead Sea — already tracked via jeic_2026 /
+  eurocham_jordan.
+
+Contact found: Delegation-jordan@eeas.europa.eu, +962-6-4607000,
+Princess Basma Street, North Abdoun, PO Box 852099, Amman 11185.
+Role-based only, no named individual for this specific programme.
+
+Sources: eeas.europa.eu/delegations/jordan (multiple pages), coleurope.eu,
+jordantimes.com
