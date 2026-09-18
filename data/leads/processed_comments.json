@@ -85,5 +85,39 @@
         "reason": "This comment just confirms the outcome of comment 5726877430 (EU Delegation / College of Europe), which is already recorded as its own processed entry above. Nothing further to action."
       }
     ]
+  },
+  {
+    "comment_id": 5729983180,
+    "issue_number": 2,
+    "processed_at": "2026-09-18T00:00:00Z",
+    "entries": [
+      {"source": "UNHCR Jordan", "outcome": "created", "reason": "Company 448171507944, Contact 871082596564 (joram@unhcr.org, official contact-page inbox), Deal 521945435348."},
+      {"source": "UNICEF Jordan", "outcome": "created", "reason": "Company 448266584294, Contact 871104823496 (Marc Rubin, mrubin@unicef.org — likely, 2-source identity), Deal 521944927426."},
+      {"source": "WFP Jordan", "outcome": "created", "reason": "Company 448255285441, Contact 871074063577 (Antonella D'Aprile, antonella.daprile@wfp.org — likely, 2-source identity), Deal 521865431254."},
+      {"source": "WHO Jordan", "outcome": "created", "reason": "Company 448166154486, Contact 871083083986 (Iman Shankiti, shankitii@who.int — verified, 3+ sources), Deal 521945573601."},
+      {"source": "UNESCO Amman office", "outcome": "created", "reason": "Company 448087473401, Contact 871010227438 (d.almasri@unesco.org — unverified, 1 source), Deal 521945775333."},
+      {"source": "UNDP Jordan", "outcome": "created", "reason": "Company 448052564198, Contact 871075008701 (ic.jo@undp.org, official procurement inbox — unverified/role-based), Deal 521835963640."},
+      {"source": "UNFPA Jordan", "outcome": "created", "reason": "Company 448201234635, Contact 871074063594 (Info@jordan.unfpa.org, official published inbox), Deal 521948587215."},
+      {"source": "UNRWA (Central Support Services, Amman)", "outcome": "created", "reason": "Company 448098179287, Deal 521892167892. No Contact — no email found, phone-only."},
+      {"source": "UNOPS Amman Hub", "outcome": "created", "reason": "Company 448169712856, Contact (RahifA@unops.org — unverified, 1 source), Deal 521872896211."},
+      {"source": "Save the Children Jordan", "outcome": "created", "reason": "Company 448164072652, Contact (info.jordan@savethechildren.org — unverified, weak sourcing, flagged), Deal."},
+      {"source": "CARE International Jordan", "outcome": "created", "reason": "Company 448229405887, Deal. No Contact — no email found."},
+      {"source": "Plan International Jordan", "outcome": "created", "reason": "Company 448229405888, Contact (info.jordan@plan-international.org — likely, 2 sources), Deal."},
+      {"source": "World Vision (Syria Response, Jordan)", "outcome": "created", "reason": "Company 448262101205, Contact (Meg Sattler, meg_sattler@wvi.org — unverified, 1 source), Deal."},
+      {"source": "INTERSOS Jordan", "outcome": "created", "reason": "Company 448233494733, Contact (intersos@intersos.org — unverified, may be generic global inbox, flagged), Deal."},
+      {"source": "Action Against Hunger / ACF Jordan", "outcome": "created", "reason": "Company 448280486103, Deal. No Contact — no email found."},
+      {"source": "Terre des Hommes (Tdh) — Jordan Delegation", "outcome": "created", "reason": "Company 448119491827, Deal. No Contact — no email found; description flags outreach via tdh.org contact form or physical address instead. User-flagged lead, researched specifically this run (Lausanne-based Foundation, distinct from Tdh Italia/International Federation)."},
+      {"source": "Instituto Cervantes Amman", "outcome": "created", "reason": "Company 448220519671, Contact (cenamm@cervantes.es, official published inbox), Deal."},
+      {"source": "Australian Embassy Amman (DFAT)", "outcome": "created", "reason": "Company 448220519672, Contact (ausembasy@nets.com.jo, official published inbox), Deal."},
+      {"source": "Canadian Embassy Amman (Global Affairs Canada)", "outcome": "created", "reason": "Company 448073839804, Contact 871110243521 (amman-consular@international.gc.ca, official general consular line), Deal."},
+      {"source": "Amman Chamber of Commerce", "outcome": "created", "reason": "Company 448171507957, Contact 871081487575 (info@acc.org.jo, official published inbox), Deal."},
+      {"source": "Amman Chamber of Industry", "outcome": "created", "reason": "Company 448235167953, Contact 871080193246 (aci@aci.org.jo, official published inbox), Deal."},
+      {"source": "Arab-Belgian-Luxembourg Chamber of Commerce (ABLCC)", "outcome": "created", "reason": "Company 448171507958, Contact 871079723244 (info@ablcc.org — unverified, Brussels HQ, no confirmed Jordan office), Deal."},
+      {"source": "Range (Range Meetings and Conferences)", "outcome": "created", "reason": "Company 448230177002, Deal. No Contact — no email found. Flagged as dual-purpose (event-management competitor / referral-partner)."},
+      {"source": "DOT Event", "outcome": "created", "reason": "Company 448175623373, Contact 871081111769 (cs@doteventjo.com, official published inbox), Deal."},
+      {"source": "Events Boutique", "outcome": "created", "reason": "Company 448167853274, Contact 871109895367 (info@eventsbtq.com, official published inbox), Deal."},
+      {"source": "COMCRA Events (Communications Craftsmen)", "outcome": "created", "reason": "Company 448087474382, Contact 871079901390 (Abdallah Hindawi, abdallah.hindawi@comcra.net — unverified, aggregator-sourced, flagged before outreach), Deal."},
+      {"source": "Fancy Event", "outcome": "created", "reason": "Company 448169712869, Deal. No Contact — no email found."}
+    ]
   }
 ]
