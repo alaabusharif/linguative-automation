@@ -15,6 +15,9 @@ Each source is a dict:
              diagnosed (bot-blocking, bad SSL cert, wrong path) so the next
              person doesn't have to re-diagnose it from scratch. Remove
              once the source is confirmed working.
+  type     - optional. "api" for a JSON API source handled by
+             crawler/api_sources.py instead of the default HTML fetch+diff.
+             Requires an "api" key naming the fetcher in API_FETCHERS.
 
 This list seeds from organizations already in HubSpot as leads (so we know
 they're relevant) plus general Jordan tender portals. Add to it as new
@@ -139,5 +142,33 @@ SOURCES = [
         "url": "http://www.gtd.gov.jo/",
         "category": "tender_portal",
         "verified": True,
+    },
+    # --- API sources (JSON, not HTML — see crawler/api_sources.py) ---
+    {
+        "key": "world_bank_procurement",
+        "name": "World Bank Procurement Notices — Jordan",
+        "url": "https://search.worldbank.org/api/v2/procnotices",
+        "category": "tender_portal",
+        "verified": True,
+        "type": "api",
+        "api": "world_bank",
+    },
+    {
+        "key": "reliefweb_jordan",
+        "name": "ReliefWeb — Jordan reports",
+        "url": "https://api.reliefweb.int/v2/reports",
+        "category": "ngo",
+        "verified": True,
+        "type": "api",
+        "api": "reliefweb",
+    },
+    {
+        "key": "eu_ted_jordan",
+        "name": "EU TED — Jordan-related tenders",
+        "url": "https://api.ted.europa.eu/v3/notices/search",
+        "category": "tender_portal",
+        "verified": True,
+        "type": "api",
+        "api": "ted",
     },
 ]

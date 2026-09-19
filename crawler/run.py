@@ -16,8 +16,9 @@ from __future__ import annotations
 import datetime as dt
 from pathlib import Path
 
+from crawler.api_sources import API_FETCHERS
 from crawler.contacts import extract_contacts
-from crawler.fetch import check_source
+from crawler.fetch import check_api_source, check_source
 from crawler.services import EVENT_SIGNAL_WORDS, SERVICE_LINES
 from crawler.sources import SOURCES
 
@@ -69,7 +70,12 @@ def run() -> None:
     flagged = []
 
     for source in SOURCES:
-        result = check_source(source["key"], source["url"])
+        if source.get("type") == "api":
+            result = check_api_source(
+                source["key"], source["url"], API_FETCHERS[source["api"]]
+            )
+        else:
+            result = check_source(source["key"], source["url"])
 
         if not result.ok:
             errors.append((source, result.error))
