@@ -17,3 +17,5 @@ Findings:
   directly for open vendor RFQs in future runs).
 
 Sources: jordan.mercycorps.org, petra.gov.jo
+
+Re-checked 2026-09-19 (NGO/embassy/corporate-seminar focused run): no material change from the 2026-09-15 findings above.

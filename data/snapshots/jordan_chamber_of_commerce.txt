@@ -16,3 +16,5 @@ Findings:
 - Events listing page: https://ammanchamber.org.jo/en/events
 
 Sources: petra.gov.jo, ammanchamber.org.jo, ibcjordan.org
+
+Re-checked 2026-09-19 (NGO/embassy/corporate-seminar focused run): no material change from the 2026-09-15 findings above.
