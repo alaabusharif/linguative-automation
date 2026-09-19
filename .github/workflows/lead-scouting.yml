@@ -14,7 +14,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: read
+  contents: write
   issues: write
 
 concurrency:
@@ -34,13 +34,16 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Restore previous snapshots
-        uses: actions/cache/restore@v4
-        with:
-          path: data/snapshots
-          key: lead-scouting-snapshots-${{ github.run_id }}
-          restore-keys: |
-            lead-scouting-snapshots-
+      - name: Restore previous snapshots from the data branch
+        # data/snapshots/ used to live only in the Actions cache, which is
+        # evicted after 7 days of no runs — a quiet week made the crawler
+        # forget what it had already seen and re-flag old tenders as new.
+        # The lead-scouting-data branch is a durable, inspectable store for
+        # the same folder (both the .txt page snapshots and the .ids.json
+        # API-source snapshots).
+        run: |
+          git fetch origin lead-scouting-data
+          git archive origin/lead-scouting-data -- data/snapshots | tar -x
 
       - name: Run crawler
         id: crawl
@@ -53,12 +56,21 @@ jobs:
         if: always()
         run: cat data/leads/latest.md
 
-      - name: Save snapshots for next run
+      - name: Persist snapshots to the data branch
         if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: data/snapshots
-          key: lead-scouting-snapshots-${{ github.run_id }}
+        run: |
+          git config user.name "lead-scouting-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git fetch origin lead-scouting-data
+          git worktree add /tmp/lead-scouting-data origin/lead-scouting-data
+          rm -rf /tmp/lead-scouting-data/data/snapshots
+          cp -r data/snapshots /tmp/lead-scouting-data/data/snapshots
+          cd /tmp/lead-scouting-data
+          git add data/snapshots
+          if ! git diff --cached --quiet; then
+            git commit -m "Lead scouting run — $(date -u +%F)"
+            git push origin HEAD:lead-scouting-data
+          fi
 
       - name: Upload report as an artifact
         if: always()
