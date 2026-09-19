@@ -1,6 +1,0 @@
-__pycache__/
-*.pyc
-data/snapshots/*.txt
-data/leads/*.md
-!data/snapshots/.gitkeep
-!data/leads/.gitkeep
