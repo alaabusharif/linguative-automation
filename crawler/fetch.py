@@ -11,6 +11,7 @@ so the report only ever shows what's actually new.
 from __future__ import annotations
 
 import difflib
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -19,6 +20,8 @@ from bs4 import BeautifulSoup
 
 SNAPSHOT_DIR = Path(__file__).resolve().parent.parent / "data" / "snapshots"
 REQUEST_TIMEOUT = 20
+MAX_ATTEMPTS = 3
+RETRY_BACKOFF_SECONDS = 2
 USER_AGENT = (
     "Mozilla/5.0 (compatible; LinguativeLeadScout/1.0; "
     "+https://github.com/linguative-automation)"
@@ -37,13 +40,25 @@ class FetchResult:
 
 
 def fetch_html(url: str) -> str:
-    resp = requests.get(
-        url,
-        headers={"User-Agent": USER_AGENT},
-        timeout=REQUEST_TIMEOUT,
-    )
-    resp.raise_for_status()
-    return resp.text
+    last_exc: requests.RequestException | None = None
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            resp = requests.get(
+                url,
+                headers={"User-Agent": USER_AGENT},
+                timeout=REQUEST_TIMEOUT,
+            )
+            resp.raise_for_status()
+            return resp.text
+        except requests.HTTPError:
+            # A 4xx/5xx status is unlikely to change on immediate retry
+            # (e.g. the known 403s on some sources) — fail fast.
+            raise
+        except requests.RequestException as exc:
+            last_exc = exc
+            if attempt < MAX_ATTEMPTS:
+                time.sleep(RETRY_BACKOFF_SECONDS * attempt)
+    raise last_exc
 
 
 def extract_text(html: str) -> str:
