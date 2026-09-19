@@ -90,6 +90,15 @@ filename), `name`, `url` (an events/news/tenders listing page is much more
 useful than a bare homepage), `category`, and `verified` (flip to `True`
 once you've confirmed the URL is right).
 
+A source can also be a JSON API instead of an HTML page: add `"type":
+"api"` and `"api": "<fetcher name>"`, with the fetcher itself defined in
+`crawler/api_sources.py` (one function per API, registered in
+`API_FETCHERS`). Currently wired up: the World Bank Procurement Notices
+API, the ReliefWeb API, and the EU TED Search API — all public, no auth
+required. API sources diff on notice/report id instead of page text, but
+otherwise flow through the same keyword tagging and report format as HTML
+sources.
+
 Service-line keyword hints live in `crawler/services.py` — they're a coarse
 first pass to flag candidate pages, not a verdict.
 
