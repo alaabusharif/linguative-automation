@@ -11,6 +11,8 @@ so the report only ever shows what's actually new.
 from __future__ import annotations
 
 import difflib
+import json
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -89,3 +91,48 @@ def check_source(key: str, url: str) -> FetchResult:
 
     path.write_text(text, encoding="utf-8")
     return FetchResult(key=key, url=url, ok=True, new_lines=new_lines, full_text=text)
+
+
+def api_snapshot_path(key: str) -> Path:
+    return SNAPSHOT_DIR / f"{key}.ids.json"
+
+
+def check_api_source(
+    key: str, url: str, fetch_items: Callable[[], list[dict]]
+) -> FetchResult:
+    """Like check_source, but for a JSON API fetcher instead of an HTML
+    page. Diffs on item id (not text lines) against a JSON snapshot of
+    previously-seen ids, since API results don't have a stable line-by-line
+    shape to diff the way rendered page text does. Each item becomes one
+    formatted line so it flows through the same keyword tagging as HTML
+    sources.
+    """
+    try:
+        items = fetch_items()
+    except requests.RequestException as exc:
+        return FetchResult(key=key, url=url, ok=False, error=str(exc))
+
+    lines_by_id = {}
+    for item in items:
+        item_id = str(item.get("id") or item.get("url") or item.get("title"))
+        line = (
+            f"{item.get('title', '(no title)')} — {item.get('date', '')} — "
+            f"{item.get('url', '')}"
+        ).strip()
+        lines_by_id[item_id] = line
+
+    path = api_snapshot_path(key)
+    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    full_text = "\n".join(lines_by_id.values())
+
+    if not path.exists():
+        path.write_text(json.dumps(sorted(lines_by_id.keys())), encoding="utf-8")
+        return FetchResult(
+            key=key, url=url, ok=True, is_first_run=True, new_lines=[], full_text=full_text
+        )
+
+    previous_ids = set(json.loads(path.read_text(encoding="utf-8")))
+    new_lines = [line for item_id, line in lines_by_id.items() if item_id not in previous_ids]
+
+    path.write_text(json.dumps(sorted(lines_by_id.keys())), encoding="utf-8")
+    return FetchResult(key=key, url=url, ok=True, new_lines=new_lines, full_text=full_text)
