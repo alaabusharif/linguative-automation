@@ -39,7 +39,13 @@ def fetch_world_bank() -> list[dict]:
     )
     resp.raise_for_status()
     data = resp.json()
-    notices = data.get("procnotices", {}).get("procnotice", [])
+    # The live API returns "procnotices" as a list of notices directly,
+    # not nested under a "procnotice" key as the docs suggested — this was
+    # never confirmed pre-merge since outbound requests are blocked in the
+    # sandbox that wrote it. Handle both shapes defensively.
+    notices = data.get("procnotices", [])
+    if isinstance(notices, dict):
+        notices = notices.get("procnotice", [])
 
     items = []
     for notice in notices:

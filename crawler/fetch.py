@@ -126,6 +126,12 @@ def check_api_source(
         items = fetch_items()
     except requests.RequestException as exc:
         return FetchResult(key=key, url=url, ok=False, error=str(exc))
+    except Exception as exc:
+        # A fetcher's assumptions about the API's response shape (field
+        # names, nesting) can be wrong in ways that surface as a plain
+        # Python error rather than a request failure — one bad source
+        # shouldn't take down every other source's crawl.
+        return FetchResult(key=key, url=url, ok=False, error=str(exc))
 
     lines_by_id = {}
     for item in items:
