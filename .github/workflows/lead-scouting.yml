@@ -48,6 +48,7 @@ jobs:
       - name: Run crawler
         id: crawl
         run: |
+          set -o pipefail
           python3 -m crawler.run | tee crawler_output.txt
           flagged=$(grep -oP 'Flagged: \K[0-9]+' crawler_output.txt || echo 0)
           echo "flagged=$flagged" >> "$GITHUB_OUTPUT"
