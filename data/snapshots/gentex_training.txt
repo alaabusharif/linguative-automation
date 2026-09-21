@@ -534,6 +534,9 @@ Enhance organizational capability through structured, customized in-house traini
 Articles
 View All Articles
 Explore expert articles, practical insights, industry trends, and professional development tips from Gentex Training Center to support continuous learning.
+Cloud Operational Resilience: What Executives Should Test After a Major Outage
+Learn how executives can test cloud operational resilience, recovery, continuity, and critical-service readiness after a major outage.
+Read more
 AI Governance for Boards: A Practical Oversight Guide for Directors
 A practical guide to AI governance for boards, covering oversight, accountability, AI risk, transparency, regulation and the questions directors should ask.
 Read more
