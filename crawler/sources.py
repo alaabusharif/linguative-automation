@@ -86,15 +86,18 @@ SOURCES = [
     {
         "key": "german_embassy_amman",
         "name": "German Embassy Amman",
-        "url": "https://amman.diplo.de/jo-de/aktuelles",
+        "url": "https://amman.diplo.de/jo-de",
         "category": "embassy",
         "verified": False,
-        "known_issue": "URL updated 2026-09-23 — the embassy's site has no "
-        "working /jo-en (English) section as far as could be found "
-        "(searches only ever turn up /jo-de/... German-language pages), so "
-        "this points at the German news/events listing instead of a "
-        "nonexistent English one. Not yet hand-confirmed to resolve — "
-        "verify on the next real run.",
+        "known_issue": "URL updated 2026-09-23, twice: first tried "
+        "/jo-de/aktuelles (a guessed news-listing path) which also 404'd "
+        "on a real test run, so this now points at the bare site root — "
+        "the one URL that consistently resolved across several searches. "
+        "No working /jo-en (English) section could be found at all; every "
+        "real page on this site is under /jo-de/. Lower-value than a "
+        "dedicated news page (it's a homepage, not a listing), but it's "
+        "the most defensible URL without live access to browse the site's "
+        "nav structure directly.",
     },
     {
         "key": "mercy_corps_jordan",
