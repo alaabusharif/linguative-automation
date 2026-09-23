@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import requests
 
-from crawler.fetch import REQUEST_TIMEOUT, USER_AGENT
+from crawler.fetch import REQUEST_TIMEOUT, USER_AGENT, raise_for_status_with_body
 
 HEADERS = {"User-Agent": USER_AGENT}
 
@@ -37,7 +37,7 @@ def fetch_world_bank() -> list[dict]:
         headers=HEADERS,
         timeout=REQUEST_TIMEOUT,
     )
-    resp.raise_for_status()
+    raise_for_status_with_body(resp)
     data = resp.json()
     # The live API returns "procnotices" as a list of notices directly,
     # not nested under a "procnotice" key as the docs suggested — this was
@@ -82,7 +82,7 @@ def fetch_reliefweb() -> list[dict]:
         headers=HEADERS,
         timeout=REQUEST_TIMEOUT,
     )
-    resp.raise_for_status()
+    raise_for_status_with_body(resp)
     data = resp.json()
 
     items = []
@@ -128,7 +128,7 @@ def fetch_ted() -> list[dict]:
         headers={**HEADERS, "Content-Type": "application/json"},
         timeout=REQUEST_TIMEOUT,
     )
-    resp.raise_for_status()
+    raise_for_status_with_body(resp)
     data = resp.json()
 
     items = []
