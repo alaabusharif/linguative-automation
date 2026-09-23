@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import difflib
 import json
+import os
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -24,10 +25,36 @@ SNAPSHOT_DIR = Path(__file__).resolve().parent.parent / "data" / "snapshots"
 REQUEST_TIMEOUT = 20
 MAX_ATTEMPTS = 3
 RETRY_BACKOFF_SECONDS = 2
+
+# Identifies us honestly to APIs we call directly (ReliefWeb, World Bank,
+# TED) — none of them block on this, so there's no reason to hide it there.
 USER_AGENT = (
     "Mozilla/5.0 (compatible; LinguativeLeadScout/1.0; "
     "+https://github.com/linguative-automation)"
 )
+
+# For plain HTML page fetches, some sites (British Council, Goethe-Institut)
+# bot-block on an honest, unfamiliar User-Agent regardless of path — a
+# realistic browser UA + Accept + Accept-Language get past simple
+# UA-sniffing (though not a full Cloudflare JS challenge, which is what
+# FIRECRAWL_API_KEY's fallback below is for).
+BROWSER_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+class SourceSkipped(Exception):
+    """A fetcher can raise this to mean "nothing to check right now" for a
+    reason that isn't a real failure — e.g. optional config (an API key or
+    app name) hasn't been supplied yet. check_source/check_api_source treat
+    this as neither a pass nor an error: the source is left out of the
+    report entirely rather than shown as broken.
+    """
 
 
 @dataclass
@@ -39,6 +66,7 @@ class FetchResult:
     new_lines: list[str] | None = None
     is_first_run: bool = False
     full_text: str = ""
+    skipped: bool = False
 
 
 def raise_for_status_with_body(resp: requests.Response) -> None:
@@ -56,18 +84,47 @@ def raise_for_status_with_body(resp: requests.Response) -> None:
         raise
 
 
+def fetch_via_firecrawl(url: str) -> str:
+    """Fallback for pages that reject even a browser-like direct fetch (a
+    Cloudflare JS challenge, not just UA-sniffing) — renders the page in
+    Firecrawl's hosted browser instead. Requires FIRECRAWL_API_KEY; raises
+    SourceSkipped if it's not configured, so a source without a key just
+    surfaces its original fetch error instead of a confusing new one.
+    """
+    api_key = os.environ.get("FIRECRAWL_API_KEY")
+    if not api_key:
+        raise SourceSkipped("no FIRECRAWL_API_KEY configured")
+
+    resp = requests.post(
+        "https://api.firecrawl.dev/v2/scrape",
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        json={"url": url, "formats": ["html"]},
+        timeout=REQUEST_TIMEOUT * 2,
+    )
+    raise_for_status_with_body(resp)
+    html = (resp.json().get("data") or {}).get("html")
+    if not html:
+        raise requests.RequestException("Firecrawl returned no html content")
+    return html
+
+
 def fetch_html(url: str) -> str:
     last_exc: requests.RequestException | None = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
-            resp = requests.get(
-                url,
-                headers={"User-Agent": USER_AGENT},
-                timeout=REQUEST_TIMEOUT,
-            )
+            resp = requests.get(url, headers=BROWSER_HEADERS, timeout=REQUEST_TIMEOUT)
             resp.raise_for_status()
             return resp.text
-        except requests.HTTPError:
+        except requests.HTTPError as exc:
+            if resp.status_code == 403:
+                try:
+                    return fetch_via_firecrawl(url)
+                except SourceSkipped:
+                    pass
+                except requests.RequestException as fc_exc:
+                    raise requests.HTTPError(
+                        f"{exc} — Firecrawl fallback also failed: {fc_exc}"
+                    ) from exc
             # A 4xx/5xx status is unlikely to change on immediate retry
             # (e.g. the known 403s on some sources) — fail fast.
             raise
@@ -95,6 +152,8 @@ def snapshot_path(key: str) -> Path:
 def check_source(key: str, url: str) -> FetchResult:
     try:
         html = fetch_html(url)
+    except SourceSkipped:
+        return FetchResult(key=key, url=url, ok=True, skipped=True)
     except requests.RequestException as exc:
         return FetchResult(key=key, url=url, ok=False, error=str(exc))
 
@@ -139,6 +198,8 @@ def check_api_source(
     """
     try:
         items = fetch_items()
+    except SourceSkipped:
+        return FetchResult(key=key, url=url, ok=True, skipped=True)
     except requests.RequestException as exc:
         return FetchResult(key=key, url=url, ok=False, error=str(exc))
     except Exception as exc:

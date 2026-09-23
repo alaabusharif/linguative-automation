@@ -68,6 +68,7 @@ def run() -> None:
     first_runs = []
     quiet = []
     flagged = []
+    skipped = []
 
     for source in SOURCES:
         if source.get("type") == "api":
@@ -76,6 +77,14 @@ def run() -> None:
             )
         else:
             result = check_source(source["key"], source["url"])
+
+        if result.skipped:
+            # A fetcher decided there's nothing to check right now for a
+            # non-error reason (e.g. optional config not supplied yet) —
+            # leave it out of the report entirely rather than show it as
+            # broken. See crawler/fetch.py's SourceSkipped.
+            skipped.append(source)
+            continue
 
         if not result.ok:
             errors.append((source, result.error))
@@ -151,7 +160,9 @@ def run() -> None:
     REPORT_PATH.write_text("\n".join(report_lines), encoding="utf-8")
     print(f"Report written to {REPORT_PATH}")
     print(f"Flagged: {len(flagged)}  First-run: {len(first_runs)}  "
-          f"Quiet: {len(quiet)}  Errors: {len(errors)}")
+          f"Quiet: {len(quiet)}  Errors: {len(errors)}  Skipped: {len(skipped)}")
+    if skipped:
+        print("Skipped (not in report): " + ", ".join(s["name"] for s in skipped))
 
 
 if __name__ == "__main__":

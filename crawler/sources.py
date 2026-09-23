@@ -55,9 +55,11 @@ SOURCES = [
         "category": "cultural_institute",
         "verified": False,
         "known_issue": "CONFIRMED 2026-09-12: 403 on /, /en, AND /en/events "
-        "— this is site-wide bot-blocking (Cloudflare or similar), not a "
-        "path problem. A different URL will not fix this. Needs a real "
-        "browser (e.g. Playwright) to fetch at all, or drop this source.",
+        "— site-wide bot-blocking (Cloudflare or similar), not a path "
+        "problem. 2026-09-23: fetch_html now sends realistic browser "
+        "headers and falls back to Firecrawl (FIRECRAWL_API_KEY) on a "
+        "403 — verify on the next real run whether that's enough, or "
+        "whether this needs the Firecrawl key added as a repo secret.",
     },
     {
         "key": "goethe_institut_jordan",
@@ -67,31 +69,35 @@ SOURCES = [
         "verified": False,
         "known_issue": "CONFIRMED 2026-09-12: 403 on both /index.html and "
         "the dedicated events page /ver.cfm — site-wide bot-blocking, same "
-        "as British Council above. A different URL will not fix this.",
+        "as British Council above. 2026-09-23: same browser-headers + "
+        "Firecrawl-fallback fix applied — verify on the next real run.",
     },
-    {
-        "key": "ifpo_amman",
-        "name": "Institut Français du Proche-Orient (Ifpo) - Amman",
-        "url": "https://www.ifporient.org/a-propos/antennes/amman/",
-        "category": "cultural_institute",
-        "verified": False,
-        "known_issue": "CONFIRMED 2026-09-12: SSL cert verification fails "
-        "on both /en/amman/ and /a-propos/antennes/amman/ — this is the "
-        "site's own broken cert chain, not a path issue. The only fix is a "
-        "deliberate, scoped exception to skip cert verification for this "
-        "one source (not a decision to make silently — flag it for "
-        "approval), or drop this source.",
-    },
+    # Ifpo Amman was removed 2026-09-23: its SSL cert chain is broken
+    # server-side (confirmed 2026-09-12, "unable to get local issuer
+    # certificate"), which can't be safely fixed without knowing Ifpo's
+    # actual intermediate CA (needs a live TLS handshake with the host to
+    # diagnose — not possible from a sandboxed Claude Code session, which
+    # has no outbound network access at all; per policy, disabling cert
+    # verification is not an option). Also, three separate manual
+    # WebSearch passes (2026-09-13, -15, -18) found only small academic
+    # talks there, never the scale of event this crawler screens for — so
+    # even a working feed would rarely be useful. Re-add if Ala gets a
+    # working URL with a valid cert.
     {
         "key": "german_embassy_amman",
         "name": "German Embassy Amman",
-        "url": "https://amman.diplo.de/jo-en/",
+        "url": "https://amman.diplo.de/jo-de",
         "category": "embassy",
         "verified": False,
-        "known_issue": "CONFIRMED 2026-09-12: 404 on /jo-en and /jo-en/ "
-        "(trailing slash didn't help). The working path structure needs "
-        "more digging (diplo.de sites often nest under a long slug, not a "
-        "bare language-root) — low priority for one embassy site.",
+        "known_issue": "URL updated 2026-09-23, twice: first tried "
+        "/jo-de/aktuelles (a guessed news-listing path) which also 404'd "
+        "on a real test run, so this now points at the bare site root — "
+        "the one URL that consistently resolved across several searches. "
+        "No working /jo-en (English) section could be found at all; every "
+        "real page on this site is under /jo-de/. Lower-value than a "
+        "dedicated news page (it's a homepage, not a listing), but it's "
+        "the most defensible URL without live access to browse the site's "
+        "nav structure directly.",
     },
     {
         "key": "mercy_corps_jordan",
@@ -161,6 +167,11 @@ SOURCES = [
         "verified": True,
         "type": "api",
         "api": "reliefweb",
+        "known_issue": "2026-09-23: started 403ing — the appname used "
+        "('linguative-lead-scouting') isn't an approved ReliefWeb appname. "
+        "Now reads RELIEFWEB_APPNAME from the environment and skips "
+        "quietly (no failure logged) until that secret is set with an "
+        "approved name Ala has requested from ReliefWeb.",
     },
     {
         "key": "eu_ted_jordan",
