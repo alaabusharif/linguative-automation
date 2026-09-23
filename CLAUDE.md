@@ -40,6 +40,9 @@ Owner: Ala.
 - publisher: schedules and posts approved content (planned)
 - rfq-watcher: reviews crawler output for matching tenders (planned)
 
+## Brand guide
+Any visual design work — the Design routine, a future designer agent, slides, social graphics — must follow `marketing/brand/BRAND.md` exactly: locked logo files (never redrawn/regenerated), exact brand colors and fonts, and the design/photography rules there. Read it before producing anything visual.
+
 ## Working rules for all agents
 - Nothing is published, sent, or submitted without Ala's approval.
 - Write for Arabic and English audiences; default to English for international B2B and Arabic for local B2C unless told otherwise.
