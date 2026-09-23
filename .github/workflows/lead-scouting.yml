@@ -60,6 +60,9 @@ jobs:
 
       - name: Run crawler
         id: crawl
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          RELIEFWEB_APPNAME: ${{ secrets.RELIEFWEB_APPNAME }}
         run: |
           set -o pipefail
           python3 -m crawler.run | tee crawler_output.txt
