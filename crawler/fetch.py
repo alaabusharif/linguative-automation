@@ -41,6 +41,21 @@ class FetchResult:
     full_text: str = ""
 
 
+def raise_for_status_with_body(resp: requests.Response) -> None:
+    """Like resp.raise_for_status(), but folds the response body into the
+    exception message. A bare "403 Forbidden" or "400 Bad Request" gives no
+    clue why an otherwise well-formed API request was rejected — most APIs
+    put the actual reason (a validation error, a block notice) in the body.
+    """
+    try:
+        resp.raise_for_status()
+    except requests.HTTPError as exc:
+        body = resp.text.strip()[:300]
+        if body:
+            raise requests.HTTPError(f"{exc} — response body: {body}", response=resp) from exc
+        raise
+
+
 def fetch_html(url: str) -> str:
     last_exc: requests.RequestException | None = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
