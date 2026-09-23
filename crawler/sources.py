@@ -54,13 +54,6 @@ SOURCES = [
         "url": "https://www.britishcouncil.jo/en/events",
         "category": "cultural_institute",
         "verified": False,
-        "known_issue": "CONFIRMED 2026-09-12: 403 on /, /en, AND /en/events "
-        "— site-wide bot-blocking (Cloudflare or similar), not a path "
-        "problem. 2026-09-23: fetch_html sends realistic browser headers "
-        "and falls back to Firecrawl (FIRECRAWL_API_KEY) on a 403 or a "
-        "retries-exhausted timeout — the block started manifesting as a "
-        "read timeout instead of a 403 partway through testing, so the "
-        "fallback now covers both. Verify on the next real run.",
     },
     {
         "key": "goethe_institut_jordan",
@@ -68,10 +61,6 @@ SOURCES = [
         "url": "https://www.goethe.de/ins/jo/en/ver.cfm",
         "category": "cultural_institute",
         "verified": False,
-        "known_issue": "CONFIRMED 2026-09-12: 403 on both /index.html and "
-        "the dedicated events page /ver.cfm — site-wide bot-blocking, same "
-        "as British Council above. 2026-09-23: same browser-headers + "
-        "Firecrawl-fallback fix applied — verify on the next real run.",
     },
     # Ifpo Amman was removed 2026-09-23: its SSL cert chain is broken
     # server-side (confirmed 2026-09-12, "unable to get local issuer
@@ -90,15 +79,6 @@ SOURCES = [
         "url": "https://amman.diplo.de/jo-de",
         "category": "embassy",
         "verified": False,
-        "known_issue": "URL updated 2026-09-23, twice: first tried "
-        "/jo-de/aktuelles (a guessed news-listing path) which also 404'd "
-        "on a real test run, so this now points at the bare site root — "
-        "the one URL that consistently resolved across several searches. "
-        "No working /jo-en (English) section could be found at all; every "
-        "real page on this site is under /jo-de/. Lower-value than a "
-        "dedicated news page (it's a homepage, not a listing), but it's "
-        "the most defensible URL without live access to browse the site's "
-        "nav structure directly.",
     },
     {
         "key": "mercy_corps_jordan",
