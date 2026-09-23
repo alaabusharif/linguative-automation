@@ -11,7 +11,15 @@ on:
     # 06:17 UTC daily. Off the hour on purpose so this doesn't pile up with
     # every other workflow on the planet scheduled for a round hour.
     - cron: "17 6 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: >-
+          Skip posting to the tracking issue and skip persisting snapshots
+          to lead-scouting-data — use this to test a branch's changes
+          without touching production state. Always off for scheduled runs.
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -33,6 +41,11 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Determine dry-run mode
+        id: mode
+        run: |
+          echo "dry_run=${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}" >> "$GITHUB_OUTPUT"
 
       - name: Restore previous snapshots from the data branch
         # data/snapshots/ used to live only in the Actions cache, which is
@@ -60,7 +73,7 @@ jobs:
         run: cat data/leads/latest.md
 
       - name: Persist snapshots to the data branch
-        if: always()
+        if: always() && steps.mode.outputs.dry_run != 'true'
         run: |
           git config user.name "lead-scouting-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -88,7 +101,7 @@ jobs:
         # fetch — errors used to only surface piggybacked on a flagged run,
         # so a quiet day with a broken source (e.g. an API start returning
         # 403/400) went unreported until something else happened to flag.
-        if: steps.crawl.outputs.flagged != '0' || steps.crawl.outputs.errors != '0'
+        if: (steps.crawl.outputs.flagged != '0' || steps.crawl.outputs.errors != '0') && steps.mode.outputs.dry_run != 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -123,7 +136,7 @@ jobs:
             });
 
       - name: Alert on crawl failure
-        if: failure() && steps.crawl.outcome == 'failure'
+        if: failure() && steps.crawl.outcome == 'failure' && steps.mode.outputs.dry_run != 'true'
         uses: actions/github-script@v7
         with:
           script: |

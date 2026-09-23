@@ -20,9 +20,11 @@ will raise.
 
 from __future__ import annotations
 
+import os
+
 import requests
 
-from crawler.fetch import REQUEST_TIMEOUT, USER_AGENT, raise_for_status_with_body
+from crawler.fetch import REQUEST_TIMEOUT, USER_AGENT, SourceSkipped, raise_for_status_with_body
 
 HEADERS = {"User-Agent": USER_AGENT}
 
@@ -66,13 +68,21 @@ def fetch_world_bank() -> list[dict]:
 
 
 def fetch_reliefweb() -> list[dict]:
-    """ReliefWeb (OCHA) reports API. No auth, but asks for an appname to
-    identify the caller for their usage stats. Docs:
-    https://apidoc.reliefweb.int/
+    """ReliefWeb (OCHA) reports API. No auth, but requires an *approved*
+    appname to identify the caller — as of 2026-09-23 requests using the
+    made-up "linguative-lead-scouting" appname started getting 403s, and
+    Ala is requesting a real approved name from ReliefWeb. Until
+    RELIEFWEB_APPNAME is set (once that request comes through), skip this
+    source quietly rather than report a failure for a problem that isn't
+    fixable from code. Docs: https://apidoc.reliefweb.int/
     """
+    appname = os.environ.get("RELIEFWEB_APPNAME")
+    if not appname:
+        raise SourceSkipped("no RELIEFWEB_APPNAME configured yet")
+
     resp = requests.post(
         "https://api.reliefweb.int/v2/reports",
-        params={"appname": "linguative-lead-scouting"},
+        params={"appname": appname},
         json={
             "limit": 20,
             "filter": {"field": "country", "value": "Jordan"},
@@ -108,22 +118,31 @@ def fetch_ted() -> list[dict]:
     event services (79952000) notices with a Jordan place of performance -
     this only catches EU-funded tenders performed in Jordan, not the whole
     TED archive.
+
+    2026-09-23: the original query 400'd. Rewritten against confirmed
+    working examples (the "*" CPV wildcard suffix isn't part of the
+    documented expert-search syntax, and "deadline-date" isn't a real
+    field — "deadline" is) — still not live-tested from this sandbox
+    (outbound requests are blocked here, see the module docstring), so
+    this is the next thing to verify once it can run somewhere with real
+    network access.
     """
     resp = requests.post(
         "https://api.ted.europa.eu/v3/notices/search",
         json={
             "query": (
-                "(classification-cpv=79530000* OR classification-cpv=79540000* "
-                "OR classification-cpv=79952000*) AND place-of-performance=JOR"
+                "(classification-cpv=79530000 OR classification-cpv=79540000 "
+                "OR classification-cpv=79952000) AND place-of-performance=JOR"
             ),
             "fields": [
                 "publication-number",
                 "notice-title",
                 "publication-date",
-                "deadline-date",
+                "deadline",
             ],
             "limit": 50,
             "scope": "ACTIVE",
+            "paginationMode": "ITERATION",
         },
         headers={**HEADERS, "Content-Type": "application/json"},
         timeout=REQUEST_TIMEOUT,
@@ -143,7 +162,7 @@ def fetch_ted() -> list[dict]:
                 "title": title or "(untitled notice)",
                 "url": f"https://ted.europa.eu/en/notice/-/detail/{pub_no}" if pub_no else "",
                 "date": notice.get("publication-date", ""),
-                "summary": f"Deadline: {notice.get('deadline-date', 'n/a')}",
+                "summary": f"Deadline: {notice.get('deadline', 'n/a')}",
             }
         )
     return items
