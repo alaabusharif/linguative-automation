@@ -35,5 +35,6 @@ Save work as markdown under `marketing/`:
 - `marketing/calendar-YYYY-MM.md`: monthly calendar
 - `marketing/briefs/YYYY-MM-DD-<slug>.md`: one brief per piece
 - `marketing/reviews/YYYY-MM-DD.md`: weekly reviews
+- `marketing/opportunities/YYYY-MM-DD.md`: ranked crawler/lead opportunities
 
 End each run with a short summary for Ala: decisions made, files written, and anything that needs his approval or input.
