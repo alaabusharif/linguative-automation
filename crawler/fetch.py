@@ -108,6 +108,21 @@ def fetch_via_firecrawl(url: str) -> str:
     return html
 
 
+def _fallback_to_firecrawl(url: str, original_exc: requests.RequestException) -> str:
+    """Try Firecrawl in place of a failed direct fetch. Raises the original
+    error (not Firecrawl's own SourceSkipped) when no key is configured, so
+    a source without one still reports its real, original problem.
+    """
+    try:
+        return fetch_via_firecrawl(url)
+    except SourceSkipped:
+        raise original_exc from None
+    except requests.RequestException as fc_exc:
+        raise type(original_exc)(
+            f"{original_exc} — Firecrawl fallback also failed: {fc_exc}"
+        ) from original_exc
+
+
 def fetch_html(url: str) -> str:
     last_exc: requests.RequestException | None = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
@@ -117,14 +132,7 @@ def fetch_html(url: str) -> str:
             return resp.text
         except requests.HTTPError as exc:
             if resp.status_code == 403:
-                try:
-                    return fetch_via_firecrawl(url)
-                except SourceSkipped:
-                    pass
-                except requests.RequestException as fc_exc:
-                    raise requests.HTTPError(
-                        f"{exc} — Firecrawl fallback also failed: {fc_exc}"
-                    ) from exc
+                return _fallback_to_firecrawl(url, exc)
             # A 4xx/5xx status is unlikely to change on immediate retry
             # (e.g. the known 403s on some sources) — fail fast.
             raise
@@ -132,7 +140,11 @@ def fetch_html(url: str) -> str:
             last_exc = exc
             if attempt < MAX_ATTEMPTS:
                 time.sleep(RETRY_BACKOFF_SECONDS * attempt)
-    raise last_exc
+    # Retries exhausted on a connection-level failure (timeout, reset,
+    # etc.), not a clean 4xx/5xx — bot-blocking can show up this way too
+    # (British Council switched from a 403 to a read timeout between runs
+    # on 2026-09-23), so try the same Firecrawl fallback here.
+    return _fallback_to_firecrawl(url, last_exc)
 
 
 def extract_text(html: str) -> str:

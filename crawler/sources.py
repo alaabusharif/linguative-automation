@@ -56,10 +56,11 @@ SOURCES = [
         "verified": False,
         "known_issue": "CONFIRMED 2026-09-12: 403 on /, /en, AND /en/events "
         "— site-wide bot-blocking (Cloudflare or similar), not a path "
-        "problem. 2026-09-23: fetch_html now sends realistic browser "
-        "headers and falls back to Firecrawl (FIRECRAWL_API_KEY) on a "
-        "403 — verify on the next real run whether that's enough, or "
-        "whether this needs the Firecrawl key added as a repo secret.",
+        "problem. 2026-09-23: fetch_html sends realistic browser headers "
+        "and falls back to Firecrawl (FIRECRAWL_API_KEY) on a 403 or a "
+        "retries-exhausted timeout — the block started manifesting as a "
+        "read timeout instead of a 403 partway through testing, so the "
+        "fallback now covers both. Verify on the next real run.",
     },
     {
         "key": "goethe_institut_jordan",
