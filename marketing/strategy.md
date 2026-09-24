@@ -1,6 +1,6 @@
 # Linguative Marketing Plan
 
-This is the single source of truth for Linguative's current channel strategy. The marketing-manager agent updates it in place whenever the strategy changes — most often after reading the twice-weekly competitor report (`marketing/competitors/`), during the weekly review, or during the monthly calendar run.
+This is the single source of truth for Linguative's current channel strategy. The marketing-manager agent updates it in place whenever the strategy changes — most often after reading the twice-weekly competitor report (`marketing/competitors/`), the daily sales reports (`marketing/sales-reports/`, written by the Sales Agent — wins/losses, objections, which services/sectors are moving, what messaging worked), during the weekly review, or during the monthly calendar run.
 
 Other Linguative routines and agents (copywriter, designer, publisher, outreach drafting, lead scouting/enrichment) should read the **Strategy changes** section below before acting, so a strategy change reaches them without needing a message between sessions.
 
