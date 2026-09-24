@@ -1,6 +1,6 @@
 # Linguative — competitor roster
 
-First pass, 2026-09-24. Jordanian and regional (Levant/GCC) firms in interpretation, translation, conference equipment/AV, and event management. For Ala to confirm, correct, or add to before the weekly routine starts tracking changes.
+First pass, 2026-09-24. Jordanian and regional (Levant/GCC) firms in interpretation, translation, conference equipment/AV, and event management. For Ala to confirm, correct, or add to before the weekly routine starts tracking changes. Expanded 2026-09-24 with a second Jordan-only pass (regional firms are parked under "Not yet researched" for now).
 
 ## Direct/bundled competitors (interpretation + AV/equipment + events — closest to Linguative's positioning)
 
@@ -22,6 +22,9 @@ First pass, 2026-09-24. Jordanian and regional (Levant/GCC) firms in interpretat
 | Fancy Event | Meetings, incentives, conferences, exhibitions and social events; logistics and technical riders; photography, videography, live edit | Amman, est. 2006. Event + technical + video bundle overlaps Linguative's event/video side; weddings are also a big line. No interpretation stated | [fancygrp.com](https://fancygrp.com/), [services](https://fancygrp.com/?page_id=17) |
 | Ramz Group | Event management, conference coordination, branding, design, advertising, PR, multimedia production | Amman (Abdoun), since 2003, around 34 staff. Competes with Linguative's event management + branding + video offer; no interpretation or equipment stated | [LinkedIn](https://www.linkedin.com/company/ramz-group), [Clutch](https://clutch.co/profile/ramz-group) |
 | Petra Conferences & Exhibitions | MICE division of Petra Travel & Tourism (est. 1965): conference concept/design, pre-registration, on-site delivery, event logistics | Travel-agency-owned PCO — the same model as the LTA-holding travel agencies that win UN event work. Division details come from search-result descriptions; confirm the division's own web page before relying on it | [petratours.com](http://www.petratours.com/) |
+| iConferences | Virtual, live and hybrid event management (conferences, trade shows, exhibits); simultaneous and consecutive interpretation in multiple languages; document translation; transcription; in-house AV (lighting, video-conferencing, recording, breakout rooms, scenic design) | Named by Ala. Amman (Zahran St. 176). Spin-off of SATO (Sukaina Authorized Translation Office, already listed above), so SATO's ministry credentials and interpreter pool back an events-and-AV brand. This is almost exactly Linguative's bundle: interpreters, AV, hybrid, events, transcription. Treat SATO and iConferences as one competitor group. Equipment brand not publicly stated | [iconferencesjo.com](https://www.iconferencesjo.com/), [about](https://iconferencesjo.com/about-us), [services](https://iconferencesjo.com/services), [transcription](https://www.iconferencesjo.com/services/transcription-services) |
+| ECT Events & Conferences (Elite Creativity Team) | Event planning and management, lighting, decor; says it keeps all event management tools in-house | Named by Ala. Amman, based at the Fairmont Amman hotel. Says it has branches across MENA. Listed as a supplier on TenderGlobal/TenderJO, so it follows tenders. Interpretation not publicly stated | [Facebook](https://www.facebook.com/ECTevents1/), [LinkedIn](https://www.linkedin.com/company/ect-events-and-conferences-services), [TenderGlobal supplier listing](https://www.tenderglobal.com/SuppliersDetails.aspx?opc_id=9748&country=global&lang=en) |
+| 3D Events Management | Full-service event planning, vendor coordination, day-of coordination, timeline management | Named by Ala. Amman. No interpretation or AV/equipment stated on its site | [3devents-jo.com](https://3devents-jo.com/) |
 
 ## Adjacent competitors (translation-only or AV-only — compete on individual services)
 
@@ -45,11 +48,53 @@ First pass, 2026-09-24. Jordanian and regional (Levant/GCC) firms in interpretat
 | Nebo Tours | DMC: MICE, meetings, incentives, conferences (groups of 10-1,000) | Amman, organizing meetings and incentives since 1993. Travel-agency MICE player, the kind of LTA-holder model that subcontracts event services | [nebotours.com/mice](https://nebotours.com/mice/), [about](https://nebotours.com/about-us/) |
 | Discovery Bespoke | DMC: meetings, incentives, corporate events, medical/scientific conferences, gala dinners, product launches | Jordan, 26+ years. Travel/DMC-side competitor for corporate and medical conferences | [discoverybespoke.com](https://www.discoverybespoke.com/), [LinkedIn](https://www.linkedin.com/company/discovery-bespoke) |
 | Sabeel DMC & MICE Services | DMC and conference services, transportation, MICE | Amman, Sabeel Group est. 1996. Travel-agency MICE model | [sabeeldmc.com](https://sabeeldmc.com/mice-services/conferences) |
+| Key Jordan | Simultaneous and consecutive interpretation for conferences, meetings and legal proceedings (Arabic, English, French, Spanish, Italian, German, Russian, Turkish, Portuguese, Chinese, Japanese, Somali); translation outsourcing; HR outsourcing, secondment and payroll | Named by Ala. Amman (Shmeisani), operating since 2014. Mainly an HR and outsourcing company; interpretation is one line. Says its interpreters are accredited by the UN, UNHCR, IOM and the US and Canadian embassies in Amman, and lists NGO clients including DRC, a current Linguative client. Direct overlap on NGO/UN interpretation, no equipment stated | [keyjordan.com (interpreting)](https://www.keyjordan.com/newpaged801633d), [LinkedIn](https://www.linkedin.com/company/key-jordan), [Clutch](https://clutch.co/profile/key-jordan) |
+
+## Found this pass, awaiting Ala's confirmation before adding
+Verified real (own site/social page + source), not yet added because Ala hasn't named or confirmed them — reply with which to include:
+- Alhurra Event & Conference Services (Shmeisani) — events + interpretation (64 languages, with/without equipment) + AV rental, same bundle as Linguative
+- Pinnacle (Pinnacle Events) — end-to-end event management, listed by the Jordan Convention Bureau
+- MaraNasi Events Management — luxury corporate events, branding, video (produced TEDxAmman)
+- Global for Events & Conferences (GEC) — PCO for medical/pharma/university conferences
+- TriTec AV — large AV rental/production house, claims market leadership
+- Dar Abu Zahra for Certified Translation — legal/medical/academic translation
+- Saint Louis Translation Company — certified/sworn legal translation
+- ZADD Translate — Arabic-English translation, localization, transcreation
+- Project Tarjim — translation, localization, interpretation; has a DevelopmentAid (donor/NGO) profile
+- Translate Online — translation, interpretation, transcription, subtitling, dubbing; publishes public prices
+- Golden Gate for Organization of Exhibitions & Conferences — trade exhibition organizer (JIMEX, Interbuild)
+- Pulse International for Organizing Exhibitions and Conferences — trade exhibition organizer
+- Bana Conferences and Exhibitions — conference/exhibition organizer (weak sourcing: news coverage only, no own site found)
+- JETT DMC — MICE + AV via the JETT transport group
+- Jordan Tours & Travel (M.I.C.E Zone) — DMC with MICE desk
+- Quest Travel Jordan — luxury-incentive DMC
+- Adviser Travel & Tourism — DMC, listed by the Jordan Convention Bureau
+- Jordan Horizons Tours & Travel — DMC, JITOA/JSTA member
+- Plaza Tours DMC — DMC, says ranked top-3 by Ministry of Tourism
+- Abercrombie & Kent Jordan — local arm of an international luxury DMC brand
+- Hajjat Tours & Travel — DMC, listed by the Jordan Convention Bureau
+- Wander Travel Jordan — corporate-travel DMC
+
+Also asked about but not found under those names: "Blue Lake" and "Skyline" — no matching Jordan events/translation/AV company turned up in search (mostly unrelated hits: skyline photography, a hotel, a sushi bar). If you have a website or fuller name for either, I'll look again.
 
 ## Not yet researched / to confirm with Ala
 - Any Bosch DICENTIS-equipped competitor with owned (not rented) equipment — none of the above state owned equipment brands publicly; worth a deeper pass.
 - Regional GCC firms (Langpros, Shamil, Alsun Arabia, SounDXB, DLC Events, Congress Rental Emirates, Aalaa) were found but set aside for now — Ala isn't focused on regional at the moment.
 - Whether any of the above have LTA relationships with travel agencies like Guarantee Travel Group (would explain tender access Linguative doesn't have). The travel-agency MICE arms now listed (Petra Conferences & Exhibitions, Nebo Tours, Discovery Bespoke, Sabeel) are the most likely LTA holders or partners.
-- Still not added, lower priority: more Jordanian DMCs with MICE desks (Jordan Tours & Travel, Jordan Horizons, Quest Travel, Adviser TT), trade-show-only organizers (Golden Gate Est., Pulse International), and Dot Media (DOT Event's sister company, already listed).
+- Still not added, lower priority: Dot Media (DOT Event's sister company, already listed).
+- Second Jordan-only pass (2026-09-24): found but not added because the evidence was too thin (classified-ad or directory listing only, no live site or active page confirmed). Check these before adding:
+  - Decibel Sound Systems (ديسيبل لأنظمة الصوت): Amman sound rental that advertises interpretation-equipment rental. Only a [HalaBazaar ad](https://www.halabazaar.com/en/show/agentproperties/1625) found.
+  - Al-Mafhoum for Events & Conferences (المفهوم لتنظيم الحفلات والمؤتمرات): sound, lighting, LED and conference setup. Only a [TenderJO supplier listing](https://www.tenderjo.com/SuppliersDetails.aspx?opc_id=9399) found, and it is unclear whether it is in Amman (Jordan) or Oman.
+  - AtEvents ([atevents-jordan.com](https://atevents-jordan.com/)): fairs and conferences. Its Jordan address and ownership are not confirmed.
+  - Events Consultant ([Facebook](https://www.facebook.com/eventscons/)): Amman event and corporate travel management. Facebook only.
+  - Agenda for Exhibitions & Conferences (اجنده لتنظيم المعارض والمؤتمرات) and Al-Motawarah (المطورة) exhibition fit-out: directory or Instagram listings only.
+  - More DMCs with MICE desks: Amani Tours, Flow Travel & Tourism, Jordan Select Tours, Nirvana Travel, Karma House DMC, Finan Tours.
+  - The Domain Entertainment: runs the King Hussein Business Park theater. Mostly concerts and shows, probably not a competitor.
+- Regional or foreign firms found this pass and set aside, per Ala's instruction: Tarjama (founded in Amman, now headquartered in Riyadh, with large Arabic localization operations), Tanweer Studios (regional dubbing and subtitling group with an Amman studio), Mezalla (Saudi), Eventify (Saudi), and TJC Global, AAKAASH and DSPTECH (foreign firms advertising interpretation or equipment in Amman).
+- Venue AV: Landmark, InterContinental Aqaba and others advertise built-in AV and interpretation booths. In-house hotel AV is an unlisted competitor on equipment for single-venue events.
 
-**Open question for Ala:** does this list match who you actually lose or win bids against? Any of these missing, or on here that shouldn't be? In particular: do you run into MCS (Microscope for Conference Services) or Active Service on interpretation + equipment jobs?
+**Open questions for Ala:**
+- Does this list match who you actually lose or win bids against? Any of these missing, or on here that shouldn't be? In particular, do you run into MCS (Microscope for Conference Services) or Active Service on interpretation + equipment jobs?
+- iConferences is SATO's events spin-off. Should the weekly routine track SATO and iConferences as one competitor?
+- Key Jordan says its interpreters work for UN agencies and NGOs, and its client list includes DRC. Do you know if DRC also uses Key Jordan for interpreters?
+- Alhurra Event & Conference Services (Shmeisani) has the same events + interpretation + AV bundle as Linguative. Do you come across them?
