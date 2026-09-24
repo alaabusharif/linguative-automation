@@ -13,6 +13,8 @@ First pass, 2026-09-24. Jordanian and regional (Levant/GCC) firms in interpretat
 | DOT Event | Corporate events, conferences, seminars — AV, stage, lighting, sound | Positions as end-to-end event + AV, similar to Linguative's AV/event bundle | [doteventjo.com](https://doteventjo.com/) |
 | Jordan Valley Conferences & Exhibits | Conferences/exhibitions with AV solutions | Established regional conference/exhibits player | [jordan-valley.com](https://www.jordan-valley.com/) |
 | Digital Matrix | Technical setup, live streaming, stage design, AV integration | AV/technical specialist for conferences and corporate meetings | [digitalmatrixav.com](https://digitalmatrixav.com/) |
+| Al-Oula Events & Conferences | Exhibition, event management, AV, simultaneous interpretation, equipment | Named by Ala. Established Amman 2005, one of the largest in the space — 63+ full-time staff, 40+ freelance interpreters, live/virtual/hybrid events across the Middle East. Scale and service breadth make this one of the closest direct competitors to Linguative's full bundle | [al-oulaecs.com](https://al-oulaecs.com/), [about](http://www.al-oulaecs.com/about) |
+| CoExistence Event Management | Conference/event management, associations management, translation services | Named by Ala. Handles scientific, medical, academic, and corporate conferences for local/national/international clients — same bundled event + language-services model as Linguative | [coexistenceme.com](https://coexistenceme.com/), [about](https://coexistenceme.com/about/) |
 
 ## Adjacent competitors (translation-only or AV-only — compete on individual services)
 
