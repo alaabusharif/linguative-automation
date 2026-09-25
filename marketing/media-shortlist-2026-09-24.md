@@ -1,5 +1,7 @@
 # Real event media shortlist (Google Drive)
 
+> **Superseded.** This was a partial first pass over one folder only. The current source of truth is `marketing/drive-media-catalog-2026-09-25.md`, which covers the full Drive (all events, all files) and fixes a duplicate-cataloguing bug in this file (Danish Institute vs ICT Hilton were wrongly shown sharing the same files). Use that file instead; this one is kept only for history.
+
 Source: Ala's Google Drive (linguativ@gmail.com), folder "Events Setup". Per `marketing/brand/BRAND.md`, real/documentary photography is the top image source for any Linguative design or video — check here before Adobe Stock or AI-generated images.
 
 This is a first pass: each folder below has more files than listed (Drive returned a partial page per folder); these are the most usable/representative items found so far. Anyone using this for a design or video should open the folder link and skim for more before falling back to stock.
