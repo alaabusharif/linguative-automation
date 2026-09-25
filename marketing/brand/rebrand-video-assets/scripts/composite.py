@@ -521,6 +521,26 @@ def render_frame(frame_num):
     bg.alpha_composite(logo)
     return bg.convert("RGB")
 
+# Ala: "smoother transitions" — the scrub used to snap on at a single frame
+# (SEG_B_START), which read as a texture pop right at the cut. This eases the
+# SAME scrub in over ~1s beforehand instead, while tau stays negative so no
+# construction element (ribbon/letters/etc, all separately tuned and
+# approved) draws early — only the background texture handoff is softened.
+# By inspection the raw footage's own old-tagline dust has already mostly
+# dissolved by CROSSFADE_START, so nothing legible is touched, just grain.
+CROSSFADE_START = 282
+
+def render_leadin_frame(frame_num):
+    raw = Image.open(os.path.join(SRC, f"f{frame_num:04d}.png")).convert("RGB")
+    if frame_num < CROSSFADE_START:
+        return raw
+    scrubbed = render_frame(frame_num)  # tau < 0 here: scrub only, no logo yet
+    alpha = smoothstep((frame_num - CROSSFADE_START) / (SEG_B_START - CROSSFADE_START))
+    raw_arr = np.asarray(raw).astype(np.float32)
+    scrub_arr = np.asarray(scrubbed).astype(np.float32)
+    out = raw_arr * (1 - alpha) + scrub_arr * alpha
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), "RGB")
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "test":
