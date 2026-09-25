@@ -70,9 +70,14 @@ LETTER_STAGGER = 4 / FPS          # 0.1667s
 LETTER_FADE = 0.45
 LETTER_T0 = 0.7
 SWEEP_T0, SWEEP_T1 = 2.55, 3.15
-TAGLINE_T0, TAGLINE_T1 = 2.9, 3.55
-REFLECTION_T0, REFLECTION_T1 = 3.3, 4.1
-GRADE_T0, GRADE_T1 = 2.9, 4.75
+# tagline: slower, more theatrical reveal (was a quick 0.65s wipe) — dust
+# condenses at the advancing edge the same way the ribbon does, so light
+# visibly "catches" each word as it resolves
+TAGLINE_T0, TAGLINE_T1 = 2.85, 4.05
+# reflection settles in slowly and late, after the tagline has mostly
+# resolved, so nothing on screen pops — it's still fully in by the cut
+REFLECTION_T0, REFLECTION_T1 = 3.6, 4.7
+GRADE_T0, GRADE_T1 = 2.85, 4.75
 SEG_B_DURATION = (SEG_B_END - SEG_B_START) / FPS  # 4.75s
 CONVERGE_MAG = 40.0  # px — small, transient, eases to 0; never a group shift
 
@@ -131,6 +136,82 @@ def crop_tight(img, bbox):
 
 LETTER_CROPS = {i: crop_tight(letters[i], LETTER_BBOX[i]) for i in range(1, 10)}
 
+# ---------- gold-dust condensation ----------
+# Ala's note: the gold dust should visibly turn into the ribbon and trace the
+# letter outlines, not just sit behind a separate fade-in. Rim points are
+# sampled once from each asset's own alpha edge (a real edge, not guessed
+# padding) and stamped with a soft gold sprite whose opacity rises, flickers,
+# then dies away as the solid shape takes over — dust "resolving into" gold.
+_rng = np.random.default_rng(20260925)
+
+def _dot_sprite(radius=7, color=(255, 214, 150)):
+    d = radius * 2 + 1
+    yy, xx = np.mgrid[0:d, 0:d]
+    dist = np.hypot(xx - radius, yy - radius) / radius
+    a = np.clip(1 - dist, 0, 1) ** 2
+    arr = np.zeros((d, d, 4), dtype=np.uint8)
+    arr[:, :, 0] = color[0]
+    arr[:, :, 1] = color[1]
+    arr[:, :, 2] = color[2]
+    arr[:, :, 3] = (a * 255).astype(np.uint8)
+    return Image.fromarray(arr, "RGBA")
+
+_DOT = _dot_sprite(7, (255, 214, 150))
+_DOT_SMALL = _dot_sprite(4, (255, 236, 200))
+
+def _edge_points(alpha_img, n_points, seed):
+    """Sample points along the true alpha edge of a crop (dilate-minus-erode
+    of the actual mask), not an assumed shape — works for any asset."""
+    bw = alpha_img.point(lambda a: 255 if a > 100 else 0)
+    dil = bw.filter(ImageFilter.MaxFilter(9))
+    ero = bw.filter(ImageFilter.MinFilter(9))
+    edge = np.array(dil).astype(np.int16) - np.array(ero).astype(np.int16)
+    ys, xs = np.where(edge > 0)
+    if len(xs) == 0:
+        return np.empty((0, 2)), np.empty((0,))
+    rng = np.random.default_rng(seed)
+    idx = rng.choice(len(xs), size=min(n_points, len(xs)), replace=False)
+    pts = np.stack([xs[idx], ys[idx]], axis=1).astype(np.float32)
+    phases = rng.uniform(0, 2 * math.pi, size=len(pts))
+    return pts, phases
+
+def _dust_envelope(p, rise=0.30, peak=0.50, fall=0.85):
+    """0 -> flicker on -> resolves into the solid shape by `fall`."""
+    if p <= 0:
+        return 0.0
+    if p < rise:
+        return smoothstep(p / rise)
+    if p < peak:
+        return 1.0
+    if p < fall:
+        return 1.0 - smoothstep((p - peak) / (fall - peak))
+    return 0.0
+
+def _stamp_dust(size, pts, phases, tau, env, sprite=_DOT):
+    if env <= 0 or len(pts) == 0:
+        return None
+    layer = Image.new("RGBA", size, (0, 0, 0, 0))
+    sw = sprite.size[0]
+    for (x, y), ph in zip(pts, phases):
+        flicker = 0.45 + 0.55 * math.sin(tau * 7.5 + ph)
+        a = env * max(0.0, flicker)
+        if a <= 0.03:
+            continue
+        dot = sprite if a >= 1 else ImageEnhance_alpha(sprite, a)
+        layer.alpha_composite(dot, (round(x - sw / 2), round(y - sw / 2)))
+    return layer
+
+def ImageEnhance_alpha(sprite, factor):
+    a = sprite.getchannel("A").point(lambda v: int(v * factor))
+    out = sprite.copy()
+    out.putalpha(a)
+    return out
+
+LETTER_RIM = {
+    i: _edge_points(LETTER_CROPS[i][0].getchannel("A"), 55, seed=1000 + i)
+    for i in range(1, 10)
+}
+
 def draw_letter(canvas, idx, tau):
     t0, t1 = letter_times(idx)
     p = progress(tau, t0, t1)
@@ -141,16 +222,39 @@ def draw_letter(canvas, idx, tau):
     scale = 0.94 + 0.06 * p
     dx, dy = letter_converge_vector(idx)
     dx, dy = dx * (1 - p), dy * (1 - p)  # eases to exactly (0,0) — true registered spot
+
+    # dust tracing the outline, in the SAME crop-local space as the letter,
+    # so it scales/drifts with it for free through the existing resize below
+    env = _dust_envelope(p)
+    pts, phases = LETTER_RIM[idx]
+    dust = _stamp_dust((cw, ch), pts, phases, tau, env)
+    base = crop
+    if dust is not None:
+        base = crop.copy()
+        base.alpha_composite(dust)
+
     new_w, new_h = max(1, round(cw * scale)), max(1, round(ch * scale))
-    resized = crop.resize((new_w, new_h), Image.LANCZOS)
+    resized_solid = crop.resize((new_w, new_h), Image.LANCZOS)
+    resized = base.resize((new_w, new_h), Image.LANCZOS)
     if p < 1.0:
-        alpha = resized.getchannel("A").point(lambda a: int(a * p))
-        resized.putalpha(alpha)
+        # solid letter fades in at p; dust (already enveloped above) keeps
+        # its own brightness on top, so it reads as forming ahead of the
+        # fill rather than fading in lockstep with it
+        crop_a = np.array(resized_solid.getchannel("A")).astype(np.float32)
+        dust_a = np.array(resized.getchannel("A")).astype(np.float32)
+        dust_only = np.clip(dust_a - crop_a, 0, 255)
+        final_a = np.clip(crop_a * p + dust_only, 0, 255).astype(np.uint8)
+        resized.putalpha(Image.fromarray(final_a, "L"))
     # keep the crop visually centered on its own bbox center while scaling
     cx, cy = ox + cw / 2, oy + ch / 2
     px = round(cx - new_w / 2 + dx)
     py = round(cy - new_h / 2 + dy)
     canvas.alpha_composite(resized, (px, py))
+
+RIBBON_DUST_PTS, RIBBON_DUST_PHASES = _edge_points(
+    ribbon_matte.crop(RIBBON_BBOX).convert("L").point(lambda v: 255 if v > 100 else 0),
+    70, seed=42,
+)
 
 def draw_ribbon(canvas, tau):
     p = progress(tau, RIBBON_T0, RIBBON_T1)
@@ -173,6 +277,31 @@ def draw_ribbon(canvas, tau):
     orig_a = np.array(out.getchannel("A")).astype(np.int32)
     combined = np.minimum(orig_a, mask).astype(np.uint8)
     out.putalpha(Image.fromarray(combined, "L"))
+
+    # gold dust condensing into the ribbon: a traveling sparkle band that
+    # rides just ahead of the wipe edge and resolves into the solid gold
+    # once the edge has passed a given point — the dust literally becomes
+    # the ribbon, rather than the ribbon appearing independently of it
+    band = 90
+    if len(RIBBON_DUST_PTS):
+        dxs = RIBBON_DUST_PTS[:, 0]
+        lead = np.clip((dxs - (threshold_x - band)) / band, 0, 1)
+        behind = np.clip(1 - (threshold_x - dxs) / band, 0, 1)
+        env_per_pt = np.where(dxs <= threshold_x, behind, np.clip(1 - lead, 0, 1))
+        env_per_pt = np.clip(env_per_pt, 0, 1) * (1 if p < 1.0 else 0.0)
+        layer = Image.new("RGBA", (w, y1 - y0), (0, 0, 0, 0))
+        sw = _DOT_SMALL.size[0]
+        for (px_, py_), ph, e in zip(RIBBON_DUST_PTS, RIBBON_DUST_PHASES, env_per_pt):
+            if e <= 0.03:
+                continue
+            flicker = 0.5 + 0.5 * math.sin(tau * 9 + ph)
+            a = e * max(0.0, flicker)
+            if a <= 0.03:
+                continue
+            dot = _DOT_SMALL if a >= 1 else ImageEnhance_alpha(_DOT_SMALL, a)
+            layer.alpha_composite(dot, (round(px_ - sw / 2), round(py_ - sw / 2)))
+        out.alpha_composite(layer)
+
     canvas.alpha_composite(out, (x0, y0))
 
 def draw_sweep(canvas, tau):
@@ -200,21 +329,67 @@ def draw_sweep(canvas, tau):
     canvas_arr[:, :, :3] = np.clip(rgb, 0, 255).astype(np.uint8)
     canvas.paste(Image.fromarray(canvas_arr, "RGBA"), (x0, y0))
 
+TAGLINE_CROP = tagline_exact.crop(TAGLINE_BBOX)
+TAGLINE_RIM_PTS, TAGLINE_RIM_PHASES = _edge_points(TAGLINE_CROP.getchannel("A"), 90, seed=77)
+
 def draw_tagline(canvas, tau):
     p = progress(tau, TAGLINE_T0, TAGLINE_T1)
     if p <= 0:
         return
     x0, y0, x1, y1 = TAGLINE_BBOX
-    crop = tagline_exact.crop((x0, y0, x1, y1))
-    w = x1 - x0
+    crop = TAGLINE_CROP
+    w, h = crop.size
     cx = w / 2
     half = np.arange(w) - cx
-    edge = 30
+    edge = 50  # wide, soft gradient — a slower, more dramatic reveal
     reveal = np.clip((p * (cx + edge) - np.abs(half)) / edge, 0, 1) * 255
     orig_a = np.array(crop.getchannel("A")).astype(np.int32)
-    mask = np.minimum(orig_a, np.tile(reveal.astype(np.int32), (crop.size[1], 1))).astype(np.uint8)
+    mask = np.minimum(orig_a, np.tile(reveal.astype(np.int32), (h, 1))).astype(np.uint8)
     out = crop.copy()
     out.putalpha(Image.fromarray(mask, "L"))
+
+    # dust condensing along the tagline's own outline, traveling outward
+    # from center in step with the wipe — light visibly "catching" each
+    # word as it resolves, same language as the ribbon and the letters
+    if len(TAGLINE_RIM_PTS):
+        dust_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        dxs = TAGLINE_RIM_PTS[:, 0]
+        point_frac = np.clip(np.abs(dxs - cx) / (cx + edge), 0, 1)
+        reveal_tau = TAGLINE_T0 + point_frac * (TAGLINE_T1 - TAGLINE_T0)
+        fade_win = 0.4
+        sw = _DOT_SMALL.size[0]
+        for (px_, py_), ph, rt in zip(TAGLINE_RIM_PTS, TAGLINE_RIM_PHASES, reveal_tau):
+            local_p = progress(tau, rt, rt + fade_win)
+            e = _dust_envelope(local_p, rise=0.3, peak=0.5, fall=0.9)
+            if e <= 0.03:
+                continue
+            flicker = 0.5 + 0.5 * math.sin(tau * 8 + ph)
+            a = e * max(0.0, flicker)
+            if a <= 0.03:
+                continue
+            dot = _DOT_SMALL if a >= 1 else ImageEnhance_alpha(_DOT_SMALL, a)
+            dust_layer.alpha_composite(dot, (round(px_ - sw / 2), round(py_ - sw / 2)))
+        out.alpha_composite(dust_layer)
+
+    # bright glint riding the two advancing wipe edges, dying away as the
+    # reveal completes — the "dramatic" catch-the-light moment Ala asked for
+    if p < 1.0:
+        edge_glow_w = 46
+        arr = np.array(out)
+        rgb = arr[:, :, :3].astype(np.float32)
+        a_ch = arr[:, :, 3].astype(np.float32) / 255.0
+        right_edge = cx + p * (cx + edge)
+        left_edge = cx - p * (cx + edge)
+        xs = np.arange(w)
+        band = (np.clip(1 - np.abs(xs - right_edge) / edge_glow_w, 0, 1)
+                + np.clip(1 - np.abs(xs - left_edge) / edge_glow_w, 0, 1))
+        band = np.clip(band, 0, 1) * (1 - p) * 220
+        tint = np.array([255, 244, 214], dtype=np.float32) / 255.0
+        add = band[np.newaxis, :, None] * tint * a_ch[:, :, None]
+        rgb = np.clip(rgb + add, 0, 255)
+        arr[:, :, :3] = rgb.astype(np.uint8)
+        out = Image.fromarray(arr, "RGBA")
+
     canvas.alpha_composite(out, (x0, y0))
 
 def draw_reflection(canvas, tau):
