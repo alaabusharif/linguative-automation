@@ -64,6 +64,7 @@ function buildDocFromInput(kind, body, createdBy) {
     status: 'draft',
     payment_status: kind === 'invoice' ? 'unpaid' : null,
     due_date: kind === 'invoice' ? (body.due_date || null) : null,
+    language: body.language === 'ar' ? 'ar' : 'en',
     client_name: body.client_name || '',
     contact_person: body.contact_person || '',
     project_title: body.project_title || '',
@@ -86,11 +87,11 @@ function buildDocFromInput(kind, body, createdBy) {
 
 function insertDocument(doc) {
   const info = db.prepare(`
-    INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date,
+    INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date, language,
       client_name, contact_person, project_title, venue, po_number, currency,
       discount_type, discount_value, tax_type, subtotal, discount_amount, tax_amount, grand_total,
       quote_ref_id, notes, created_by)
-    VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date,
+    VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date, @language,
       @client_name, @contact_person, @project_title, @venue, @po_number, @currency,
       @discount_type, @discount_value, @tax_type, @subtotal, @discount_amount, @tax_amount, @grand_total,
       @quote_ref_id, @notes, @created_by)
@@ -123,6 +124,7 @@ router.post('/from-quote/:quoteId', requireLogin, (req, res) => {
     discount_type: quote.discount_type,
     discount_value: quote.discount_value,
     tax_type: quote.tax_type,
+    language: quote.language,
     items,
     quote_ref_id: quote.id,
     due_date: req.body.due_date || null,
@@ -144,10 +146,11 @@ router.put('/:id', requireLogin, (req, res) => {
   db.prepare(`UPDATE documents SET
     client_name=@client_name, contact_person=@contact_person, project_title=@project_title, venue=@venue,
     po_number=@po_number, currency=@currency, discount_type=@discount_type, discount_value=@discount_value,
-    tax_type=@tax_type, subtotal=@subtotal, discount_amount=@discount_amount, tax_amount=@tax_amount,
+    tax_type=@tax_type, language=@language, subtotal=@subtotal, discount_amount=@discount_amount, tax_amount=@tax_amount,
     grand_total=@grand_total, due_date=@due_date, notes=@notes, updated_at=datetime('now')
     WHERE id=@id`).run({
     id: doc.id,
+    language: req.body.language === 'ar' || req.body.language === 'en' ? req.body.language : doc.language,
     client_name: req.body.client_name ?? doc.client_name,
     contact_person: req.body.contact_person ?? doc.contact_person,
     project_title: req.body.project_title ?? doc.project_title,
@@ -203,7 +206,7 @@ router.post('/:id/amend', requireLogin, (req, res) => {
 
   const newDoc = {
     kind: doc.kind, number: doc.number, version: maxVersion + 1, root_id: rootId, parent_id: doc.id,
-    status: 'draft', payment_status: doc.kind === 'invoice' ? 'unpaid' : null, due_date: doc.due_date,
+    status: 'draft', payment_status: doc.kind === 'invoice' ? 'unpaid' : null, due_date: doc.due_date, language: doc.language,
     client_name: doc.client_name, contact_person: doc.contact_person, project_title: doc.project_title, venue: doc.venue,
     po_number: doc.po_number, currency: doc.currency, discount_type: doc.discount_type, discount_value: doc.discount_value,
     tax_type: doc.tax_type, subtotal: doc.subtotal, discount_amount: doc.discount_amount, tax_amount: doc.tax_amount,
@@ -213,11 +216,11 @@ router.post('/:id/amend', requireLogin, (req, res) => {
   const tx = db.transaction(() => {
     db.prepare("UPDATE documents SET status='amended', updated_at=datetime('now') WHERE id=?").run(doc.id);
     const info = db.prepare(`
-      INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date,
+      INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date, language,
         client_name, contact_person, project_title, venue, po_number, currency,
         discount_type, discount_value, tax_type, subtotal, discount_amount, tax_amount, grand_total,
         quote_ref_id, notes, created_by)
-      VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date,
+      VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date, @language,
         @client_name, @contact_person, @project_title, @venue, @po_number, @currency,
         @discount_type, @discount_value, @tax_type, @subtotal, @discount_amount, @tax_amount, @grand_total,
         @quote_ref_id, @notes, @created_by)

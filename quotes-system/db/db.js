@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS items_catalog (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT UNIQUE NOT NULL,
+  name_ar TEXT, -- native Arabic service name, not a machine translation
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS documents (
     -- draft, pending_approval, approved, sent, amended, cancelled
   payment_status TEXT, -- invoices only: 'unpaid' | 'paid'
   due_date TEXT, -- invoices only
+  language TEXT NOT NULL DEFAULT 'en', -- 'en' | 'ar' — which language this document is written/exported in
 
   client_name TEXT NOT NULL DEFAULT '',
   contact_person TEXT NOT NULL DEFAULT '',
@@ -90,12 +92,21 @@ CREATE INDEX IF NOT EXISTS idx_documents_number ON documents(number);
 CREATE INDEX IF NOT EXISTS idx_document_items_doc ON document_items(document_id);
 `);
 
+// Safe, idempotent migrations for columns added after the tables first existed.
+for (const [table, column, ddl] of [
+  ['documents', 'language', "ALTER TABLE documents ADD COLUMN language TEXT NOT NULL DEFAULT 'en'"],
+  ['items_catalog', 'name_ar', 'ALTER TABLE items_catalog ADD COLUMN name_ar TEXT'],
+]) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
+  if (!cols.includes(column)) db.exec(ddl);
+}
+
 // Seed item catalog once
 const itemCount = db.prepare('SELECT COUNT(*) AS c FROM items_catalog').get().c;
 if (itemCount === 0) {
   const seedItems = JSON.parse(fs.readFileSync(path.join(__dirname, 'seed-items.json'), 'utf8'));
-  const insert = db.prepare('INSERT OR IGNORE INTO items_catalog (name) VALUES (?)');
-  const insertMany = db.transaction((names) => { for (const n of names) insert.run(n); });
+  const insert = db.prepare('INSERT OR IGNORE INTO items_catalog (name, name_ar) VALUES (?, ?)');
+  const insertMany = db.transaction((rows) => { for (const r of rows) insert.run(r.name, r.name_ar || null); });
   insertMany(seedItems);
 }
 

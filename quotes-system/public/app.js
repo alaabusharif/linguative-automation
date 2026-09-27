@@ -173,6 +173,12 @@ function renderEditor(kind, doc) {
 
     <div class="card">
       <div class="grid grid-3">
+        <div class="field"><label>Document Language</label>
+          <select id="f-language" ${!editable ? 'disabled' : ''}>
+            <option value="en" ${(doc.language || 'en') === 'en' ? 'selected' : ''}>English</option>
+            <option value="ar" ${doc.language === 'ar' ? 'selected' : ''}>العربية (Arabic)</option>
+          </select>
+        </div>
         <div class="field"><label>Currency</label>
           <select id="f-currency" ${!editable ? 'disabled' : ''}>
             ${['JOD','USD','EUR'].map(c => `<option value="${c}" ${currency===c?'selected':''}>${c}</option>`).join('')}
@@ -230,12 +236,18 @@ function renderEditor(kind, doc) {
   renderActions(doc);
 }
 
+function currentLanguage() {
+  const el = document.getElementById('f-language');
+  return el ? el.value : 'en';
+}
+
 function renderItemsBody(editable) {
   const body = document.getElementById('items-body');
+  const rtl = currentLanguage() === 'ar';
   body.innerHTML = window.__items.map((it, idx) => `
     <tr>
       <td class="autocomplete">
-        <input data-idx="${idx}" class="item-desc" value="${it.description || ''}" ${!editable ? 'disabled' : ''} autocomplete="off">
+        <input data-idx="${idx}" class="item-desc" value="${it.description || ''}" ${!editable ? 'disabled' : ''} autocomplete="off" ${rtl ? 'dir="rtl" style="text-align:right;"' : ''}>
         <div class="options" id="opts-${idx}" hidden></div>
       </td>
       <td><input type="number" step="0.5" data-idx="${idx}" class="item-days" value="${it.days ?? 1}" ${!editable ? 'disabled' : ''}></td>
@@ -286,7 +298,11 @@ async function onDescInput(e) {
   acTimer = setTimeout(async () => {
     const { items } = await api(`/api/items?q=${encodeURIComponent(q)}`);
     if (!items.length) { opts.hidden = true; return; }
-    opts.innerHTML = items.map(i => `<div data-name="${i.name.replace(/"/g, '&quot;')}">${i.name}</div>`).join('')
+    const rtl = currentLanguage() === 'ar';
+    opts.innerHTML = items.map(i => {
+      const label = rtl && i.name_ar ? i.name_ar : i.name;
+      return `<div data-name="${label.replace(/"/g, '&quot;')}" ${rtl ? 'dir="rtl" style="text-align:right;"' : ''}>${label}</div>`;
+    }).join('')
       + `<div style="border-top:1px solid #eee; color:#071A2E; font-weight:600;" data-add="${q.replace(/"/g, '&quot;')}">+ Add "${q}" to list</div>`;
     opts.hidden = false;
     opts.querySelectorAll('div').forEach(d => d.addEventListener('mousedown', async () => {
@@ -314,6 +330,7 @@ window.removeRow = (idx) => {
 
 function currentFormValues() {
   return {
+    language: val('f-language'),
     client_name: val('f-client'),
     contact_person: val('f-contact'),
     project_title: val('f-project'),
@@ -346,6 +363,12 @@ function recalcTotals() {
 ['f-tax','f-discount-type','f-discount-value','f-currency'].forEach(id => {
   document.addEventListener('input', (e) => { if (e.target && e.target.id === id) recalcTotals(); });
   document.addEventListener('change', (e) => { if (e.target && e.target.id === id) recalcTotals(); });
+});
+document.addEventListener('change', (e) => {
+  if (e.target && e.target.id === 'f-language' && window.__items) {
+    const editable = !document.querySelector('#items-body input[disabled]');
+    renderItemsBody(editable);
+  }
 });
 
 async function triggerPoScan() {
