@@ -15,19 +15,19 @@ sales@ and marketing@linguative.net are still warming up. These are real, known 
 ## Recipients and angle
 | # | Contact | Angle | Channel suggestion |
 |---|---|---|---|
-| 1 | DRC: Mr. Ma'en | Year-end program reviews / partner workshops; also transcription + report translation (DRC has seen only interpretation) | Ala by phone/WhatsApp, then an email recap |
-| 2 | FCA | Follow-up to the August 2026 training requests (interpretation + catering; **Ala to confirm what was actually delivered** so the draft references it correctly): any year-end trainings or closing events? | Email reply on the August thread |
-| 3 | NRC | Transcription delivered 2024; Q4 evaluations/FGDs → transcription + translation; events | Email |
-| 4 | IFRC Jordan | Framework agreement (through May 2028): ask about the Q4 event pipeline so Linguative can plan equipment and interpreters in advance | Email to the framework focal point |
-| 5 | Bank of Jordan | Procurement-led: ask procurement whether year-end events, AGM prep or training sessions need interpretation/AV, and how to get on the vendor list for 2027 | Formal email to procurement |
-| 6 | S&P Global Ratings (Olivia Grant / Giulia Filocca) | Jan 2026 W Hotel event: any 2026 year-end or early-2027 Amman meetings? | Email reply on the January thread |
-| 7 | NTU International (EU Delegation meeting, Feb 2026) | **Jordan-EU Investment Conference, 19 Nov, Dead Sea:** EU-funded projects often hold side meetings or delegation briefings around it. Offer interpretation + conference setup | Email |
-| 8 | EU Twinning land administration project team | Same Jordan-EU conference angle + follow-on trainings after the Sept sessions | Email reply on the September thread (quote in EUR and pricing as an attachment only, per their stated requirement) |
-| 9 | UNODA (InterContinental, Jan 2026) | Q4/early-2027 regional meetings in Amman | Email |
-| 10 | UNDRR (hybrid regional workshop, Dec 2025) | One year on: is a Dec 2026 regional workshop planned? Hybrid + interpretation | Email |
-| 11 | IGC Jordan (Nov-Dec 2025, 5-day training) | Same season as last year: is the training recurring? | Email |
+| 1 | A recurring NGO client (framework-agreement contact) | Year-end program reviews / partner workshops; also transcription + report translation (this client has seen only interpretation so far) | Ala by phone/WhatsApp, then an email recap |
+| 2 | Another recurring NGO client | Follow-up to the August 2026 training requests (interpretation + catering; **Ala to confirm what was actually delivered** so the draft references it correctly): any year-end trainings or closing events? | Email reply on the August thread |
+| 3 | An international humanitarian NGO | Transcription delivered 2024; Q4 evaluations/FGDs → transcription + translation; events | Email |
+| 4 | An international humanitarian-federation client | Framework agreement (through May 2028): ask about the Q4 event pipeline so Linguative can plan equipment and interpreters in advance | Email to the framework focal point |
+| 5 | A procurement-led banking-sector client | Procurement-led: ask procurement whether year-end events, AGM prep or training sessions need interpretation/AV, and how to get on the vendor list for 2027 | Formal email to procurement |
+| 6 | A global ratings-agency client | Jan 2026 W Hotel event: any 2026 year-end or early-2027 Amman meetings? | Email reply on the January thread |
+| 7 | An EU-delegation-linked institutional client (EU Delegation meeting, Feb 2026) | **Jordan-EU Investment Conference, 19 Nov, Dead Sea:** EU-funded projects often hold side meetings or delegation briefings around it. Offer interpretation + conference setup | Email |
+| 8 | An EU-funded land administration project team | Same Jordan-EU conference angle + follow-on trainings after the Sept sessions | Email reply on the September thread (quote in EUR and pricing as an attachment only, per their stated requirement) |
+| 9 | A UN-agency client (InterContinental, Jan 2026) | Q4/early-2027 regional meetings in Amman | Email |
+| 10 | A UN-agency client (hybrid regional workshop, Dec 2025) | One year on: is a Dec 2026 regional workshop planned? Hybrid + interpretation | Email |
+| 11 | An institutional training client (Nov-Dec 2025, 5-day training) | Same season as last year: is the training recurring? | Email |
 
-Guarantee Travel Group isn't on this list because it gets its own follow-up after the 8 Oct event (`2026-10-11-gtg-post-event-followup.md`).
+The event-management/AV channel partner isn't on this list because it gets its own follow-up after the 8 Oct event (`2026-10-11-channel-partner-post-event-followup.md`).
 
 ## Key message (per email)
 Short and personal: reference the last job specifically (venue, date), ask one question ("Do you have events planned for November or December where we can help?"), and mention one service they haven't bought from Linguative yet (hybrid, transcription, video, or branding), chosen per the table. Mention the new identity in one line at most ("you may have seen our new look").
@@ -39,7 +39,7 @@ Use only their own past project with Linguative. Don't name other clients in the
 "Could you share your Q4 dates, even tentative ones? We'll hold equipment and interpreters and send a setup proposal." Or offer a 15-minute call.
 
 ## Length / format
-- English (Arabic for Bank of Jordan if the prior thread was in Arabic), 80-120 words, plain text, signed by Ala.
+- English (Arabic for the banking-sector client if the prior thread was in Arabic), 80-120 words, plain text, signed by Ala.
 - Subject line: reuse the prior thread subject (reply), or "Q4 events: [Org] + Linguative".
 - **No prices.** If rates come up, Ala confirms them separately.
 

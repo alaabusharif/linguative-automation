@@ -17,11 +17,11 @@ Decision makers who judge vendors on "have they done this at our level before?"
 
 ## Proof points
 - Real footage from `marketing/media-shortlist-2026-09-24.md`:
-  - **Marriott - Dead Sea:** national conference on a fair and inclusive labour agenda for women in Jordan, Nov 2025, with a minister in attendance (23MB video + hall photo)
-  - **French Embassy - HTU:** roundtable on drought adaptation, Nov 2025 (17MB video)
-  - **IFRC - Royal** (15MB video) as backup
+  - **Government ministry conference (Dead Sea hotel venue):** national conference on a fair and inclusive labour agenda for women in Jordan, Nov 2025, with a minister in attendance (23MB video + hall photo)
+  - **Diplomatic-mission roundtable (university venue):** roundtable on drought adaptation, Nov 2025 (17MB video)
+  - **International humanitarian-federation water-resilience event** (15MB video) as backup
 - Describe event types, not clients. Don't name the minister, embassy or university unless Ala approves.
-- Approved names are available for the caption if a named reference helps: IMF, Expertise France.
+- A short list of approved names is available for the caption if a named reference helps — see the private company reference.
 
 ## Call to action
 "Planning a conference in Amman or at the Dead Sea this season? Let's talk setup." LinkedIn: DM / info@linguative.net. Facebook: Messenger or call. GBP button: **Call now**.

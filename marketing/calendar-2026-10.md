@@ -8,7 +8,7 @@ Read with: `marketing/strategy.md` (see the 2026-09-24 and 2026-09-25 entries), 
 
 ## 1. What October is for
 
-October is when NGO, UN and institutional clients in Jordan commit their **November-December event budgets**. That covers year-end workshops, lessons-learned and closing sessions, 16 Days of Activism events (25 Nov - 10 Dec), Human Rights Day (10 Dec) events, and meetings around the Jordan-EU Investment Conference (19 Nov, Dead Sea). Most of Linguative's NGO/UN clients (DRC, NRC, FCA, IFRC, UN agencies) appear to run calendar-year budgets. *(Assumption: not verified per client. Ala, please correct this if any client runs a different fiscal year.)* If Linguative isn't on their shortlist by late October, the December work goes to whoever is.
+October is when NGO, UN and institutional clients in Jordan commit their **November-December event budgets**. That covers year-end workshops, lessons-learned and closing sessions, 16 Days of Activism events (25 Nov - 10 Dec), Human Rights Day (10 Dec) events, and meetings around the Jordan-EU Investment Conference (19 Nov, Dead Sea). Most of Linguative's recurring NGO/UN clients appear to run calendar-year budgets. *(Assumption: not verified per client. Ala, please correct this if any client runs a different fiscal year.)* If Linguative isn't on their shortlist by late October, the December work goes to whoever is.
 
 So the October goal is **to get booked for November-December**. Specifically:
 1. Get every recurring and past client to tell us what they're planning for Q4, through direct outreach and not just posts.
@@ -74,7 +74,7 @@ Content pillars in the rotation:
 | 22 Oct | Thu | P5 | Document translation: personal/legal (FB, GBP) and organizational reports (LI) | B2C inquiries via FB/GBP; B2B document work via LI | Local B2C (FB/GBP), local B2B (LI) | 4:5 image / 4:5 image / 4:3 image | `2026-10-22-document-translation.md` |
 | 25 Oct | Sun | P6 | Hybrid meetings with interpretation: remote participants hear the interpreter too | Sell the hybrid add-on (higher ticket) | Local + regional B2B | 4:5 image / 4:5 image / 4:3 image | `2026-10-25-hybrid-with-interpretation.md` |
 | 27 Oct | Tue | P1 | Beyond language: event branding, video and bilingual subtitles | Cross-sell branding/video to interpretation clients | Local B2B | Short video or 4:5 image / same / 4:3 image | `2026-10-27-branding-and-event-video.md` |
-| 29 Oct | Thu | P3 + P7 | Climate and water events: COP28 Water Pavilion experience, ahead of COP31 (9-20 Nov) / GBP: review request | Position for Q4 climate and water events; GBP reviews | Local + regional B2B; GBP: past clients | 4:5 image / 4:5 image / GBP 4:3 review-ask image | `2026-10-29-climate-events-cop-experience.md` |
+| 29 Oct | Thu | P3 + P7 | Climate and water events: past climate-summit experience, ahead of COP31 (9-20 Nov) / GBP: review request | Position for Q4 climate and water events; GBP reviews | Local + regional B2B; GBP: past clients | 4:5 image / 4:5 image / GBP 4:3 review-ask image | `2026-10-29-climate-events-cop-experience.md` |
 
 **Sequencing logic:** the month opens broad with the bundle (4 Oct) and closes on Q4 booking pressure (29 Oct). Guides (6, 20 Oct) alternate with proof (8, 13, 18 Oct) so no two back-to-back posts ask for a sale. The two language-services posts (15, 22 Oct) keep translation/transcription visible without making Linguative look like a translation office.
 
@@ -84,21 +84,21 @@ All email follows the **current warmup schedule for sales@ and marketing@linguat
 
 | Dates | Piece | Who | Goal | Brief |
 |---|---|---|---|---|
-| 5-8 Oct (Mon-Thu) | Q4 check-in with existing and past clients | DRC (Mr. Ma'en), FCA, NRC, IFRC Jordan (framework through May 2028), Bank of Jordan (via procurement), S&P Global Ratings, NTU International / EU Delegation project, EU Twinning land administration team, UNODA, UNDRR, IGC Jordan. The EU-linked contacts get the Jordan-EU Investment Conference (19 Nov) side-meeting angle | Find their Nov-Dec events now; get on the RFQ list | `2026-10-05-q4-client-checkin-outreach.md` |
-| 11-12 Oct | Post-event follow-up after the 8 Oct national consultation session (Guarantee Travel Group) | Guarantee Travel Group (Lana Abu Hajar / Sara Abdeen) | Thank-you, ask for feedback and a GBP review, ask about their Q4 pipeline, ask permission to use photos | `2026-10-11-gtg-post-event-followup.md` |
-| 19-22 Oct | Partnership intro to LTA-holding travel agencies / DMCs with MICE desks | Shortlist from `marketing/competitors/roster.md`: Nebo Tours, Petra Conferences & Exhibitions, Sabeel DMC, Discovery Bespoke, JETT DMC, Abercrombie & Kent Jordan (max 6 this month) | Become their subcontracted interpretation + conference-tech vendor for UN/NGO events | `2026-10-19-lta-dmc-partnership-intro.md` |
+| 5-8 Oct (Mon-Thu) | Q4 check-in with existing and past clients | Recurring NGO/UN-agency clients (framework-agreement and procurement-led relationships) and delivered institutional projects (ratings agency, EU-delegation-linked, EU-funded, UN-agency workshops and trainings) — see the private company reference for specifics. The EU-linked contacts get the Jordan-EU Investment Conference (19 Nov) side-meeting angle | Find their Nov-Dec events now; get on the RFQ list | `2026-10-05-q4-client-checkin-outreach.md` |
+| 11-12 Oct | Post-event follow-up after the 8 Oct national consultation session | The event-management/AV channel partner (never named publicly; contacts in the private reference) | Thank-you, ask for feedback and a GBP review, ask about their Q4 pipeline, ask permission to use photos | `2026-10-11-channel-partner-post-event-followup.md` |
+| 19-22 Oct | Partnership intro to LTA-holding travel agencies / DMCs with MICE desks | Shortlist from `marketing/competitors/roster.md` (max 6 this month) | Become their subcontracted interpretation + conference-tech vendor for UN/NGO events | `2026-10-19-lta-dmc-partnership-intro.md` |
 
-**Guarantee Travel Group is never named in public posts.** It's a channel partner, and naming it publicly would expose how Linguative wins UN work.
+**The event-management/AV channel partner behind the 8 Oct national consultation session is never named in public posts.** It's a channel partner, and naming it publicly would expose how Linguative wins UN work.
 
 ## 6. Proof points and naming rules for October
 
 The folder `marketing/case-studies/` that the media shortlist mentions does not exist yet. For October, the naming rule comes from the locked website drafts (`/mnt/project-files/website/2026-09-23-draft-content-case-studies.md`) and the company profile:
 
-- **OK to name (locked/approved website copy):** Expertise France (2021-22 justice-sector work, incl. hybrid Zoom sessions and trilingual EN/FR/AR), IMF (ongoing: interpretation, translation, language distribution, videography/photography), COP28 Water Pavilion (10-day international event).
-- **OK to name (company-profile portfolio list, used on service pages):** IFRC, Danish Refugee Council, Finn Church Aid, Save the Children, Mercy Corps, GIZ International Services, ActionAid Arab Region, ACTED, Karama Women's Network, NTU/EU Delegation, S&P Global Ratings.
-- **Confirm with Ala before naming** (on the sitemap draft's nameable list, which isn't approved yet): UNODA, UNDRR, IGC Jordan, EU Twinning. Briefs that use these give an unnamed fallback.
-- **Never name publicly:** Guarantee Travel Group, Bank of Jordan, NCHR (proposal), EMGS (proposal), NRC (not on any approved list; describe as "an international humanitarian NGO").
-- **Events in the media shortlist** (French Embassy/HTU roundtable, Marriott Dead Sea National Labour Conference, Danish Institute, IFRC/Jordan Red Crescent/KOICA water-resilience event, ICT Hilton): photos and video are real and usable. **Describe the event type, not the client**, unless Ala approves naming.
+- **OK to name (locked/approved website copy):** a small set of clients Ala has cleared for public naming — see the private company reference (`/mnt/project-files/linguative-company-memory.md`) and the locked website drafts for the current list. Don't restate specific names in this repo.
+- **OK to name (company-profile portfolio list, used on service pages):** a short list of NGO/UN and institutional clients Ala has approved for the portfolio — same private reference for the current list.
+- **Confirm with Ala before naming:** several delivered UN-agency and institutional projects are candidates but not yet cleared. Briefs that use these give an unnamed fallback.
+- **Never name publicly:** the event-management/AV channel partner, the procurement-led banking client, and any unannounced proposal — plus any client the private reference flags as never-public.
+- **Events in the media shortlist** (a diplomatic-mission roundtable, a government ministry conference, a government-institute event, an international humanitarian-federation water-resilience event, a hotel-venue event): photos and video are real and usable. **Describe the event type, not the client**, unless Ala approves naming.
 
 **Equipment claims:** the only equipment brand ever named is **Bosch DICENTIS**. Do not name Bosch INTEGRUS: Linguative's owned IR system isn't INTEGRUS. Everything else is generic: interpreter booth, infrared language distribution, receivers, delegate/wireless microphones, conference sound, PTZ/conference cameras. **No equipment counts or capacities** in public posts. **No prices** in any post.
 
@@ -111,7 +111,7 @@ All briefs follow `marketing/brand/BRAND.md`:
 - **Fonts:** Futura PT for headings, Acumin Pro for body (fallbacks Montserrat / Source Sans 3). Thin gold rules and generous negative space. One idea per image.
 - **Arabic type:** BRAND.md doesn't specify an Arabic font. Until Ala sets one, use the pairing already used in the Arabic company-profile draft (2026-09-23): **Cairo** for headings and **Tajawal** for body. **Ala to confirm.**
 - **Photography:** real photos first, from `marketing/media-shortlist-2026-09-24.md` (open the Drive folders; the shortlist is only a partial list). Stock is a fallback only and must be realistic and documentary. No AI-generated conference equipment.
-- **Shortlist data issue:** the "Danish Institute" and "ICT Hilton" entries point to the **same** mixing-console photo and the **same** 60MB video file IDs. One of them is a copy error. Before captioning either, the designer must open both Drive folders and confirm which event the files really belong to.
+- **Shortlist data issue:** the "government-institute event" and "hotel-venue event" entries point to the **same** mixing-console photo and the **same** 60MB video file IDs. One of them is a copy error. Before captioning either, the designer must open both Drive folders and confirm which event the files really belong to.
 - **Booth photos:** two outer panels on the owned booth were damaged in August 2026. Don't use new close-ups of that booth unless it has been repaired. Pre-August event photos are fine.
 - **Sizes:** LinkedIn/Facebook single image 1080x1350 (4:5); LinkedIn carousel as a 1080x1350 PDF; Facebook album 1080x1350 images; GBP 1200x900 (4:3), with the logo and key text kept inside the central safe area because GBP crops thumbnails.
 

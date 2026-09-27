@@ -1,6 +1,8 @@
 # Full Google Drive media catalog
 
-Source: Ala's Google Drive (`linguativ@gmail.com`). This supersedes `marketing/media-shortlist-2026-09-24.md`, which was an explicitly partial first pass over one folder only ("Events Setup") and had a cataloguing bug (see "Fix: Danish Institute vs ICT Hilton" below). Keep this file as the source of truth for real/documentary photography going forward, per `marketing/brand/BRAND.md` ("real/documentary photography from Ala's Drive is the top image source, preferred over stock or AI-generated").
+Source: Ala's Google Drive (`linguativ@gmail.com`). This supersedes `marketing/media-shortlist-2026-09-24.md`, which was an explicitly partial first pass over one folder only ("Events Setup") and had a cataloguing bug (see "Fix: duplicate-folder bug" below). Keep this file as the source of truth for real/documentary photography going forward, per `marketing/brand/BRAND.md` ("real/documentary photography from Ala's Drive is the top image source, preferred over stock or AI-generated").
+
+Client/organization names for the events below are kept out of this repo — see the private company reference (`/mnt/project-files/linguative-company-memory.md`) for specifics.
 
 ## How this was built
 
@@ -9,13 +11,13 @@ Source: Ala's Google Drive (`linguativ@gmail.com`). This supersedes `marketing/m
 - Excluded files whose name starts with `.trashed-…` (an artifact of the phone backup/sync tool marking a photo deleted-on-device; these are near-duplicate frames taken seconds before/after a kept file, not distinct new content) — counts are noted per event below so nobody wonders where they went.
 - Did **not** find a `marketing/case-studies/` folder or any other pre-approved public-client-naming list in this repo (the old shortlist referenced one, but it does not exist yet). Every client below is therefore flagged "confirm with Ala" per the working rule that naming any client publicly needs per-client approval — nothing here is asserted as pre-cleared.
 
-## Fix: Danish Institute vs ICT Hilton (the known duplicate bug)
+## Fix: duplicate-folder bug (two folders wrongly shown as one)
 
-The first-pass shortlist listed the **same two files** (a mixing-console photo and a 60MB event video) under both "Danish Institute" and "ICT Hilton." Re-checked directly against Drive folder contents:
+The first-pass shortlist listed the **same two files** (a mixing-console photo and a 60MB event video) under two different folder entries ("Government-institute event" and "Hotel-venue event" below). Re-checked directly against Drive folder contents:
 
-- **Danish Institute** (Drive folder is literally named "Danish Inistitute" — a typo in Drive itself, not in this catalog) and **ICT Hilton** are two separate, real Drive folders with entirely separate files. They are not the same event.
-- The mixing-console photo (`IMG_20251124_131945.jpg`, https://drive.google.com/file/d/1feNua-aFxafPl1tilLzPJSHdnvI18lJq/view) and the 60MB video (`VID_20251125_103414.mp4`, https://drive.google.com/file/d/1WoToClArHrMUl-ui60OB4_ugeAKSkjvW/view) both genuinely belong to **Danish Institute only**.
-- **ICT Hilton** has its own distinct set of files (mostly WhatsApp-forwarded photos/videos, listed below) — none of them are shared with Danish Institute. The duplicate in the old shortlist was a cataloguing error, not a real duplicate in Drive.
+- Those two entries are two separate, real Drive folders with entirely separate files (one folder's name has a typo in Drive itself, not in this catalog). They are not the same event.
+- The mixing-console photo (`IMG_20251124_131945.jpg`, https://drive.google.com/file/d/1feNua-aFxafPl1tilLzPJSHdnvI18lJq/view) and the 60MB video (`VID_20251125_103414.mp4`, https://drive.google.com/file/d/1WoToClArHrMUl-ui60OB4_ugeAKSkjvW/view) both genuinely belong to the **government-institute event only**.
+- The **hotel-venue event** has its own distinct set of files (mostly WhatsApp-forwarded photos/videos, listed below) — none of them are shared with the government-institute event. The duplicate in the old shortlist was a cataloguing error, not a real duplicate in Drive.
 
 ---
 
@@ -24,25 +26,25 @@ The first-pass shortlist listed the **same two files** (a mixing-console photo a
 - **5 events/clients** catalogued in the "Events Setup" folder tree, covering **77 photos + 26 videos (103 usable files, ~772.0 MB total)**.
 - Plus a handful of non-event media loose at the Drive root (brand/rebrand video work-in-progress, a subtitling deliverable, a logo file, one broken upload) and one large file shared into the Drive by someone else — see "Other media" below.
 - No Drive permission issues were hit; every folder searched returned results normally.
-- `Event Shooting Video`, `CFI`, `Bank of Jordan` (+ subfolders), and `Russian Translation Project` (+ subfolders) exist in the Drive but contain **no photos or videos** (empty, or administrative/document folders only) — confirmed via a Drive-wide image/video search, not by assumption. `ACTED Jordan` likewise only contains administrative subfolders (Policies, Financial Statements, Forms, Contracts, Admin Documents) with no media found.
+- A handful of client-named Drive folders (see the private company reference for which ones) exist but contain **no photos or videos** (empty, or administrative/document folders only) — confirmed via a Drive-wide image/video search, not by assumption.
 
-| Event / client | Folder | Photos | Videos | Size | Public use |
+| Event | Folder | Photos | Videos | Size | Public use |
 |---|---|---|---|---|---|
-| French Embassy – HTU | [Drive folder](https://drive.google.com/drive/folders/1zLuaTguvZSUnoabc_9AyT2j_Yn5Al8D2) | 14 | 3 | 96.2 MB | confirm with Ala |
-| Marriott – Dead Sea | [Drive folder](https://drive.google.com/drive/folders/152ZS5ojqUtK4BVBEpuZ22LnNqnkjKLCa) | 21 | 5 | 221.1 MB | confirm with Ala |
-| Danish Institute | [Drive folder](https://drive.google.com/drive/folders/16IZZkqAu6VRWrq-jjGDl1yZUT64RBtR4) | 25 | 10 | 339.7 MB | confirm with Ala |
-| IFRC – Royal | [Drive folder](https://drive.google.com/drive/folders/15TKIXkx4CX-U51DZtPU6Ltc_mU2u63CY) | 7 | 2 | 58.4 MB | confirm with Ala |
-| ICT Hilton | [Drive folder](https://drive.google.com/drive/folders/1XZge9He05uFNQ7W-jyI44Hm_qhRBWOdO) | 10 | 6 | 56.5 MB | confirm with Ala |
+| Diplomatic-mission roundtable (university venue) | [Drive folder](https://drive.google.com/drive/folders/1zLuaTguvZSUnoabc_9AyT2j_Yn5Al8D2) | 14 | 3 | 96.2 MB | confirm with Ala |
+| Government ministry conference (Dead Sea hotel venue) | [Drive folder](https://drive.google.com/drive/folders/152ZS5ojqUtK4BVBEpuZ22LnNqnkjKLCa) | 21 | 5 | 221.1 MB | confirm with Ala |
+| Government-institute event | [Drive folder](https://drive.google.com/drive/folders/16IZZkqAu6VRWrq-jjGDl1yZUT64RBtR4) | 25 | 10 | 339.7 MB | confirm with Ala |
+| International humanitarian-federation water-resilience event | [Drive folder](https://drive.google.com/drive/folders/15TKIXkx4CX-U51DZtPU6Ltc_mU2u63CY) | 7 | 2 | 58.4 MB | confirm with Ala |
+| Hotel-venue event | [Drive folder](https://drive.google.com/drive/folders/1XZge9He05uFNQ7W-jyI44Hm_qhRBWOdO) | 10 | 6 | 56.5 MB | confirm with Ala |
 
 ---
 
-## French Embassy – HTU
+## Diplomatic-mission roundtable (university venue)
 
-Roundtable discussion at Al Hussein Technical University ("Adapting to droughts in Jordan: Managing the Emergency, Preventing the Disaster"), Nov 2025.
+Roundtable discussion at a university venue ("Adapting to droughts in Jordan: Managing the Emergency, Preventing the Disaster"), Nov 2025.
 
 - **Folder:** https://drive.google.com/drive/folders/1zLuaTguvZSUnoabc_9AyT2j_Yn5Al8D2
 - **Contents:** 14 photos, 3 videos, ~96.2 MB total (plus 2 `.trashed-…` duplicate frame(s) excluded — see note above)
-- **Public use:** confirm with Ala — French Embassy is a diplomatic client; not on the pre-approved public-naming list (no `marketing/case-studies/` approval list exists in the repo yet). Confirm before naming publicly.
+- **Public use:** confirm with Ala — this is a diplomatic-mission client; not on the pre-approved public-naming list (no `marketing/case-studies/` approval list exists in the repo yet). Confirm before naming publicly.
 
 **Photos:**
 
@@ -69,13 +71,13 @@ Roundtable discussion at Al Hussein Technical University ("Adapting to droughts 
 
 ---
 
-## Marriott – Dead Sea
+## Government ministry conference (Dead Sea hotel venue)
 
-National Labour Conference ("مؤتمر العمل الوطني: نحو أجندة عادلة وشاملة للمرأة في الأردن" — toward a fair and inclusive labour agenda for women in Jordan), Nov 25 2025, with Jordan's Minister of Social Development.
+National labour conference ("مؤتمر العمل الوطني: نحو أجندة عادلة وشاملة للمرأة في الأردن" — toward a fair and inclusive labour agenda for women in Jordan), Nov 25 2025, with a government minister present.
 
 - **Folder:** https://drive.google.com/drive/folders/152ZS5ojqUtK4BVBEpuZ22LnNqnkjKLCa
 - **Contents:** 21 photos, 5 videos, ~221.1 MB total (plus 1 `.trashed-…` duplicate frame(s) excluded — see note above)
-- **Public use:** confirm with Ala — Government minister present (Ministry of Social Development) and a specific hotel venue; confirm client/venue naming and whether the minister's likeness can be used publicly before any public use.
+- **Public use:** confirm with Ala — a government minister was present and a specific hotel venue is identifiable; confirm client/venue naming and whether the minister's likeness can be used publicly before any public use.
 
 **Photos:**
 
@@ -111,15 +113,15 @@ National Labour Conference ("مؤتمر العمل الوطني: نحو أجند
 
 ---
 
-## Danish Institute
+## Government-institute event
 
 Nov 2025 event spanning three shoot days (Nov 18, 24 and 25) — the largest folder in the Drive. Includes a sound-mixing-console shot (Linguative's own AV/technical setup, good equipment-in-use proof point).
 
-*(Drive folder is literally named "Danish Inistitute" — typo in Drive itself.)*
+*(The Drive folder name has a typo — an artifact of Drive itself, not of this catalog.)*
 
 - **Folder:** https://drive.google.com/drive/folders/16IZZkqAu6VRWrq-jjGDl1yZUT64RBtR4
 - **Contents:** 25 photos, 10 videos, ~339.7 MB total
-- **Public use:** confirm with Ala — "Danish Institute" is not on Linguative's known recurring-client list in CLAUDE.md (that list has DRC — Danish Refugee Council — which is a different organization); treat as a client name requiring confirmation, and do not conflate it with DRC in any copy.
+- **Public use:** confirm with Ala — this client is not on Linguative's known recurring-client list; treat as a client name requiring confirmation, and don't conflate it with any other similarly-named organization in copy.
 
 **Photos:**
 
@@ -164,13 +166,13 @@ Nov 2025 event spanning three shoot days (Nov 18, 24 and 25) — the largest fol
 
 ---
 
-## IFRC – Royal
+## International humanitarian-federation water-resilience event
 
-Jordan Red Crescent + IFRC + KOICA event on water-related community conflict and resilience ("Addressing Water-Induced Community-Level Conflicts, and Strengthening Water Systems, Community Adaptation and Resilience Building"), Nov 18 2025.
+An international humanitarian federation's event (with a local Red Crescent society and an international development agency) on water-related community conflict and resilience ("Addressing Water-Induced Community-Level Conflicts, and Strengthening Water Systems, Community Adaptation and Resilience Building"), Nov 18 2025.
 
 - **Folder:** https://drive.google.com/drive/folders/15TKIXkx4CX-U51DZtPU6Ltc_mU2u63CY
 - **Contents:** 7 photos, 2 videos, ~58.4 MB total (plus 3 `.trashed-…` duplicate frame(s) excluded — see note above)
-- **Public use:** confirm with Ala — IFRC is a named recurring client in Linguative's own project records (CLAUDE.md lists an IFRC framework agreement and an IFRC Crowne Plaza event as notable delivered work), so it is likely already discussed publicly elsewhere — but no `marketing/case-studies/` approval list exists in this repo, so confirm with Ala before using these specific photos/video publicly rather than assuming approval carries over.
+- **Public use:** confirm with Ala — this is a named recurring client in Linguative's own project records (per the private company reference, a framework agreement and a delivered event), so it is likely already discussed publicly elsewhere — but no `marketing/case-studies/` approval list exists in this repo, so confirm with Ala before using these specific photos/video publicly rather than assuming approval carries over.
 
 **Photos:**
 
@@ -189,17 +191,17 @@ Jordan Red Crescent + IFRC + KOICA event on water-related community conflict and
 
 **Related, but filed elsewhere:**
 
-- `Royal Anthem of Jordan _ السلام الملكي الأردني.mp4` — https://drive.google.com/file/d/1N-TYkIscFo2v5DgpLA5H2ACfDrcPJonR/view (980.2 KB, video) — loose in the parent "Events Setup" folder, not inside IFRC- ROYAL itself — almost certainly this event's opening clip given the timing (Nov 18) and title, but not confirmed
+- `Royal Anthem of Jordan _ السلام الملكي الأردني.mp4` — https://drive.google.com/file/d/1N-TYkIscFo2v5DgpLA5H2ACfDrcPJonR/view (980.2 KB, video) — loose in the parent "Events Setup" folder, not inside this event's own folder — almost certainly this event's opening clip given the timing (Nov 18) and title, but not confirmed
 
 ---
 
-## ICT Hilton
+## Hotel-venue event
 
-Event at a Hilton property, spanning two shoot dates (Nov 11 and Nov 23 2025) — could be a two-day/two-session engagement or two related bookings; not confirmed. Genuinely a separate Drive folder with its own distinct files — NOT the same photos/video as Danish Institute (see fix note below).
+Event at a hotel property, spanning two shoot dates (Nov 11 and Nov 23 2025) — could be a two-day/two-session engagement or two related bookings; not confirmed. Genuinely a separate Drive folder with its own distinct files — NOT the same photos/video as the government-institute event (see fix note above).
 
 - **Folder:** https://drive.google.com/drive/folders/1XZge9He05uFNQ7W-jyI44Hm_qhRBWOdO
 - **Contents:** 10 photos, 6 videos, ~56.5 MB total (plus 5 `.trashed-…` duplicate frame(s) excluded — see note above)
-- **Public use:** confirm with Ala — "ICT" client identity is not established from filenames alone (no client name embedded); confirm the actual client name and naming approval with Ala before public use.
+- **Public use:** confirm with Ala — client identity is not established from filenames alone (no client name embedded); confirm the actual client name and naming approval with Ala before public use.
 
 **Photos:**
 
@@ -231,20 +233,20 @@ Loose at the Drive root — not part of the "Events Setup" folder tree, and not 
 
 - `optimized_create_a_premium_cinematic_corporate_rebrand_film_for_linguative__begin_exactly_from_the_supplied_br.mp4` — https://drive.google.com/file/d/1vpF-xTgaWVXcpN18XTi4SIGyyqe-rGrn/view (1.9 MB, video) — Linguative's own in-progress cinematic corporate rebrand film (optimized/compressed cut) — brand video project, not client event footage. Created today (2026-09-25).
 - `Create_a_premium_cinematic_corporate_rebrand_film_for_Linguative__Begin_exactly_from_the_supplied_br.mp4` — https://drive.google.com/file/d/1_FDKI_bkc_ZctEyg8XnD3aUtOZirVEz0/view (78.9 MB, video) — Same rebrand film, full-resolution/original cut (78.9 MB — large, note for sandbox download-size limits). Created today (2026-09-25).
-- `Diakonia_6_SUB_Final_version.mp4` — https://drive.google.com/file/d/1mMHV5SGH_Ilxu7e5Z4400hAv0ihhHWoz/view (27.8 MB, video) — Subtitled video deliverable for a client named "Diakonia" — proof point for the subtitling/localization service line. Not an event-venue photo/video.
+- A subtitled deliverable video (filename contains the client's name, kept out of this repo — see the private company reference) — https://drive.google.com/file/d/1mMHV5SGH_Ilxu7e5Z4400hAv0ihhHWoz/view (27.8 MB, video) — proof point for the subtitling/localization service line. Not an event-venue photo/video.
 - `Logo-PDF-new.png` — https://drive.google.com/file/d/1SqrnSJQE-Pd76ySJ5zyT1JW9A_5C9Eil/view (169.6 KB, image) — A logo file sitting loose in Drive — per the Brand Guide, only the two locked logo files in marketing/brand/logos/ in this repo are approved for use; do not substitute this Drive file for those.
 - `GMT20260608-055045_Recording_640x360.mp4.adding` — https://drive.google.com/file/d/1c0XqYcXoLcNjUJR1Hlljz1Uq3ShoWo3w/view (0 B, video) — An incomplete/broken upload (0 bytes, ".adding" extension — a Zoom recording sync that never finished). Not usable; flagging so nobody wastes time trying to open it.
 
 **Shared with Ala by someone else (not owned by linguativ@gmail.com):**
 
-- `Diakonia-5 – SUBTITLE.mp4` — https://drive.google.com/file/d/1tRmx8bhtzBwZ2QmlDybCS6o6Q7Q24hEU/view (308.2 MB, video, owned by moskah19@gmail.com) — A large (308 MB) subtitled video shared into Ala's Drive by moskah19@gmail.com, not owned by linguativ@gmail.com — likely another Diakonia deliverable/cut. Too large to safely pull into a sandbox; flagging its existence and size only.
+- Another subtitled video (filename also contains the client's name) — https://drive.google.com/file/d/1tRmx8bhtzBwZ2QmlDybCS6o6Q7Q24hEU/view (308.2 MB, video, owned by moskah19@gmail.com) — A large (308 MB) subtitled video shared into Ala's Drive by moskah19@gmail.com, not owned by linguativ@gmail.com — likely another deliverable/cut for the same subtitling client above. Too large to safely pull into a sandbox; flagging its existence and size only.
 
 ---
 
 ## Rules recap for whoever uses this catalog
 
 - **No prices, equipment counts, or capacities** in anything public.
-- **Guarantee Travel Group must never be named publicly.** (None of the events catalogued above appear to be Guarantee Travel Group engagements based on folder/file names, but if any client identity is later confirmed to be Guarantee Travel Group, treat it as never-public immediately.)
+- **The event-management/AV channel partner must never be named publicly.** (None of the events catalogued above appear to be that partner's engagements based on folder/file names, but if any client identity is later confirmed to be that partner, treat it as never-public immediately.)
 - **Any other specific client name needs Ala's per-event approval before public use** — this catalog does not pre-clear any of them; every "Public use" flag above is "confirm with Ala," not a guess in either direction.
-- **Equipment naming:** only caption visible gear as "Bosch DICENTIS" or "Bosch INTEGRUS" where it is genuinely, identifiably that equipment in the shot (e.g. the Danish Institute mixing-console photo) — never another brand name, never an invented model.
+- **Equipment naming:** only caption visible gear as "Bosch DICENTIS" or "Bosch INTEGRUS" where it is genuinely, identifiably that equipment in the shot (e.g. the government-institute event's mixing-console photo) — never another brand name, never an invented model.
 - This catalog was built from Drive metadata (filenames, folder placement, timestamps, file sizes) rather than by opening and captioning every one of the 100+ individual photos — before using any specific photo in a design, open its Drive link and confirm it actually shows what you need.

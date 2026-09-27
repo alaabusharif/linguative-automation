@@ -16,8 +16,8 @@ MEAL officers, evaluation team leaders (often independent consultants hired by N
 "Recorded interviews and focus groups in Arabic? We transcribe them accurately, translate into English, and hand back files your evaluation team can code and quote from."
 
 ## Proof points
-- Transcription delivered for **an international humanitarian NGO** (2024). *Don't name NRC; it isn't on an approved list.*
-- Translation of NGO/UN reports, policy documents and development-sector documents (company memory; portfolio includes IFRC, DRC, FCA).
+- Transcription delivered for **an international humanitarian NGO** (2024). *Don't name the client; it isn't on an approved list.*
+- Translation of NGO/UN reports, policy documents and development-sector documents (company memory; portfolio includes several recurring NGO/UN-agency clients — see the private reference for names).
 - Confidential handling of sensitive participant data. Describe it as practice ("we handle recordings confidentially"). **Don't claim** certifications or ISO standards.
 - **No rates.** Transcription pricing isn't set: if asked, the reply is "we'll quote per project" and Ala confirms the rate.
 

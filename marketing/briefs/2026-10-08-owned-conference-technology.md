@@ -31,7 +31,7 @@ People who have had a microphone or channel fail mid-session and don't want it a
 | GBP | English + Arabic | 60-80 words; no phone number in the body | 1200x900 photo |
 
 ## Visual direction
-- **Real equipment photography only.** First choice: the sound-mixing-console shot in the shortlist (listed under both Danish Institute and ICT Hilton with the same file ID. The designer must open both Drive folders and confirm which event it's from, and skim them for a DICENTIS delegate-unit or interpreter-desk shot, which would be better).
+- **Real equipment photography only.** First choice: the sound-mixing-console shot in the shortlist (listed under both the government-institute event and the hotel-venue event with the same file ID. The designer must open both Drive folders and confirm which event it's from, and skim them for a DICENTIS delegate-unit or interpreter-desk shot, which would be better).
 - Documentary, close crop, natural light. Don't add or invent equipment, and don't retouch controls or labels. Background cleanup and a light crop are fine.
 - **No new close-ups of the booth** until its damaged panels are repaired. Pre-August 2026 booth photos are fine.
 - Text on image: at most one line, e.g. "Owned. Set up. Run by our own team." in Futura PT / Cairo on a navy band, with a thin gold rule. Use the white + gold logo on dark photos and the navy + gold logo on light ones.
