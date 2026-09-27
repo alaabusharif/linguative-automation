@@ -90,6 +90,7 @@ label { font-size: 12px; color: #555; display: block; margin-bottom: 4px; }
 .totals-box .grand { font-weight: 700; font-size: 18px; color: var(--navy); }
 
 .login-wrap { display: flex; align-items: center; justify-content: center; height: 100vh; }
+[hidden] { display: none !important; }
 .login-card { width: 340px; }
 
 .error { color: #a30000; font-size: 13px; margin-top: 8px; }

@@ -401,6 +401,7 @@ function renderActions(doc) {
   }
   if (doc.id) {
     btns.push(`<a class="plain" style="text-decoration:none; display:inline-block;" href="/api/documents/${doc.id}/pdf" target="_blank">Download PDF</a>`);
+    btns.push(`<a class="plain" style="text-decoration:none; display:inline-block;" href="/api/documents/${doc.id}/docx">Download DOCX</a>`);
   }
   if (doc.id && doc.kind === 'quote' && ['approved','sent'].includes(doc.status)) {
     btns.push(`<button class="gold" onclick="createInvoiceFromQuote(${doc.id})">Create Invoice from this Quote</button>`);

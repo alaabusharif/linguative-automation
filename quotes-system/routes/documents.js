@@ -4,6 +4,7 @@ const { requireLogin, requireAdmin } = require('../middleware/auth');
 const { calcTotals, lineTotal } = require('../lib/calc');
 const { nextNumber } = require('../lib/numbering');
 const { renderDocumentPdf } = require('../lib/pdf');
+const { buildDocumentDocx } = require('../lib/docx');
 
 const router = express.Router();
 
@@ -251,6 +252,21 @@ router.get('/:id/pdf', requireLogin, (req, res) => {
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `inline; filename="${doc.number}.pdf"`);
   renderDocumentPdf(doc, items, res);
+});
+
+router.get('/:id/docx', requireLogin, async (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc) return res.status(404).send('Not found');
+  const items = getItems(doc.id);
+  try {
+    const buffer = await buildDocumentDocx(doc, items);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', `attachment; filename="${doc.number}.docx"`);
+    res.send(buffer);
+  } catch (e) {
+    console.error('[docx] failed:', e);
+    res.status(500).send('Could not generate the .docx');
+  }
 });
 
 module.exports = router;
