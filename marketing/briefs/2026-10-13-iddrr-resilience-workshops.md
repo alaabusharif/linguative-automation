@@ -10,14 +10,14 @@
 Use a relevant UN day to show real delivery for the DRR/resilience community, which runs many regional and multilingual workshops, without turning the day into an ad. Target outcome: inquiries from DRR/climate program teams planning Q4 or early-2027 regional workshops.
 
 ## Audience
-DRR, climate adaptation and water-program staff at UN agencies, IFRC/Jordan Red Crescent, INGOs and ministries. Also regional organizers who bring participants to Amman.
+DRR, climate adaptation and water-program staff at UN agencies, international/national Red Cross and Red Crescent societies, INGOs and ministries. Also regional organizers who bring participants to Amman.
 
 ## Key message
 Resilience starts with communities being heard, and at a regional workshop that means every participant, in the room or online, following in their own language. Lead with the day's theme in one line, then move to what Linguative did.
 
 ## Proof points (pick based on Ala's naming approval)
-- **Regional hybrid DRR workshop, Dec 2025, ~70 participants, in-room + remote, interpreter booth, interpreter consoles, receivers, wireless and lapel microphones, full-day technical support.** Name **UNDRR** only if Ala approves. Fallback wording: "a UN regional hybrid workshop on disaster risk reduction."
-- **Water-conflict and community-resilience event with the Jordan Red Crescent and IFRC, Nov 2025** (media shortlist "IFRC - Royal"). IFRC is on the approved list. Confirm with Ala before naming the Jordan Red Crescent or KOICA.
+- **Regional hybrid DRR workshop, Dec 2025, ~70 participants, in-room + remote, interpreter booth, interpreter consoles, receivers, wireless and lapel microphones, full-day technical support.** Don't name the UN agency unless Ala approves. Fallback wording: "a UN regional hybrid workshop on disaster risk reduction."
+- **Water-conflict and community-resilience event with a national Red Crescent society and an international humanitarian federation, Nov 2025** (media shortlist "international humanitarian-federation water-resilience event"). Confirm with Ala before naming any of the organizations involved.
 - Don't give receiver counts as inventory; "~70 participants" describes the event, not owned stock.
 
 ## Call to action
@@ -31,7 +31,7 @@ Resilience starts with communities being heard, and at a regional workshop that 
 | GBP | English + Arabic | 60-80 words | 1200x900 |
 
 ## Visual direction
-- Real photo from the **IFRC - Royal** Drive folder: participants in session, documentary. Don't use a disaster image or UN/IFRC emblems on the graphic.
+- Real photo from the **international humanitarian-federation water-resilience event** Drive folder: participants in session, documentary. Don't use a disaster image or any organization's emblems on the graphic.
 - Minimal overlay: navy band at the bottom with one line, "Everyone heard. In every language." / «كل صوت مسموع، بكل لغة», Futura PT / Cairo, thin gold rule, and the logo file matched to the background (white + gold on the navy band).
 - The day's name can sit in small caps above the headline, in Champagne Gold.
 

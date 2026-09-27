@@ -20,7 +20,7 @@
 
 ## Proof points
 - Arabic ↔ English and Arabic/English ↔ French; legal, academic, institutional and development-sector documents (company memory).
-- B2B named references (approved): IMF (reports, briefs, policy documents), Expertise France (legal translation).
+- B2B named references (approved) available in the private company reference: an international financial institution client (reports, briefs, policy documents), a justice-sector program client (legal translation).
 - **Don't write "certified" or "sworn" translation** until Ala confirms accreditation status. Use "official and legal documents".
 - **No prices or per-page rates** in any version. Rates are confirmed by Ala per request.
 - "Electronic intake" is fine. **Don't promise specific turnaround times** (e.g. "24 hours") unless Ala confirms them.

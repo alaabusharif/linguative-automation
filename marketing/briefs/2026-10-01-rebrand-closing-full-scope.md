@@ -36,7 +36,7 @@ New identity, same team and standards. It now reflects the full scope of what Li
 ## Visual direction
 - Deep Navy `#071A2E` field, **white + gold logo** (`marketing/brand/logos/logo-white-gold-dark-bg.png`) placed as the file, never recreated. Tagline exactly as written: COMMUNICATION BEYOND LANGUAGE.
 - Below it, a thin Champagne Gold `#C9A46A` rule, then the five service names in Futura PT (Arabic version: Cairo), Warm Ivory `#F8F5F0`.
-- Optional variant: an asymmetric layout with one real event photo on the left (dark, documentary, e.g. the conference hall photo from the Marriott Dead Sea folder in the media shortlist) and the logo on a navy panel on the right.
+- Optional variant: an asymmetric layout with one real event photo on the left (dark, documentary, e.g. the conference hall photo from the government ministry conference (Dead Sea hotel venue) folder in the media shortlist) and the logo on a navy panel on the right.
 - **Animated video:** if the rebrand animation is approved in time, use it on LinkedIn and Facebook (GBP takes a still frame). It must use the locked logo file as an asset, not an animated redraw of the letters.
 - Don't use the old logo, swooshes beyond the one in the logo, flags, globes or speech bubbles.
 
