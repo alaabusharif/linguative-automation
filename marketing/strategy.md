@@ -8,11 +8,13 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 
 _Newest entry first. Each entry: what changed, why, and what copy, design, outreach, and lead targeting should now do differently._
 
-### 2026-09-25 — Standing cadence from Oct 4 (provisional), logo on all posts, October plan
+### 2026-09-25 — Standing cadence from Oct 4 (confirmed), logo on all posts, October plan
+
+**Confirmed 2026-09-27:** Ala merged draft PR #27 (the October calendar built on this cadence/logo assumption) on 2026-09-25 with no objection — treating both points below as standing, not provisional.
 
 **What changes:**
-1. **Cadence after the rebrand week:** the 2026-09-24 entry says "normal cadence resumes 2026-10-04" but never defines "normal". From Sunday 2026-10-04, the standing cadence is **3 posts/week per active platform (LinkedIn, Facebook, Google Business Profile), on Sun/Tue/Thu**. Fri and Sat are left free because they're the Jordanian weekend. This is **provisional until Ala confirms it**: his 2026-09-24 wording ("3 times a week for all platforms, starting Sunday for 1 week") can be read as applying to the rebrand week only.
-2. **Official logo on every post, not only during the rebrand week.** Ala's "all posts must have the official logo" is read as standing. Use the locked files in `marketing/brand/logos/` per BRAND.md. **Ala to confirm.**
+1. **Cadence after the rebrand week:** the 2026-09-24 entry says "normal cadence resumes 2026-10-04" but never defines "normal". From Sunday 2026-10-04, the standing cadence is **3 posts/week per active platform (LinkedIn, Facebook, Google Business Profile), on Sun/Tue/Thu**. Fri and Sat are left free because they're the Jordanian weekend.
+2. **Official logo on every post, not only during the rebrand week.** Ala's "all posts must have the official logo" is read as standing. Use the locked files in `marketing/brand/logos/` per BRAND.md.
 3. **Channels briefed:** LinkedIn (English, B2B), Facebook (Arabic-first, local B2B + B2C), GBP (bilingual, local search). Instagram and YouTube are **not active and not briefed** until further notice.
 4. **October focus:** Q4 booking (NGO/UN year-end events, Dead Sea conference season). Most of October's revenue effort goes into 1:1 outreach to existing clients and LTA-holding travel agencies/DMCs, within the email warmup limits. See `marketing/calendar-2026-10.md` and `marketing/briefs/2026-10-*.md`.
 
