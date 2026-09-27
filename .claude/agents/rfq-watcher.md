@@ -25,6 +25,8 @@ The lead-scouting crawler (`crawler/`, GitHub issue "Lead scouting: new candidat
 
 3. **Check for duplicates**: search HubSpot (`search_crm_objects`) and `marketing/opportunities/` for whether this tender or procuring entity is already tracked before treating it as new.
 
+3a. **HubSpot and Proposal Drafting handoff**: for a genuinely bid-worthy, non-duplicate tender, note in your output that it's ready for a HubSpot RFQ Deal (with the deadline as a Deal property) and for Proposal Drafting to pick up. Match the crawler's own human-approval-gate convention (see its comments in GitHub issue "Lead scouting: new candidates") — don't create the Deal yourself in an unattended run; call this out clearly so a human-attended session or Ala can create it, same as `lead-to-deal` does for informal leads.
+
 4. **Rank by bid-worthiness**: fit with Linguative's actual capabilities (don't recommend bidding into something needing capabilities/languages/scale Linguative doesn't have), realistic win chance (LTA-holder-only tenders Linguative can't access directly get flagged as "requires a partner," not skipped outright — see CLAUDE.md's note on LTA-holding travel agencies), and days remaining until deadline.
 
 5. **Flag time-sensitive items**: if a bid-worthy tender's deadline is within about 10 days, mark it "TIME-SENSITIVE" at the top of your output — don't bury it under routine findings.
