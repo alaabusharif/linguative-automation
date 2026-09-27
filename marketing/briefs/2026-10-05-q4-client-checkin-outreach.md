@@ -27,7 +27,7 @@ sales@ and marketing@linguative.net are still warming up. These are real, known 
 | 10 | A UN-agency client (hybrid regional workshop, Dec 2025) | One year on: is a Dec 2026 regional workshop planned? Hybrid + interpretation | Email |
 | 11 | An institutional training client (Nov-Dec 2025, 5-day training) | Same season as last year: is the training recurring? | Email |
 
-The event-management/AV channel partner isn't on this list because it gets its own follow-up after the 8 Oct event (`2026-10-11-gtg-post-event-followup.md`).
+The event-management/AV channel partner isn't on this list because it gets its own follow-up after the 8 Oct event (`2026-10-11-channel-partner-post-event-followup.md`).
 
 ## Key message (per email)
 Short and personal: reference the last job specifically (venue, date), ask one question ("Do you have events planned for November or December where we can help?"), and mention one service they haven't bought from Linguative yet (hybrid, transcription, video, or branding), chosen per the table. Mention the new identity in one line at most ("you may have seen our new look").
