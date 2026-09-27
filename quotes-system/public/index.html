@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linguative Quotes &amp; Invoices</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="login-screen" class="login-wrap" hidden>
+    <div class="card login-card">
+      <div class="brand" style="color:#071A2E; font-weight:700; margin-bottom:4px;">LINGUATIVE</div>
+      <div class="muted" style="margin-bottom:16px;">Quotes &amp; Invoices</div>
+      <div class="field"><label>Username</label><input id="login-username"></div>
+      <div class="field"><label>Password</label><input id="login-password" type="password"></div>
+      <button class="primary" id="login-btn" style="width:100%;">Log in</button>
+      <div class="error" id="login-error"></div>
+    </div>
+  </div>
+
+  <div id="app" hidden>
+    <header>
+      <div>
+        <div class="brand">LINGUATIVE</div>
+        <div class="tagline">COMMUNICATION BEYOND LANGUAGE.</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span id="whoami" style="font-size:13px;"></span>
+        <button class="plain" id="logout-btn">Log out</button>
+      </div>
+    </header>
+    <nav>
+      <button data-tab="quotes" class="active">Quotes</button>
+      <button data-tab="invoices">Invoices</button>
+      <button data-tab="users" id="users-tab-btn" hidden>Users</button>
+    </nav>
+    <main id="main"></main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
