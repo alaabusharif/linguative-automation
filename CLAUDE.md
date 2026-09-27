@@ -33,7 +33,7 @@ This repository is public, so specific client names, contacts, delivered/prospec
 - copywriter: writes posts, emails, web copy from briefs (planned)
 - designer: social visuals from briefs (planned)
 - publisher: schedules and posts approved content (planned)
-- rfq-watcher: reviews crawler output for matching tenders (planned)
+- rfq-watcher: reviews the lead-scouting crawler's tender-portal sources plus UNGM/other procurement boards for formal, deadline-bound tenders matching Linguative's services; feeds marketing-manager, flags time-sensitive deadlines directly (built)
 
 ## Brand guide
 Any visual design work — the Design routine, a future designer agent, slides, social graphics — must follow `marketing/brand/BRAND.md` exactly: locked logo files (never redrawn/regenerated), exact brand colors and fonts, and the design/photography rules there. Read it before producing anything visual.
