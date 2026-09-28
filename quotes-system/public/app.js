@@ -158,7 +158,7 @@ function renderEditor(kind, doc) {
 
     <div class="card">
       <div class="grid grid-2">
-        <div class="field"><label>Client / Organization</label><input id="f-client" value="${doc.client_name || ''}" ${!editable ? 'disabled' : ''}></div>
+        <div class="field autocomplete"><label>Client / Organization</label><input id="f-client" value="${doc.client_name || ''}" autocomplete="off" ${!editable ? 'disabled' : ''}><div class="options" id="opts-client" hidden></div></div>
         <div class="field"><label>Contact Person</label><input id="f-contact" value="${doc.contact_person || ''}" ${!editable ? 'disabled' : ''}></div>
         <div class="field"><label>Project / Event</label><input id="f-project" value="${doc.project_title || ''}" ${!editable ? 'disabled' : ''}></div>
         <div class="field"><label>Venue</label><input id="f-venue" value="${doc.venue || ''}" ${!editable ? 'disabled' : ''}></div>
@@ -166,7 +166,8 @@ function renderEditor(kind, doc) {
           <label>PO Number (optional)</label>
           <input id="f-po" value="${doc.po_number || ''}" ${!editable ? 'disabled' : ''}>
         </div>
-        ${!isInvoice ? '' : `<div class="field"><label>Due Date</label><input id="f-due" type="date" value="${doc.due_date ? doc.due_date.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>`}
+        <div class="field"><label>Service Dates</label><input id="f-service-dates" placeholder="e.g. 12-13 Nov 2026" value="${doc.service_dates || ''}" ${!editable ? 'disabled' : ''}></div>
+        ${!isInvoice ? `<div class="field"><label>Valid Until</label><input id="f-valid-until" type="date" value="${doc.valid_until ? doc.valid_until.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>` : `<div class="field"><label>Due Date</label><input id="f-due" type="date" value="${doc.due_date ? doc.due_date.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>`}
       </div>
       ${editable ? `<button class="plain" id="po-scan-btn" type="button">📷 Scan PO (OCR)</button><div id="po-scan-result"></div>` : ''}
     </div>
@@ -232,6 +233,12 @@ function renderEditor(kind, doc) {
 
   const poScanBtn = document.getElementById('po-scan-btn');
   if (poScanBtn) poScanBtn.addEventListener('click', triggerPoScan);
+
+  const clientInput = document.getElementById('f-client');
+  if (editable && clientInput) {
+    clientInput.addEventListener('input', onClientInput);
+    clientInput.addEventListener('blur', () => setTimeout(hideClientOptions, 150));
+  }
 
   renderActions(doc);
 }
@@ -321,6 +328,41 @@ function hideOptions(idx) {
   if (opts) opts.hidden = true;
 }
 
+let clientAcTimer;
+async function onClientInput(e) {
+  clearTimeout(clientAcTimer);
+  const q = e.target.value.trim();
+  const opts = document.getElementById('opts-client');
+  if (!opts) return;
+  if (!q) { opts.hidden = true; return; }
+  clientAcTimer = setTimeout(async () => {
+    const { clients } = await api(`/api/clients?q=${encodeURIComponent(q)}`);
+    if (!clients.length) { opts.hidden = true; return; }
+    opts.innerHTML = clients.map(c =>
+      `<div data-name="${c.name.replace(/"/g, '&quot;')}" data-contact="${(c.contact_person || '').replace(/"/g, '&quot;')}">${c.name}</div>`
+    ).join('')
+      + `<div style="border-top:1px solid #eee; color:#071A2E; font-weight:600;" data-add="${q.replace(/"/g, '&quot;')}">+ Add "${q}" as a new client</div>`;
+    opts.hidden = false;
+    opts.querySelectorAll('div').forEach(d => d.addEventListener('mousedown', async () => {
+      const clientInput = document.getElementById('f-client');
+      if (d.dataset.add !== undefined) {
+        await api('/api/clients', { method: 'POST', body: { name: d.dataset.add } });
+        clientInput.value = d.dataset.add;
+      } else {
+        clientInput.value = d.dataset.name;
+        const contactInput = document.getElementById('f-contact');
+        if (contactInput && !contactInput.value && d.dataset.contact) contactInput.value = d.dataset.contact;
+      }
+      opts.hidden = true;
+    }));
+  }, 200);
+}
+
+function hideClientOptions() {
+  const opts = document.getElementById('opts-client');
+  if (opts) opts.hidden = true;
+}
+
 window.removeRow = (idx) => {
   window.__items.splice(idx, 1);
   if (!window.__items.length) window.__items.push({ description: '', days: 1, qty: 1, unit: 'Each', unit_price: 0 });
@@ -337,6 +379,8 @@ function currentFormValues() {
     venue: val('f-venue'),
     po_number: val('f-po') || null,
     due_date: val('f-due') || null,
+    valid_until: val('f-valid-until') || null,
+    service_dates: val('f-service-dates') || null,
     currency: val('f-currency'),
     tax_type: val('f-tax'),
     discount_type: val('f-discount-type'),

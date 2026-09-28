@@ -40,6 +40,9 @@ function renderDocumentPdf(doc, items, res) {
     .fontSize(11)
     .text(`${doc.number}${doc.version > 1 ? `  (v${doc.version})` : ''}`, { align: 'right' })
     .text(new Date(doc.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }), { align: 'right' });
+  if (doc.prepared_by) {
+    pdf.text(`Prepared By: ${doc.prepared_by}`, { align: 'right' });
+  }
 
   pdf.moveDown(3);
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
@@ -53,8 +56,12 @@ function renderDocumentPdf(doc, items, res) {
   if (doc.project_title) pdf.text(`Project / Event: ${doc.project_title}`);
   if (doc.venue) pdf.text(`Venue: ${doc.venue}`);
   if (doc.po_number) pdf.text(`PO Number: ${doc.po_number}`);
+  if (doc.service_dates) pdf.text(`Service Dates: ${doc.service_dates}`);
   if (doc.kind === 'invoice' && doc.due_date) {
     pdf.text(`Due Date: ${new Date(doc.due_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`);
+  }
+  if (doc.kind === 'quote' && doc.valid_until) {
+    pdf.text(`Valid Until: ${new Date(doc.valid_until).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`);
   }
   pdf.moveDown(1.2);
 
@@ -107,7 +114,17 @@ function renderDocumentPdf(doc, items, res) {
   pdf.moveDown(2);
   pdf.fontSize(9.5).fillColor(BRAND.gold).text('COMMUNICATION BEYOND LANGUAGE.', 40, pdf.y);
 
+  drawPageFooter(pdf);
   pdf.end();
+}
+
+// Master template's footer line, pinned near the bottom of the page.
+// Stays just above the page's bottom margin — pdfkit silently starts a new
+// page if text would land inside the margin, even with an explicit y.
+function drawPageFooter(pdf) {
+  const y = pdf.page.height - pdf.page.margins.bottom - 12;
+  pdf.fontSize(8.5).fillColor('#777777').font('Helvetica')
+    .text('linguative.net   |   Amman, Jordan   |   Communication Beyond Language', 40, y, { width: 515, align: 'center', lineBreak: false });
 }
 
 // Arabic layout: same brand system and page geometry as the English one,
@@ -133,6 +150,9 @@ function renderDocumentPdfAr(doc, items, res) {
   pdf.fillColor(BRAND.charcoal).fontSize(11);
   drawBidiLine(pdf, `${doc.number}${doc.version > 1 ? `  (v${doc.version})` : ''}`, LEFT, 66, FULL);
   drawBidiLine(pdf, formatDate(doc.created_at, 'ar'), LEFT, 80, FULL);
+  if (doc.prepared_by) {
+    drawBidiLine(pdf, `${L.preparedBy} ${doc.prepared_by}`, LEFT, 94, FULL);
+  }
 
   pdf.y = 118;
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
@@ -148,7 +168,9 @@ function renderDocumentPdfAr(doc, items, res) {
   if (doc.project_title) rows.push([L.project, doc.project_title]);
   if (doc.venue) rows.push([L.venue, doc.venue]);
   if (doc.po_number) rows.push([L.poNumber, doc.po_number]);
+  if (doc.service_dates) rows.push([L.serviceDates, doc.service_dates]);
   if (doc.kind === 'invoice' && doc.due_date) rows.push([L.dueDate, formatDate(doc.due_date, 'ar')]);
+  if (doc.kind === 'quote' && doc.valid_until) rows.push([L.validUntil, formatDate(doc.valid_until, 'ar')]);
   for (const [label, value] of rows) {
     drawBidiLine(pdf, `${label} ${value}`, LEFT, pdf.y, FULL);
     pdf.moveDown(0.5);
@@ -213,6 +235,7 @@ function renderDocumentPdfAr(doc, items, res) {
   // Tagline stays in English exactly as locked in the brand guide.
   pdf.fontSize(9.5).fillColor(BRAND.gold).font('Helvetica').text('COMMUNICATION BEYOND LANGUAGE.', 40, pdf.y);
 
+  drawPageFooter(pdf);
   pdf.end();
 }
 

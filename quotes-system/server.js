@@ -8,6 +8,7 @@ const db = require('./db/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const itemRoutes = require('./routes/items');
+const clientRoutes = require('./routes/clients');
 const documentRoutes = require('./routes/documents');
 const ocrRoutes = require('./routes/ocr');
 const { requireLogin } = require('./middleware/auth');
@@ -27,6 +28,7 @@ app.use(session({
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/items', itemRoutes);
+app.use('/api/clients', clientRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/ocr', ocrRoutes);
 

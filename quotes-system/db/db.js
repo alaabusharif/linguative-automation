@@ -26,6 +26,14 @@ CREATE TABLE IF NOT EXISTS items_catalog (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS clients (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT UNIQUE NOT NULL,
+  contact_person TEXT,
+  notes TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS counters (
   series TEXT PRIMARY KEY, -- e.g. 'Q-2026', 'INV-2026'
   value INTEGER NOT NULL DEFAULT 0
@@ -96,6 +104,8 @@ CREATE INDEX IF NOT EXISTS idx_document_items_doc ON document_items(document_id)
 for (const [table, column, ddl] of [
   ['documents', 'language', "ALTER TABLE documents ADD COLUMN language TEXT NOT NULL DEFAULT 'en'"],
   ['items_catalog', 'name_ar', 'ALTER TABLE items_catalog ADD COLUMN name_ar TEXT'],
+  ['documents', 'valid_until', 'ALTER TABLE documents ADD COLUMN valid_until TEXT'],
+  ['documents', 'service_dates', 'ALTER TABLE documents ADD COLUMN service_dates TEXT'],
 ]) {
   const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
   if (!cols.includes(column)) db.exec(ddl);
@@ -109,6 +119,21 @@ if (itemCount === 0) {
   const insertMany = db.transaction((rows) => { for (const r of rows) insert.run(r.name, r.name_ar || null); });
   insertMany(seedItems);
 }
+
+// One-time backfill: fold every description ever quoted/invoiced into the
+// catalog too, so past line items (not just the seed list) show up as
+// autocomplete suggestions going forward.
+db.exec(`
+  INSERT OR IGNORE INTO items_catalog (name)
+  SELECT DISTINCT TRIM(description) FROM document_items WHERE TRIM(description) <> '';
+`);
+
+// Same idea for clients: backfill from every document's client_name so
+// existing quotes/invoices feed the new clients autocomplete immediately.
+db.exec(`
+  INSERT OR IGNORE INTO clients (name)
+  SELECT DISTINCT TRIM(client_name) FROM documents WHERE TRIM(client_name) <> '';
+`);
 
 // Bootstrap admin user if no users exist yet
 const userCount = db.prepare('SELECT COUNT(*) AS c FROM users').get().c;
