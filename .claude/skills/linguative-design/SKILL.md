@@ -102,32 +102,52 @@ State which source was used and why in every summary to Ala.
 `export_html_to_express` has shipped designs with the photo and/or logo
 completely missing — not just misaligned, entirely blank canvas where the
 image should be — while the tool call itself returns success and the
-returned HzHTML looks correct. Confirmed causes, both reproduced directly:
+returned HzHTML looks correct. Root cause, fully isolated: **the importer
+only fetches images from a small Adobe-owned domain whitelist. Any other
+source silently becomes a blank placeholder — it never errors.**
+Confirmed directly:
 
-- An external `<img src="https://...">` URL, even one that is verified
-  reachable, gets silently replaced with a 1×1 transparent placeholder
-  instead of being fetched.
-- A base64 `data:` URI embedded directly in the HTML is **not a reliable
-  fix** — it has also come out fully blank (confirmed with a minimal
-  isolated test: a plain solid-color PNG, embedded as base64 in a bare
-  `<img>` tag with no other content, still rendered as blank background
-  in the resulting Express document). Using base64 as a CSS
-  `background-image` instead of an `<img>` tag has failed the export call
-  outright.
-- Direct Adobe asset upload (`asset_initialize_file_upload` + chunk PUT)
-  is blocked by this environment's network policy
-  (`acp-...-blobstore-...adobe.io` is denied), so uploading the image
-  first and referencing it isn't currently available as a workaround
-  either.
+- An external `<img src="https://...">` URL on a non-Adobe domain (tried:
+  GitHub raw, and even Adobe Stock's own public CDN `*.ftcdn.net`), even
+  one verified reachable, gets silently replaced with a 1×1 transparent
+  placeholder.
+- A base64 `data:` URI is **not a workaround** — a bare `<img>` tag with
+  a base64 source still renders blank; base64 as a CSS
+  `background-image` fails the export call outright.
+- `image_crop_and_resize` (and presumably the other Adobe image-editing
+  tools) enforce the same whitelist explicitly, erroring with "URL domain
+  not whitelisted" for GitHub raw, Google Drive, jsDelivr, and Unsplash —
+  confirming this is a deliberate, hard boundary, not a fetch bug.
+- **What does work:** a URL already on Adobe's own storage. Licensing an
+  Adobe Stock asset (`asset_license_and_download_stock`, even the free
+  tier) returns a presigned URL on Adobe's own blobstore, and embedding
+  that URL renders correctly — verified end to end with
+  `asset_inline_preview`. Likewise, any asset already sitting in the
+  user's Creative Cloud storage (`asset_search` with `entityScope:
+  CCAsset`) has a working `renditionURL`/`downloadURL` on Adobe's domain.
+- Getting your **own** image (Ala's real event photos, the locked logo
+  files) onto that trusted storage from this environment is currently
+  blocked: direct block-upload (`asset_initialize_file_upload` + chunk
+  PUT) redirects to `acp-...-blobstore-...adobe.io`, which this
+  environment's network policy denies (confirmed twice, same result).
+  `asset_add_file` needs a human picking a file in the Express UI, which
+  isn't available headlessly.
 
-There is no known-reliable way to guarantee an image lands in the
-exported Express document from this environment as of 2026-09-28. Treat
-every export as unverified until you have actually looked at it (next
-section) — never assume an image "should" be there because the source
-HTML or the tool's success response says so. If every embedding method
-you try still comes out blank, that's a genuine blocker: say so plainly
-rather than shipping a draft with the image missing, and rather than
-silently retrying indefinitely.
+**Practical implication:** Adobe Stock photos (licensed first) are fully
+usable — prefer them over anything else when a real event photo can't be
+sourced this way. For the logo and any other file that must be Ala's
+own real asset, the only currently-working path is for **Ala to upload
+it once** into his Adobe Express / Creative Cloud files himself (drag a
+file into Express's "Your files" — takes seconds); after that, it shows
+up via `asset_search` (`entityScope: CCAsset`) with a working URL like
+any other CC-hosted asset, and the automation can reference it going
+forward without needing this workaround again per post.
+
+There is no other known-reliable way to guarantee a non-Adobe image
+lands in the exported Express document from this environment as of
+2026-09-28. Treat every export as unverified until you have actually
+looked at it (next section) — never assume an image "should" be there
+because the source HTML or the tool's success response says so.
 
 ## Post-export QA — do this before calling anything a finished draft
 
