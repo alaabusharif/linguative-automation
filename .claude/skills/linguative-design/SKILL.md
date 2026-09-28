@@ -133,15 +133,35 @@ Confirmed directly:
   `asset_add_file` needs a human picking a file in the Express UI, which
   isn't available headlessly.
 
-**Practical implication:** Adobe Stock photos (licensed first) are fully
-usable — prefer them over anything else when a real event photo can't be
-sourced this way. For the logo and any other file that must be Ala's
-own real asset, the only currently-working path is for **Ala to upload
-it once** into his Adobe Express / Creative Cloud files himself (drag a
-file into Express's "Your files" — takes seconds); after that, it shows
-up via `asset_search` (`entityScope: CCAsset`) with a working URL like
-any other CC-hosted asset, and the automation can reference it going
-forward without needing this workaround again per post.
+**Practical implication, refined 2026-09-28 (second round):** the
+importer's trust is narrower than "any Adobe domain." Confirmed by direct
+test: even a real file already sitting in the user's own Creative Cloud
+"Your files" — the actual locked logo, uploaded by Ala himself — still
+came out blank when referenced by its `asset_search`/`asset_get_presigned_urls`
+URL (an `at.adobe.com` short link), and running it through
+`image_crop_and_resize` first (to get a same-pixels passthrough) and
+using *that* output URL (`photoshop-api.adobe.io/...`) also came out
+blank. The only URL pattern confirmed to actually work is a raw
+S3-presigned URL from Adobe's own Stock-licensing flow
+(`asset_license_and_download_stock`) — everything else, including other
+Adobe-domain URLs, is untrusted by this specific import path.
+
+**So, concretely, per asset type:**
+- **Stock photos:** fully automatable — license first, embed the
+  returned S3 URL. Use freely.
+- **A locked/real file that must be exact (the logo, Ala's own event
+  photos):** there is currently no confirmed automated path to get it
+  into an exported Express document, even once it's sitting in Ala's own
+  Creative Cloud files. The last-mile step needs a human inside Express
+  itself: build the design with everything else correct, then either (a)
+  ask Ala to drag the real file into that specific document himself
+  (fastest — he's done this before), or (b) if you find a *new* working
+  URL pattern, verify it with a live test image before trusting it, and
+  update this section with the result either way so the next attempt
+  doesn't repeat the same eight now-confirmed-failing paths (external
+  URL, base64 `<img>`, base64 CSS background, Stock's own public CDN
+  rendition URL, direct block-upload, `at.adobe.com` renditionURL,
+  `asset_get_presigned_urls` output, `image_crop_and_resize` output URL).
 
 There is no other known-reliable way to guarantee a non-Adobe image
 lands in the exported Express document from this environment as of
