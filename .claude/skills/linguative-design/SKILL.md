@@ -149,19 +149,46 @@ Adobe-domain URLs, is untrusted by this specific import path.
 **So, concretely, per asset type:**
 - **Stock photos:** fully automatable — license first, embed the
   returned S3 URL. Use freely.
-- **A locked/real file that must be exact (the logo, Ala's own event
-  photos):** there is currently no confirmed automated path to get it
-  into an exported Express document, even once it's sitting in Ala's own
-  Creative Cloud files. The last-mile step needs a human inside Express
-  itself: build the design with everything else correct, then either (a)
-  ask Ala to drag the real file into that specific document himself
-  (fastest — he's done this before), or (b) if you find a *new* working
-  URL pattern, verify it with a live test image before trusting it, and
-  update this section with the result either way so the next attempt
-  doesn't repeat the same eight now-confirmed-failing paths (external
-  URL, base64 `<img>`, base64 CSS background, Stock's own public CDN
-  rendition URL, direct block-upload, `at.adobe.com` renditionURL,
-  `asset_get_presigned_urls` output, `image_crop_and_resize` output URL).
+- **The logo (and anything else that needs to be exact, unmodified):
+  SOLVED 2026-09-28, use this — don't ask Ala to drag it in by hand.**
+  Duplicate an existing Express document that already has the real
+  logo placed in it (`asset_copy_assets` with that doc's id as
+  `sourceIds`), then call `fill_text` on the **copy's** URN to replace
+  only the eyebrow/headline/body text (and, if needed, other editable
+  fields) with the new post's copy. This preserves every non-text
+  element from the source doc byte-for-byte — logo included — because
+  nothing about the logo ever goes through the broken image-fetch path.
+  Verified end to end: copied the Sept 24 "Behind the Scenes" doc
+  (`urn:aaid:sc:AP:035f50ab-0894-486e-b8e2-85756ab404d5`, which has the
+  real logo placed by Ala), ran `fill_text` on the copy with new
+  rebrand copy, and the resulting document had the correct new text
+  *and* the real logo, verified with `asset_inline_preview` on the
+  `fill_text` response's own `previewUrl` (which is itself already a
+  working S3 blobstore URL — no extra step needed to check it).
+  **Keep at least one Express doc with the real logo correctly placed
+  as a standing "logo template"** (the Sept 24 doc works today; if it's
+  ever deleted or the logo ever needs to change, make a fresh one — a
+  quick manual placement, once — and note its doc id here) and start
+  every future post as a copy of it rather than a from-scratch
+  `export_html_to_express` call. `fill_text` only replaces text, not
+  photos or background, so still source and place the post's photo
+  separately (Stock licensing works fine for that, per above); a
+  from-scratch build is still fine for the copy/layout/photo, just
+  route the *logo specifically* through this copy-and-fill-text path
+  instead of trying to embed the logo file directly.
+- **Ala's own real event photos specifically** (not the logo — that's
+  solved above): there is still no confirmed automated path to embed
+  one directly, even once it's sitting in Ala's own Creative Cloud
+  files — same eight now-confirmed-failing paths as the logo hit
+  (external URL, base64 `<img>`, base64 CSS background, Stock's own
+  public CDN rendition URL, direct block-upload, `at.adobe.com`
+  renditionURL, `asset_get_presigned_urls` output, `image_crop_and_resize`
+  output URL). The copy-and-`fill_text` trick doesn't help here since
+  `fill_text` only touches text, not photos. Until a working path is
+  found for arbitrary photos too, prefer a real Adobe Stock photo
+  (fully automatable, per above) over asking Ala to place his own photo
+  by hand — reserve asking him for cases where only his specific photo
+  will do and say plainly it's a one-time manual step for that post.
 
 There is no other known-reliable way to guarantee a non-Adobe image
 lands in the exported Express document from this environment as of
