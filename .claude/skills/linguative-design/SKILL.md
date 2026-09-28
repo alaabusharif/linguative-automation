@@ -291,11 +291,22 @@ For photography: check Ala's Google Drive first per
 [[linguative-image-sourcing-priority]], but a Drive photo from an event is
 often a *client's* event with the client's own branding visible on
 screens/signage — never put a client's branding in a public post without
-Ala's OK (per project memory). When no safe photo is available, lean into
-BRAND.md's own design language (generous negative space, strong
-typography, one dominant idea, thin gold rules) rather than reaching for
-generic stock — this is documented to work (the Sept 27 identity-reveal
-post shipped this way, no photo, and was accepted).
+Ala's OK (per project memory). When no safe Drive photo is available,
+Adobe Stock works cleanly in this pipeline too: `asset_search`
+(`entityScope: "StockAsset"`) → `asset_license_and_download_stock` →
+the licensed result is a direct `*.s3.*.amazonaws.com` URL, which
+downloads fine with a plain `curl` (unlike the blobstore/proxy path,
+this one isn't blocked) — pull it to a local file and reference it the
+same `file://` way as the logo. Prefer an empty/architectural shot
+(conference hall, stage, booth) over one with recognizable people or any
+signage, so there's no branding or likeness question to clear with Ala.
+Only when neither a safe Drive photo nor a fitting Stock photo exists,
+fall back to BRAND.md's own typography-led design language (generous
+negative space, strong typography, one dominant idea, thin gold rules) —
+this is documented to work too (the Sept 27 identity-reveal post shipped
+this way, no photo, and was accepted), but Ala's Sept 28 reaction
+("no logo, no photo... has to look premium") shows a real photo is the
+stronger default when one is available.
 
 ## After the draft is saved
 
