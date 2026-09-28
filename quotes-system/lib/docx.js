@@ -33,7 +33,7 @@ function cell(text, opts = {}) {
     children: [new Paragraph({
       alignment: align,
       bidirectional: !!opts.rtl,
-      children: [new TextRun({ text: text ?? '', bold: !!opts.bold, color: opts.color || CHARCOAL, size: opts.size || 18, rightToLeft: !!opts.rtl })],
+      children: [new TextRun({ text: text ?? '', bold: !!opts.bold, color: opts.color || CHARCOAL, size: opts.size || 22, rightToLeft: !!opts.rtl })],
     })],
   });
 }
@@ -79,8 +79,8 @@ async function buildDocumentDocx(doc, items) {
     borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE }, insideHorizontal: { style: BorderStyle.NONE }, insideVertical: { style: BorderStyle.NONE } },
     rows: [
       new TableRow({ children: [
-        cell(leftCol[0], { width: 50, bold: true, color: NAVY, size: 20, rtl }),
-        cell(rightCol[0], { width: 50, bold: true, color: NAVY, size: 20, rtl }),
+        cell(leftCol[0], { width: 50, bold: true, color: NAVY, size: 24, rtl }),
+        cell(rightCol[0], { width: 50, bold: true, color: NAVY, size: 24, rtl }),
       ]}),
       ...Array.from({ length: Math.max(leftCol[1].length, rightCol[1].length) }).map((_, i) => new TableRow({ children: [
         cell(leftCol[1][i] ? `${leftCol[1][i][0]}  ${leftCol[1][i][1]}` : '', { width: 50, rtl }),
@@ -91,17 +91,17 @@ async function buildDocumentDocx(doc, items) {
 
   const itemHeader = new TableRow({
     children: [L.col.no, L.col.item, L.col.days, L.col.qty, L.col.unit, L.col.unitPrice, L.col.total].map(h =>
-      cell(h, { bold: true, color: 'FFFFFF', shade: NAVY, size: 16, rtl })),
+      cell(h, { bold: true, color: 'FFFFFF', shade: NAVY, size: 22, rtl })),
   });
   const itemRows = items.map((it, idx) => new TableRow({
     children: [
-      cell(String(idx + 1), { size: 16, rtl }),
-      cell(it.description, { size: 16, rtl }),
-      cell(String(it.days), { size: 16, rtl }),
-      cell(String(it.qty), { size: 16, rtl }),
-      cell(it.unit, { size: 16, rtl }),
-      cell(fmtMoney(it.unit_price, doc.currency), { size: 16, rtl }),
-      cell(fmtMoney(it.line_total, doc.currency), { size: 16, rtl }),
+      cell(String(idx + 1), { size: 22, rtl }),
+      cell(it.description, { size: 22, rtl }),
+      cell(String(it.days), { size: 22, rtl }),
+      cell(String(it.qty), { size: 22, rtl }),
+      cell(it.unit, { size: 22, rtl }),
+      cell(fmtMoney(it.unit_price, doc.currency), { size: 22, rtl }),
+      cell(fmtMoney(it.line_total, doc.currency), { size: 22, rtl }),
     ],
   }));
   const itemsTable = new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [itemHeader, ...itemRows] });
@@ -127,22 +127,22 @@ async function buildDocumentDocx(doc, items) {
 
   const children = [
     new Paragraph({ children: headerChildren, alignment: AlignmentType.LEFT }),
-    new Paragraph({ children: [new TextRun({ text: kindLabel, bold: true, size: 40, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
+    new Paragraph({ children: [new TextRun({ text: kindLabel, bold: true, size: 48, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
     new Paragraph({ text: '' }),
     infoTable,
     new Paragraph({ text: '' }),
-    new Paragraph({ children: [new TextRun({ text: L.scopePricing, bold: true, size: 22, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
+    new Paragraph({ children: [new TextRun({ text: L.scopePricing, bold: true, size: 26, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
     itemsTable,
     new Paragraph({ text: '' }),
-    new Paragraph({ children: [new TextRun({ text: L.calcSummary, bold: true, size: 22, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
+    new Paragraph({ children: [new TextRun({ text: L.calcSummary, bold: true, size: 26, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
     summaryTable,
   ];
 
   if (doc.notes) {
-    children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: doc.notes, size: 18, color: CHARCOAL, rightToLeft: rtl })], alignment: align, bidirectional: rtl }));
+    children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: doc.notes, size: 22, color: CHARCOAL, rightToLeft: rtl })], alignment: align, bidirectional: rtl }));
   }
   // Tagline stays in English exactly as locked in the brand guide, regardless of document language.
-  children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: 'COMMUNICATION BEYOND LANGUAGE.', bold: true, size: 16, color: GOLD })] }));
+  children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: 'COMMUNICATION BEYOND LANGUAGE.', bold: true, size: 20, color: GOLD })] }));
 
   const document = new Document({ sections: [{ children }] });
   return Packer.toBuffer(document);
