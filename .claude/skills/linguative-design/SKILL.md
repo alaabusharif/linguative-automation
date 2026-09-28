@@ -97,6 +97,38 @@ Whatever the source, two things are non-negotiable:
 
 State which source was used and why in every summary to Ala.
 
+## Known export bug — images can silently fail to render (2026-09-28)
+
+`export_html_to_express` has shipped designs with the photo and/or logo
+completely missing — not just misaligned, entirely blank canvas where the
+image should be — while the tool call itself returns success and the
+returned HzHTML looks correct. Confirmed causes, both reproduced directly:
+
+- An external `<img src="https://...">` URL, even one that is verified
+  reachable, gets silently replaced with a 1×1 transparent placeholder
+  instead of being fetched.
+- A base64 `data:` URI embedded directly in the HTML is **not a reliable
+  fix** — it has also come out fully blank (confirmed with a minimal
+  isolated test: a plain solid-color PNG, embedded as base64 in a bare
+  `<img>` tag with no other content, still rendered as blank background
+  in the resulting Express document). Using base64 as a CSS
+  `background-image` instead of an `<img>` tag has failed the export call
+  outright.
+- Direct Adobe asset upload (`asset_initialize_file_upload` + chunk PUT)
+  is blocked by this environment's network policy
+  (`acp-...-blobstore-...adobe.io` is denied), so uploading the image
+  first and referencing it isn't currently available as a workaround
+  either.
+
+There is no known-reliable way to guarantee an image lands in the
+exported Express document from this environment as of 2026-09-28. Treat
+every export as unverified until you have actually looked at it (next
+section) — never assume an image "should" be there because the source
+HTML or the tool's success response says so. If every embedding method
+you try still comes out blank, that's a genuine blocker: say so plainly
+rather than shipping a draft with the image missing, and rather than
+silently retrying indefinitely.
+
 ## Post-export QA — do this before calling anything a finished draft
 
 `export_html_to_express` (or `import-claude-design-from-url`) converting
@@ -106,10 +138,15 @@ your HTML clearly included (the logo) came out missing in Express, and
 text boxes came out misaligned even though the source HTML was correct.
 
 After exporting, open/preview the **actual resulting Express document**
-(not your source HTML) and check, in order:
+(not your source HTML, not the tool's returned HzHTML) using
+`asset_search` (entityScope CCAsset, by the doc name) to get its
+`renditionURL`, then `asset_inline_preview` on that URL, and look at the
+real pixels. Check, in order:
 
 1. **Logo** — present, correctly placed, correct light/dark variant, not
-   distorted.
+   distorted. A blank area, a 1×1/near-invisible speck, or solid
+   background color where the logo should be is an automatic fail —
+   never report this as passed.
 2. **Text boxes** — right font size and alignment; every box's edges sit
    flush with the intended canvas margins (no box running wider/narrower
    than its neighbors, no unintended overhang).
@@ -117,12 +154,20 @@ After exporting, open/preview the **actual resulting Express document**
    gap or seam.
 4. **Contact line** — present and legible.
 5. **Photo** — crisp at the size it's displayed, genuinely matches the
-   post's specific content (see above).
+   post's specific content (see above). Same automatic-fail rule as the
+   logo: a blank/placeholder area is a fail, full stop, regardless of
+   what the export call returned.
 
-If anything fails, fix it and re-check — don't save the draft or notify
-Ala until this passes. This step is the actual point of the skill: catch
-what the export step silently drops or misplaces, rather than trusting
-the HTML that went in.
+A QA pass must be based on this actual visual check, never on the
+source HTML being correct, the tool call succeeding, or the returned
+HzHTML containing the right `src`/`url` values — all three of those have
+been true while the real document still shipped blank. If any check
+fails, fix it and re-check — don't save the draft, don't tell Ala it
+passed, and don't notify him for approval until this passes for real. If
+you cannot get a check to pass after a reasonable retry (per the known
+export bug above), report it as a blocker instead of reporting a false
+pass — never claim "N/N checks passed" without having actually looked at
+the rendered output for each one.
 
 ## After the draft is saved
 
