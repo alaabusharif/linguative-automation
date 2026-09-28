@@ -176,6 +176,21 @@ Adobe-domain URLs, is untrusted by this specific import path.
   from-scratch build is still fine for the copy/layout/photo, just
   route the *logo specifically* through this copy-and-fill-text path
   instead of trying to embed the logo file directly.
+  **Hard limit, confirmed 2026-09-28: `fill_text` only replaces text.**
+  It cannot swap the photo/background on a document it's applied to.
+  So a document produced this way keeps whichever photo the *source*
+  doc (the one you copied) already had — you cannot give it a new,
+  sharper, or more relevant photo through this path. If the post needs
+  both the real logo *and* a different/better photo than whatever the
+  logo-template doc already has, that combination currently has no
+  automated route: either accept the template doc's existing photo, or
+  ask Ala to swap the photo inside Express himself (a real, one-time
+  manual step — say so plainly, don't imply it's close to solved). Also
+  confirmed: the exported JPEG's pixel dimensions match the canvas
+  (e.g. 1080×1350) — there's no separate "higher quality" render to
+  fetch instead; if a photo still reads as soft/low quality, the fix is
+  swapping to a sharper source image, not re-exporting the same doc.
+
 - **Ala's own real event photos specifically** (not the logo — that's
   solved above): there is still no confirmed automated path to embed
   one directly, even once it's sitting in Ala's own Creative Cloud
