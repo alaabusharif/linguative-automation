@@ -251,6 +251,52 @@ export bug above), report it as a blocker instead of reporting a false
 pass — never claim "N/N checks passed" without having actually looked at
 the rendered output for each one.
 
+## Preferred path: render locally, skip Express entirely
+
+Given everything documented above (the image-fetch whitelist, `fill_text`
+being text-only, Express links sometimes showing stale/blank to Ala even
+when this session's own checks pass — likely an Adobe-account mismatch
+between this connector and Ala's own login), **the default path for a new
+design is now to render it locally, not to go through Express at all**:
+
+1. Write the design as a self-contained HTML file (same brand-compliant
+   HTML you'd otherwise send to `export_html_to_express`), referencing the
+   real logo file directly from `marketing/brand/logos/` via a `file://`
+   path (or an embedded `<img>` pointing at a local copy) — never a
+   base64 data URI or a remote URL, both are unnecessary here since
+   nothing goes through Adobe's importer.
+2. Fonts: Futura PT / Acumin Pro aren't installed locally and aren't on
+   Google Fonts. `@import` the fallback stack from BRAND.md instead
+   (Montserrat for headings, Source Sans 3 for body) via
+   `fonts.googleapis.com` — confirmed reachable through the proxy.
+3. Render with Playwright + the pre-installed Chromium
+   (`/opt/pw-browsers/chromium-*/chrome-linux/chrome`, launched with
+   `--no-sandbox`; the python `playwright` package needs
+   `pip install playwright` once, but the browser binary is already
+   there — don't run `playwright install`, it will look for a
+   different revision and fail). Use `device_scale_factor=2` (or higher)
+   for crisp export resolution well beyond canvas size.
+4. Visually inspect the actual PNG with the Read tool before sending
+   anything to Ala — same non-negotiable rule as the Express QA checklist
+   below: only trust pixels you looked at.
+
+This sidesteps the whitelist bug, the text-only `fill_text` limit, and the
+account-mismatch delivery problem all at once, at the cost of losing
+in-Express editability — acceptable for a finished social image, not for
+anything Ala needs to open and tweak himself in Express. If Ala wants an
+editable Express doc specifically, say so and fall back to the
+`export_html_to_express` path with its known limits documented above.
+
+For photography: check Ala's Google Drive first per
+[[linguative-image-sourcing-priority]], but a Drive photo from an event is
+often a *client's* event with the client's own branding visible on
+screens/signage — never put a client's branding in a public post without
+Ala's OK (per project memory). When no safe photo is available, lean into
+BRAND.md's own design language (generous negative space, strong
+typography, one dominant idea, thin gold rules) rather than reaching for
+generic stock — this is documented to work (the Sept 27 identity-reveal
+post shipped this way, no photo, and was accepted).
+
 ## After the draft is saved
 
 Send Ala a **sent** email (never a Gmail draft) to `alaabusharif@gmail.com`
