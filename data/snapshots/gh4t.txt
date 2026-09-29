@@ -84,6 +84,7 @@ Frankfurt
 Riyadh (KSA)
 Jeddah (KSA)
 Los Angeles(United State)
+Cappadocia (Turkey)
 Tailored
 Services
 Associations
@@ -183,6 +184,7 @@ Frankfurt
 Riyadh (KSA)
 Jeddah (KSA)
 Los Angeles(United State)
+Cappadocia (Turkey)
 Duration
 One week
 One week
@@ -309,6 +311,7 @@ Frankfurt
 Riyadh (KSA)
 Jeddah (KSA)
 Los Angeles(United State)
+Cappadocia (Turkey)
 Course Venue:
 This field is required
 Number Of Days:
