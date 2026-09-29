@@ -6,6 +6,30 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 
 ## Strategy changes
 
+### 2026-09-29 — Marketing OS alignment: five channels, rolling language/format ratios, new creative stack
+
+**Decision:** Align downstream marketing execution with the locked Linguative Marketing Bible and ChatGPT Marketing Manager operating model.
+
+**Why:** The previous strategy entry still treated Instagram and YouTube as inactive and used an older platform-by-platform language model. The new Marketing OS uses one master-content system adapted across five channels, with rolling language/format ratios and a controlled creative workflow.
+
+**Applies to:** Social / Content / Website / SEO-GEO / Creative / Marketing analytics.
+
+**Required downstream behavior:**
+- Active strategic channels are LinkedIn, Instagram, Facebook, Google Business Profile, and YouTube. If a channel is not technically connected yet, prepare its approved variant but do not claim it was scheduled or published.
+- Default output is **3 master content concepts per week**, adapted by channel instead of creating five unrelated calendars.
+- Across each rolling 10-post cycle, maintain **70% English / 30% Arabic** and **60% static / 40% video**. Preferred combined matrix: 4 English static, 3 English video, 2 Arabic static, 1 Arabic video.
+- Arabic must be written natively in polished professional MSA; do not translate English line-by-line.
+- Content priorities rotate across simultaneous interpretation, conference interpretation equipment rental, Bosch DICENTIS, consecutive interpretation, hybrid/multilingual event support, event/AV support, translation/multilingual content, and multimedia/video/event-production support.
+- Creative production: ChatGPT concept/copy/creative direction → real approved assets and/or Higgsfield where useful → Adobe Express Premium for deterministic layout/logo/typography/RTL/finishing → QA → Ala approval → Metricool.
+- Generative tools must not redraw or regenerate the logo or invent identifiable equipment.
+- Use the governed Client Reference Register before naming any client/reference in proposals, case studies, social, website, testimonials, logo walls, or credentials.
+- Marketing performance is judged first by qualified inquiries, quote requests, calls/WhatsApp/DMs, and closed/won attribution; reach/engagement are secondary.
+- Nothing is published without Ala's approval unless he explicitly delegates that category later.
+
+**Effective:** immediately.
+
+**Evidence/source:** Linguative Marketing Bible / Marketing OS, approved 2026-09-29.
+
 _Newest entry first. Each entry: what changed, why, and what copy, design, outreach, and lead targeting should now do differently._
 
 ### 2026-09-25 — Standing cadence from Oct 4 (confirmed), logo on all posts, October plan
