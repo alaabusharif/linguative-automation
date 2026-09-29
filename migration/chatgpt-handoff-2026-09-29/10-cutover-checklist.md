@@ -11,7 +11,7 @@
 - [ ] `08-security-audit.md`'s two follow-ups (client-name spot-check, git-history secret sweep) are complete, whatever their outcome.
 
 ## Cutover sequence (once all of the above are checked)
-1. **Centralize cross-cutting brand/identity rules into `CLAUDE.md`** (masculine Arabic company name, Bosch-only equipment naming, Guarantee Travel Group rule, two-logo rule) — this decouples them from any routine being retired. Do this FIRST, before touching any routine.
+1. **Centralize cross-cutting brand/identity rules into `CLAUDE.md`** (masculine Arabic company name, Bosch-only equipment naming, the event-management/AV channel partner rule, two-logo rule) — this decouples them from any routine being retired. Do this FIRST, before touching any routine.
 2. **Apply the Gap C mailbox-safety prompt change** (Client Email Responder: label-for-review instead of auto-trash on first offense) if Ala approved it — a prompt-only edit, independently deployable.
 3. **Archive, do not delete**, `old-logo-linguative-bridging-cultures.png` into `marketing/brand/logos/do-not-use/`.
 4. **Archive, do not delete**, the `linguative-design` skill directory (rename/flag as fallback in its SKILL.md frontmatter, don't remove the files) — only after Gap E's QA-parity test has passed for the new design stack.

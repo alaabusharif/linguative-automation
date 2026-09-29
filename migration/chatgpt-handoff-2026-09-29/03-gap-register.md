@@ -1,5 +1,13 @@
 # 03 — Gap Register
 
+> **Corrected by ChatGPT's review (2026-09-29):** see
+> [`chatgpt-review-2026-09-29/00-authoritative-review.md`](chatgpt-review-2026-09-29/00-authoritative-review.md).
+> Several items below classified here as effectively "unique and hard to
+> retire" are reclassified there as "MERGE INTO SALES & BD OPERATIONS;
+> RETIRE SOURCE ROUTINE ONLY AFTER MODULE-LEVEL PARITY" — the capability is
+> what must be preserved, not the routine that currently holds it. This
+> document's factual gap analysis is otherwise unchanged.
+
 Every capability marked anything other than a clean KEEP in `02-capability-matrix.md`, with why the new 4-role structure doesn't yet cover it cleanly, the proposed bridge, and the test needed before cutover. No item here is "safe to retire" until its bridge is built and tested.
 
 ---

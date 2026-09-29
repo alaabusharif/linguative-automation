@@ -1,5 +1,13 @@
 # 11 — Draft Retirement List
 
+> **Corrected by ChatGPT's review (2026-09-29):** see
+> [`chatgpt-review-2026-09-29/06-revised-retirement-and-test-plan.md`](chatgpt-review-2026-09-29/06-revised-retirement-and-test-plan.md).
+> The "DO NOT RETIRE — UNIQUE CAPABILITY" classification used below for
+> several Sales/BD routines is replaced there with "MERGE INTO SALES & BD
+> OPERATIONS; RETIRE SOURCE ROUTINE ONLY AFTER MODULE-LEVEL PARITY." This
+> document's original classifications are left unchanged below for the
+> record.
+
 **DRAFT — for Ala's review.** Every current agent, routine, and skill classified as one of: **KEEP**, **MERGE INTO [target]**, **ARCHIVE**, **RETIRE AFTER TEST**, **DO NOT RETIRE — UNIQUE CAPABILITY**. For every RETIRE AFTER TEST item, the exact replacement and its parity test are named. Nothing here is executed.
 
 ## Routines (triggers)

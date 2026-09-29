@@ -1,7 +1,9 @@
 ---
 name: lead-to-deal
-description: Turn new candidates from the lead-scouting GitHub issue into proposed HubSpot Companies and Deals for approval. Use when asked to "process new leads", "convert leads to deals", or on a scheduled lead-to-deal check for this repo.
+description: Turn new candidates from the lead-scouting GitHub issue into proposed HubSpot Companies and Deals for approval. Use when asked to "process new leads", "convert leads to deals", or on a scheduled lead-to-deal check for this repo. Ownership: Sales & BD Operations (module D).
 ---
+
+> **Ownership moved to Sales & BD Operations (2026-09-29, Accelerated Marketing Cutover + Agent/Skill Consolidation).** This skill's logic is unchanged — it remains a callable stateful helper (see `.claude/agents/sales-bd-operations.md` module D). Kept as-is because duplicating its `data/leads/processed_comments.json` audit-trail logic elsewhere would risk losing state, not because anything here needed to change.
 
 # Lead to deal
 
