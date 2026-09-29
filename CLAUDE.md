@@ -42,12 +42,17 @@ This public repository is **not** the master store for private client names, con
 - linguative.net's mail is fixed and verified (SPF, DKIM, DMARC, MX all correct; server IP checked clean, not blacklisted). Staying on the current AxenCloud hosting — no migration planned. Warmup of sales@linguative.net and marketing@linguative.net is in progress (manual ramp, real contacts first). Agents may plan email outreach, but sending volume must follow the warmup schedule until warmup is complete — don't recommend jumping straight to full-volume campaigns from these addresses.
 - The website is due for a rebuild.
 
-## Agent team (planned)
-- marketing-manager: strategy, channels, calendar, briefs (built)
-- copywriter: writes posts, emails, web copy from briefs (planned)
-- designer: social visuals from briefs (planned)
-- publisher: schedules and posts approved content (planned)
-- rfq-watcher: reviews the lead-scouting crawler's tender-portal sources plus UNGM/other procurement boards for formal, deadline-bound tenders matching Linguative's services; feeds marketing-manager, flags time-sensitive deadlines directly (built)
+## Agent team / role ownership
+
+- **ChatGPT — Linguative Marketing Manager:** brand, marketing strategy, SEO/GEO strategy, website messaging/UX/CRO, content, social strategy, competitor interpretation, marketing analytics, reputation/case-study strategy. ChatGPT owns `marketing/strategy.md`.
+- **sales-bd-operations:** consolidated Sales & BD lifecycle owner; see `.claude/agents/sales-bd-operations.md`. Source routines remain rollback references until module-level parity passes.
+- **operations-monitor:** consolidated monitoring/routing owner; see `.claude/agents/operations-monitor.md`.
+- **Claude Code — Web & Automation Engineer:** website/WordPress/code, technical SEO/schema/hreflang/canonicals/sitemaps/redirects/performance/accessibility, integrations, GitHub Actions, crawler, quotes-system, DNS/SSL/hosting, debugging.
+- **rfq-watcher:** specialist formal-tender logic operating under Operations Monitor; retained because formal dated tenders are distinct from ordinary lead discovery.
+- **lead-to-deal skill:** stateful helper under Sales & BD Operations; may remain callable where its audit/approval mechanics are useful.
+- **linguative-design skill:** legacy/fallback design implementation only until the new Adobe Express Premium + Higgsfield workflow passes the locked QA threshold.
+
+The target architecture consolidates capability ownership. A source routine is not kept forever merely because it once contained unique logic; that logic must be transferred and parity-tested before the source trigger is disabled.
 
 ## Brand guide
 Any visual design work — the Design routine, a future designer agent, slides, social graphics — must follow `marketing/brand/BRAND.md` exactly: locked logo files (never redrawn/regenerated), exact brand colors and fonts, and the design/photography rules there. Read it before producing anything visual.
