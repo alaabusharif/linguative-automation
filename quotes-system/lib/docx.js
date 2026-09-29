@@ -64,8 +64,13 @@ async function buildDocumentDocx(doc, items) {
     [L.date, dateStr],
     [L.poNumber, doc.po_number || L.notFilled],
   ];
+  if (doc.prepared_by) detailsRows.push([L.preparedBy, doc.prepared_by]);
+  if (doc.service_dates) detailsRows.push([L.serviceDates, doc.service_dates]);
   if (doc.kind === 'invoice' && doc.due_date) {
     detailsRows.push([L.dueDate, formatDate(doc.due_date, language)]);
+  }
+  if (doc.kind === 'quote' && doc.valid_until) {
+    detailsRows.push([L.validUntil, formatDate(doc.valid_until, language)]);
   }
 
   // In the Arabic layout the "prepared for" column reads right-to-left, so
@@ -143,6 +148,11 @@ async function buildDocumentDocx(doc, items) {
   }
   // Tagline stays in English exactly as locked in the brand guide, regardless of document language.
   children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: 'COMMUNICATION BEYOND LANGUAGE.', bold: true, size: 20, color: GOLD })] }));
+  // Master template's footer line.
+  children.push(new Paragraph({ text: '' }), new Paragraph({
+    alignment: AlignmentType.CENTER,
+    children: [new TextRun({ text: 'linguative.net   |   Amman, Jordan   |   Communication Beyond Language', size: 16, color: '777777' })],
+  }));
 
   const document = new Document({ sections: [{ children }] });
   return Packer.toBuffer(document);

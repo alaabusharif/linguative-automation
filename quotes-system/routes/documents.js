@@ -17,8 +17,11 @@ function saveItems(documentId, items) {
   const insert = db.prepare(`INSERT INTO document_items
     (document_id, sort_order, description, days, qty, unit, unit_price, line_total)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
+  const upsertCatalog = db.prepare('INSERT OR IGNORE INTO items_catalog (name) VALUES (?)');
   items.forEach((it, idx) => {
     insert.run(documentId, idx, it.description, it.days || 1, it.qty || 1, it.unit || 'Each', it.unit_price || 0, lineTotal(it));
+    const desc = (it.description || '').trim();
+    if (desc) upsertCatalog.run(desc);
   });
 }
 
@@ -70,6 +73,8 @@ function buildDocFromInput(kind, body, createdBy) {
     project_title: body.project_title || '',
     venue: body.venue || '',
     po_number: body.po_number || null,
+    valid_until: body.valid_until || null,
+    service_dates: body.service_dates || null,
     currency: body.currency || 'JOD',
     discount_type: body.discount_type === 'percent' ? 'percent' : 'flat',
     discount_value: Number(body.discount_value) || 0,
@@ -85,14 +90,23 @@ function buildDocFromInput(kind, body, createdBy) {
   };
 }
 
+// Keeps the clients autocomplete list current with whatever gets typed on a
+// document, even if the user never clicked "+ Add" in the dropdown.
+function upsertClient(name, contactPerson) {
+  const clientName = (name || '').trim();
+  if (!clientName) return;
+  db.prepare('INSERT INTO clients (name, contact_person) VALUES (?, ?) ON CONFLICT(name) DO UPDATE SET contact_person = COALESCE(clients.contact_person, excluded.contact_person)')
+    .run(clientName, (contactPerson || '').trim() || null);
+}
+
 function insertDocument(doc) {
   const info = db.prepare(`
     INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date, language,
-      client_name, contact_person, project_title, venue, po_number, currency,
+      client_name, contact_person, project_title, venue, po_number, valid_until, service_dates, currency,
       discount_type, discount_value, tax_type, subtotal, discount_amount, tax_amount, grand_total,
       quote_ref_id, notes, created_by)
     VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date, @language,
-      @client_name, @contact_person, @project_title, @venue, @po_number, @currency,
+      @client_name, @contact_person, @project_title, @venue, @po_number, @valid_until, @service_dates, @currency,
       @discount_type, @discount_value, @tax_type, @subtotal, @discount_amount, @tax_amount, @grand_total,
       @quote_ref_id, @notes, @created_by)
   `).run({ root_id: null, parent_id: null, ...doc });
@@ -105,6 +119,7 @@ router.post('/', requireLogin, (req, res) => {
   const kind = req.body.kind === 'invoice' ? 'invoice' : 'quote';
   const doc = buildDocFromInput(kind, req.body, req.session.user.id);
   const id = insertDocument(doc);
+  upsertClient(doc.client_name, doc.contact_person);
   res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(id)) });
 });
 
@@ -120,6 +135,7 @@ router.post('/from-quote/:quoteId', requireLogin, (req, res) => {
     project_title: quote.project_title,
     venue: quote.venue,
     po_number: quote.po_number,
+    service_dates: quote.service_dates,
     currency: quote.currency,
     discount_type: quote.discount_type,
     discount_value: quote.discount_value,
@@ -145,7 +161,7 @@ router.put('/:id', requireLogin, (req, res) => {
 
   db.prepare(`UPDATE documents SET
     client_name=@client_name, contact_person=@contact_person, project_title=@project_title, venue=@venue,
-    po_number=@po_number, currency=@currency, discount_type=@discount_type, discount_value=@discount_value,
+    po_number=@po_number, valid_until=@valid_until, service_dates=@service_dates, currency=@currency, discount_type=@discount_type, discount_value=@discount_value,
     tax_type=@tax_type, language=@language, subtotal=@subtotal, discount_amount=@discount_amount, tax_amount=@tax_amount,
     grand_total=@grand_total, due_date=@due_date, notes=@notes, updated_at=datetime('now')
     WHERE id=@id`).run({
@@ -156,6 +172,8 @@ router.put('/:id', requireLogin, (req, res) => {
     project_title: req.body.project_title ?? doc.project_title,
     venue: req.body.venue ?? doc.venue,
     po_number: req.body.po_number ?? doc.po_number,
+    valid_until: req.body.valid_until ?? doc.valid_until,
+    service_dates: req.body.service_dates ?? doc.service_dates,
     currency: req.body.currency ?? doc.currency,
     discount_type: req.body.discount_type ?? doc.discount_type,
     discount_value: totals ? (req.body.discount_value ?? doc.discount_value) : doc.discount_value,
@@ -168,6 +186,7 @@ router.put('/:id', requireLogin, (req, res) => {
     notes: req.body.notes ?? doc.notes,
   });
   saveItems(doc.id, items);
+  upsertClient(req.body.client_name ?? doc.client_name, req.body.contact_person ?? doc.contact_person);
   res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
 });
 
@@ -208,7 +227,7 @@ router.post('/:id/amend', requireLogin, (req, res) => {
     kind: doc.kind, number: doc.number, version: maxVersion + 1, root_id: rootId, parent_id: doc.id,
     status: 'draft', payment_status: doc.kind === 'invoice' ? 'unpaid' : null, due_date: doc.due_date, language: doc.language,
     client_name: doc.client_name, contact_person: doc.contact_person, project_title: doc.project_title, venue: doc.venue,
-    po_number: doc.po_number, currency: doc.currency, discount_type: doc.discount_type, discount_value: doc.discount_value,
+    po_number: doc.po_number, valid_until: doc.valid_until, service_dates: doc.service_dates, currency: doc.currency, discount_type: doc.discount_type, discount_value: doc.discount_value,
     tax_type: doc.tax_type, subtotal: doc.subtotal, discount_amount: doc.discount_amount, tax_amount: doc.tax_amount,
     grand_total: doc.grand_total, quote_ref_id: doc.quote_ref_id, notes: doc.notes, created_by: req.session.user.id,
   };
@@ -217,11 +236,11 @@ router.post('/:id/amend', requireLogin, (req, res) => {
     db.prepare("UPDATE documents SET status='amended', updated_at=datetime('now') WHERE id=?").run(doc.id);
     const info = db.prepare(`
       INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date, language,
-        client_name, contact_person, project_title, venue, po_number, currency,
+        client_name, contact_person, project_title, venue, po_number, valid_until, service_dates, currency,
         discount_type, discount_value, tax_type, subtotal, discount_amount, tax_amount, grand_total,
         quote_ref_id, notes, created_by)
       VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date, @language,
-        @client_name, @contact_person, @project_title, @venue, @po_number, @currency,
+        @client_name, @contact_person, @project_title, @venue, @po_number, @valid_until, @service_dates, @currency,
         @discount_type, @discount_value, @tax_type, @subtotal, @discount_amount, @tax_amount, @grand_total,
         @quote_ref_id, @notes, @created_by)
     `).run(newDoc);
@@ -248,13 +267,20 @@ router.post('/:id/mark-paid', requireLogin, (req, res) => {
   res.json({ ok: true });
 });
 
+// "Prepared by" is always the user who created the document — never a
+// manually-typed field, so it can't be edited after the fact.
+function withPreparedBy(doc) {
+  const creator = doc.created_by ? db.prepare('SELECT display_name FROM users WHERE id = ?').get(doc.created_by) : null;
+  return { ...doc, prepared_by: creator ? creator.display_name : '' };
+}
+
 router.get('/:id/pdf', requireLogin, (req, res) => {
   const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
   if (!doc) return res.status(404).send('Not found');
   const items = getItems(doc.id);
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `inline; filename="${doc.number}.pdf"`);
-  renderDocumentPdf(doc, items, res);
+  renderDocumentPdf(withPreparedBy(doc), items, res);
 });
 
 router.get('/:id/docx', requireLogin, async (req, res) => {
@@ -262,7 +288,7 @@ router.get('/:id/docx', requireLogin, async (req, res) => {
   if (!doc) return res.status(404).send('Not found');
   const items = getItems(doc.id);
   try {
-    const buffer = await buildDocumentDocx(doc, items);
+    const buffer = await buildDocumentDocx(withPreparedBy(doc), items);
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', `attachment; filename="${doc.number}.docx"`);
     res.send(buffer);
