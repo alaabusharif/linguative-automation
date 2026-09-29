@@ -19,6 +19,19 @@ This repository is public, so specific client names, contacts, delivered/prospec
 - Many UN agencies hold Long-Term Agreements (LTAs) with travel/tourism agencies that subcontract event services, so direct tender bids are hard to win — relationships with LTA holders matter (see the private reference for names).
 - Transcription is a proven, delivered service; editing/proofreading and localization/subtitling/dubbing are advertised but not yet sold — no priced rate exists for these yet, flag "confirm rate with Ala" rather than inventing one.
 
+## Client reference governance
+Linguative uses a **private Client Reference Register** as the source of truth for whether a real client/reference may be named in proposals, public case studies, website content, social posts, capability statements, testimonials, logo walls, or other materials.
+
+This public repository is **not** the master store for private client names, contacts, rates, project details, or permission records. See `marketing/client-reference-policy.md` for the public-safe operating rules.
+
+- Named proposal references require `PUBLIC_NAMED` or `PROPOSAL_NAMED`.
+- Named public case studies/marketing require `PUBLIC_NAMED`.
+- `ANONYMISED_ONLY` may be described publicly without identifying the organization.
+- `PENDING`, `PRIVATE_ONLY`, and `PROSPECT_ONLY` may not be used as named external credentials.
+- Never infer permission merely because Linguative performed work for an organization.
+- Public naming permission does not automatically authorize logo use, testimonial quotation, participant names, rates, confidential documents, or detailed outcomes.
+- Context-specific exceptions are governed by the private register; a client may be permitted in a private communication addressed directly to that client while prohibited in public/third-party use.
+
 ## Segments
 1. Local B2C: individuals needing certified or personal translation in Jordan.
 2. Local B2B: NGOs, UN agencies, embassies, conference organizers, companies, and LTA-holding travel agencies in Jordan.
