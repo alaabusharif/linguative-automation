@@ -6,6 +6,29 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 
 ## Strategy changes
 
+### 2026-09-29 — ChatGPT Marketing Manager takes over October execution
+
+**Decision:** The previous October calendar and briefs are legacy planning input, not the governing marketing plan. October execution is rebuilt under the locked Marketing Bible and ChatGPT Marketing Manager model.
+
+**Why:** The previous plan was created before the final Marketing OS. It used a three-channel model, platform-specific language assumptions, and an older production workflow that conflict with the approved five-channel, rolling-ratio system.
+
+**Applies to:** Social / Content / Creative / GBP / YouTube / Website content reuse / Marketing analytics.
+
+**Required downstream behavior:**
+- Use the new ChatGPT-authored `marketing/calendar-2026-10.md` as the October execution calendar.
+- Preserve useful factual inputs from older briefs only when they remain accurate; do not inherit their strategic assumptions.
+- Five strategic channels: LinkedIn, Instagram, Facebook, Google Business Profile, YouTube.
+- Three master concepts per week, adapted by channel.
+- Maintain the repeating 10-post sequence so every rolling 10 master concepts remains **70% English / 30% Arabic** and **60% static / 40% video**.
+- Marketing starts immediately; migration/parity testing runs in parallel and must not delay content production.
+- Client/reference use follows the governed Client Reference Register.
+- Final visuals use real approved assets and/or Higgsfield for scene generation, then Adobe Express Premium for exact logo, typography, RTL, resizing and finishing.
+- Nothing publishes without Ala's approval.
+
+**Effective:** immediately.
+
+**Evidence/source:** Locked Linguative Marketing Bible / Marketing OS.
+
 ### 2026-09-29 — Marketing OS alignment: five channels, rolling language/format ratios, new creative stack
 
 **Decision:** Align downstream marketing execution with the locked Linguative Marketing Bible and ChatGPT Marketing Manager operating model.
