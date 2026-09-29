@@ -22,7 +22,7 @@ This repository is public, so specific client names, contacts, delivered/prospec
 ## Client reference governance
 Linguative uses a **private Client Reference Register** as the source of truth for whether a real client/reference may be named in proposals, public case studies, website content, social posts, capability statements, testimonials, logo walls, or other materials.
 
-This public repository is **not** the master store for private client names, contacts, rates, project details, or permission records. See `marketing/client-reference-policy.md` for the public-safe operating rules.
+This public repository is **not** the master store for private client names, contacts, rates, project details, or permission records. See `marketing/client-reference-policy.md` for the public-safe operating rules and `marketing/client-reference-workflow.md` for proposal-reference selection and case-study handling.
 
 - Named proposal references require `PUBLIC_NAMED` or `PROPOSAL_NAMED`.
 - Named public case studies/marketing require `PUBLIC_NAMED`.
@@ -31,6 +31,7 @@ This public repository is **not** the master store for private client names, con
 - Never infer permission merely because Linguative performed work for an organization.
 - Public naming permission does not automatically authorize logo use, testimonial quotation, participant names, rates, confidential documents, or detailed outcomes.
 - Context-specific exceptions are governed by the private register; a client may be permitted in a private communication addressed directly to that client while prohibited in public/third-party use.
+- Proposal and case-study workflows must check the private register before naming a client and must follow the eligibility/scoring/evidence rules in `marketing/client-reference-workflow.md`.
 
 ## Segments
 1. Local B2C: individuals needing certified or personal translation in Jordan.
