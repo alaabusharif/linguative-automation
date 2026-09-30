@@ -20,7 +20,7 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 - Use the local HTML-render pipeline with locked brand assets for deterministic static social designs; preserve exact official logos and approved equipment references.
 - Adobe Express is optional rather than a required final step.
 - Instagram remains a strategic channel but is not schedulable until its Metricool connection exists.
-- LinkedIn is currently connected in Metricool as a personal profile; do not assume this is the Linguative company page.
+- LinkedIn is intentionally connected in Metricool as the current personal-profile target; do not treat this as an issue or propose changing the account unless Ala explicitly reopens that decision.
 - Nothing is published or scheduled without Ala's explicit approval.
 
 **Effective:** immediately.
