@@ -6,6 +6,27 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 
 ## Strategy changes
 
+### 2026-09-30 — Measurement, website-builder and production-workflow correction
+
+**Decision:** Treat GA4 as a broken measurement signal until live tagging is repaired; Bricks is the selected website builder; and social creative production is standardized on the local HTML-render workflow for deterministic finished graphics. Adobe Express may be used only when it is useful and reliable, not as a mandatory finishing dependency.
+
+**Why:** Search Console is recording organic visits while the linked GA4 property reports zero sessions/users/events. Ala selected Bricks on 30 September. The prior mandatory Adobe Express assumption conflicts with the proven local design workflow and can block production.
+
+**Applies to:** Website / SEO-GEO / analytics / social creative / publishing workflow.
+
+**Required downstream behavior:**
+- Do not interpret GA4 zeroes as zero website traffic while Search Console shows clicks/impressions; flag GA4 as measurement-unreliable until tracking is repaired and validated.
+- Website rebuild proceeds in **Bricks**; do not ask Ala to choose Elementor vs Bricks vs a premium theme again.
+- Use the local HTML-render pipeline with locked brand assets for deterministic static social designs; preserve exact official logos and approved equipment references.
+- Adobe Express is optional rather than a required final step.
+- Instagram remains a strategic channel but is not schedulable until its Metricool connection exists.
+- LinkedIn is currently connected in Metricool as a personal profile; do not assume this is the Linguative company page.
+- Nothing is published or scheduled without Ala's explicit approval.
+
+**Effective:** immediately.
+
+**Evidence/source:** 30 September 2026 systems check and Ala's direct Bricks decision.
+
 ### 2026-09-29 — ChatGPT Marketing Manager takes over October execution
 
 **Decision:** The previous October calendar and briefs are legacy planning input, not the governing marketing plan. October execution is rebuilt under the locked Marketing Bible and ChatGPT Marketing Manager model.
@@ -22,7 +43,7 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 - Maintain the repeating 10-post sequence so every rolling 10 master concepts remains **70% English / 30% Arabic** and **60% static / 40% video**.
 - Marketing starts immediately; migration/parity testing runs in parallel and must not delay content production.
 - Client/reference use follows the governed Client Reference Register.
-- Final visuals use real approved assets and/or Higgsfield for scene generation, then Adobe Express Premium for exact logo, typography, RTL, resizing and finishing.
+- Final visuals use real approved assets and/or Higgsfield for scene generation, with the local HTML-render pipeline as the default deterministic finishing path; Adobe Express is optional.
 - Nothing publishes without Ala's approval.
 
 **Effective:** immediately.
@@ -43,7 +64,7 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 - Across each rolling 10-post cycle, maintain **70% English / 30% Arabic** and **60% static / 40% video**. Preferred combined matrix: 4 English static, 3 English video, 2 Arabic static, 1 Arabic video.
 - Arabic must be written natively in polished professional MSA; do not translate English line-by-line.
 - Content priorities rotate across simultaneous interpretation, conference interpretation equipment rental, Bosch DICENTIS, consecutive interpretation, hybrid/multilingual event support, event/AV support, translation/multilingual content, and multimedia/video/event-production support.
-- Creative production: ChatGPT concept/copy/creative direction → real approved assets and/or Higgsfield where useful → Adobe Express Premium for deterministic layout/logo/typography/RTL/finishing → QA → Ala approval → Metricool.
+- Creative production: ChatGPT concept/copy/creative direction → real approved assets and/or Higgsfield where useful → local HTML-render pipeline for deterministic layout/logo/typography/RTL/finishing; Adobe Express only when useful and reliable → QA → Ala approval → Metricool.
 - Generative tools must not redraw or regenerate the logo or invent identifiable equipment.
 - Use the governed Client Reference Register before naming any client/reference in proposals, case studies, social, website, testimonials, logo walls, or credentials.
 - Marketing performance is judged first by qualified inquiries, quote requests, calls/WhatsApp/DMs, and closed/won attribution; reach/engagement are secondary.
@@ -85,4 +106,11 @@ Ala: "Beginning Sunday, all posts should be about rebranding" / "Also, all posts
 
 ## Current channel strategy
 
-_Not yet written. The marketing-manager agent fills this in on its next run, per responsibility 1 in `.claude/agents/marketing-manager.md` (channel choices per segment, ranked by expected return)._
+- LinkedIn: B2B authority and institutional credibility.
+- Instagram: premium visual discovery; prepare variants, but do not schedule until the Metricool connection exists.
+- Facebook: local reach and buyer education.
+- Google Business Profile: local search and conversion.
+- YouTube: searchable visual authority and evergreen explainers.
+- Operating model: three master concepts per week, adapted by channel; rolling 70% English / 30% Arabic and 60% static / 40% video.
+- Primary commercial positioning: one premium partner for multilingual events — interpreters, interpretation technology, hybrid support, AV, and multilingual content.
+- Approval gate: nothing publishes or schedules without Ala's explicit approval.
