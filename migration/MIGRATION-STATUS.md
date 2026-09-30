@@ -1,5 +1,7 @@
 # Migration Execution Status — 2026-09-29
 
+> **Correction (2026-09-29, later same day):** "No current trigger is disabled by this change" below is now out of date. Ala's follow-up "Accelerated Marketing Cutover — execute now" instruction had the six legacy marketing triggers actually disabled/paused live (not merely documented) — see `chatgpt-handoff-2026-09-29/13-accelerated-cutover-2026-09-29.md` for the exact trigger IDs, timestamps, and `list_triggers` verification. This file's own "Not yet authorized for retirement" section predates that instruction.
+
 ## Completed
 - ChatGPT Marketing Manager role defined.
 - Claude Code Web & Automation Engineer role defined.

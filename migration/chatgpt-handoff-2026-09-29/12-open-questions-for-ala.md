@@ -10,7 +10,7 @@ Everything below needs your decision before cutover can proceed. Numbered for re
 
 4. **`linguative-design`'s QA checklist.** Should its 5-point post-export QA checklist be explicitly reused as the acceptance test for Adobe Express Premium/Higgsfield output, or do you want a fresh QA process defined for the new stack? (Recommendation: reuse it — it exists because of a specific past failure mode that could recur in any export-based pipeline.)
 
-5. **Centralizing brand/identity rules now, independent of the rest of the migration.** The masculine Arabic company-name rule, the Bosch-only equipment rule, and the Guarantee Travel Group naming rule are currently duplicated across 3–4 routine prompts each. Recommend moving them into `CLAUDE.md` now (low-risk, immediately useful, doesn't require the rest of the migration to be approved first) — do you want this done as a standalone small PR ahead of the full migration?
+5. **Centralizing brand/identity rules now, independent of the rest of the migration.** The masculine Arabic company-name rule, the Bosch-only equipment rule, and the the event-management/AV channel partner naming rule are currently duplicated across 3–4 routine prompts each. Recommend moving them into `CLAUDE.md` now (low-risk, immediately useful, doesn't require the rest of the migration to be approved first) — do you want this done as a standalone small PR ahead of the full migration?
 
 6. **Instagram.** The migration brief's channel list for ChatGPT's Marketing Bible includes Instagram, but it isn't currently connected in Metricool. Do you want it connected before the new marketing system goes live, or should Instagram stay out of scope for now?
 

@@ -1,7 +1,9 @@
 ---
 name: linguative-design
-description: Use for any Adobe Express visual design for Linguative — LinkedIn/Facebook/GBP social graphics, flyers, or similar fixed-canvas posts. Bakes in the brand guide, a reusable layout grid, image-sourcing order, and the post-export QA checklist so nothing gets skipped or buried in a long routine prompt.
+description: ARCHIVED FALLBACK (2026-09-29) — was "use for any Adobe Express visual design for Linguative"; primary design workflow has moved to ChatGPT + Higgsfield + Adobe Express Premium. Bakes in the brand guide, a reusable layout grid, image-sourcing order, and the post-export QA checklist so nothing gets skipped or buried in a long routine prompt.
 ---
+
+> **ARCHIVED AS FALLBACK/REFERENCE ONLY (2026-09-29, Accelerated Marketing Cutover, Ala).** This skill is no longer the primary creative workflow. The scheduled "Linguative Design" routine that invoked it is disabled — see `migration/chatgpt-handoff-2026-09-29/13-accelerated-cutover-2026-09-29.md`. Primary design workflow is now: ChatGPT strategy/copy/creative direction → real approved assets and/or Higgsfield → Adobe Express Premium → QA → Ala approval → Metricool. This file's exact-logo handling, export-fidelity QA, and technical rendering knowledge are preserved below as reference/fallback — do not invoke it as the default path, and do not regenerate or reinterpret the logo from it or anywhere else.
 
 # Linguative design
 

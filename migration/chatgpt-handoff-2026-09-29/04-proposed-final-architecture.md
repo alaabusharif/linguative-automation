@@ -42,7 +42,7 @@ This handoff standard does not exist yet in practice — the website rewrite is 
 - Masculine Arabic company name (الإبداع اللغوي).
 - Bosch DICENTIS/INTEGRUS-only equipment naming.
 - Never state or imply freelancer/subcontractor delivery.
-- Guarantee Travel Group: never named publicly; may be named in a private communication addressed directly to them.
+- the event-management/AV channel partner: never named publicly; may be named in a private communication addressed directly to them.
 - The two approved logo variants only (see `08-security-audit.md`).
 - Nothing is published, sent, or submitted without Ala's approval (the one rule every single routine in this project already follows).
 

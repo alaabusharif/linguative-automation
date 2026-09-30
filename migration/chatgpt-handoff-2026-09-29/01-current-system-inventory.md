@@ -58,7 +58,7 @@ Legend for "External side effect": **NONE** (read-only or writes only to the rep
 
 ### 5. Linguative after-event follow-up
 - **Trigger ID:** `trig_01PCi4J9Fd3ruf2jAgTEq5QC` · **Schedule:** `0 4 * * 6` UTC = 7:00am Amman Saturday · **Session:** `session_011HMD1U41ZNL5H5SGXkPDxk`
-- **Purpose:** Finds recently completed jobs/events (HubSpot won/delivered deals + Gmail wrap-up signals), drafts (a) a testimonial ask, (b) a Google review ask (fixed link `https://g.page/r/CQAP6dK-aEBzEBM/review`), (c) a case-study draft — all as drafts, nothing sent. Skips any job with complaint/dispute signals. Never names Guarantee Travel Group publicly.
+- **Purpose:** Finds recently completed jobs/events (HubSpot won/delivered deals + Gmail wrap-up signals), drafts (a) a testimonial ask, (b) a Google review ask (fixed link `https://g.page/r/CQAP6dK-aEBzEBM/review`), (c) a case-study draft — all as drafts, nothing sent. Skips any job with complaint/dispute signals. Never names the event-management/AV channel partner publicly.
 - **Outputs:** Gmail drafts (testimonial + review ask), `marketing/case-studies/YYYY-MM-DD-<slug>.md` via draft PR, `marketing/case-studies/testimonial-log.md` (repo-privacy-scrubbed: HubSpot ID/generic sector only, no names).
 - **External services:** HubSpot (read), Gmail (draft), GitHub (PR).
 - **Downstream dependencies:** Feeds Sales Agent / marketing-manager via `testimonial-log.md`. Explicitly must NOT edit `/mnt/project-files/website/2026-09-23-draft-content-case-studies.md` (owned by the Website thread).
@@ -139,7 +139,7 @@ Legend for "External side effect": **NONE** (read-only or writes only to the rep
   - Every quote is a copy of the master GRPAM 2651 template (`/mnt/project-files/quotes/templates/linguative-master-quotation-template.docx`) — **never edit the master itself**; copy, rename, edit the copy.
   - Always produce a validated `.docx` (Ala's explicit instruction) — a Google Doc alongside is fine but not a substitute.
   - Reference-citation rules: Stokoe Partnership Solicitors (law/litigation sector) and Planet Depos (deposition/court-reporting sector) may be cited as credibility references to OTHER firms in that class — **never to the firm itself**, and never with confidential case specifics.
-  - Never name Guarantee Travel Group in any proposal, ever.
+  - Never name the event-management/AV channel partner in any proposal, ever.
   - Equipment: Bosch DICENTIS/INTEGRUS only; anything else the tender specifies gets flagged "confirm brand/spec with Ala," never selected independently.
   - Deal moves to "Proposal Drafted" stage — never further (never "Submitted") without Ala.
 - **Outputs:** `.docx` (+ optional Google Doc) linked to the HubSpot Deal.
@@ -153,7 +153,7 @@ Legend for "External side effect": **NONE** (read-only or writes only to the rep
 - **Unique rules to preserve exactly:**
   - Reads `marketing/strategy.md`'s latest "Strategy changes" AND `marketing/sales-reports/` results-tracking before drafting, to weight sector/angle priority (doesn't override hard rules, just weighting).
   - Same Stokoe/Planet Depos citation rule as Proposal Drafting (never to the firm itself).
-  - Never name Guarantee Travel Group in outreach, to anyone, ever.
+  - Never name the event-management/AV channel partner in outreach, to anyone, ever.
   - Company profile Drive links: Arabic profile only on new Arabic drafts; English profile on every English draft, new or re-engagement — no exception — included as a sentence in the body, never an attachment (too large for inline attach) and never a bare URL.
   - Equipment: Bosch DICENTIS/INTEGRUS only.
   - Arabic company name always الإبداع اللغوي, masculine verb agreement, never لينقواتيف.
@@ -164,7 +164,7 @@ Legend for "External side effect": **NONE** (read-only or writes only to the rep
 
 ### 16. Linguative Sales Agent
 - **Trigger ID:** `trig_01HCRnUZLFYVpcHDfhmtVX2L` · **Schedule:** `0 8 * * 0,1,2,3,4,6` UTC = 11:00am Amman Sat–Thu · **Session:** `session_01Q2pWZZF1ZX1utCDYbEDhsX`
-- **Purpose:** The most complex routine — daily whole-pipeline management across 8 parts (A–H): prioritized call/email plan with stall thresholds; multi-step follow-up sequences; RFQ→bid-package assembly (mirrors Proposal Drafting but with prices marked "confirm with Ala"); cross-sell/re-engagement scan; call scripts; Saturday-only weekly pipeline forecast; results-tracking roll-up (sent/replied/won by sector/service/language/angle — feeds Outreach Drafting and Copywriting); and recurring-client 90-day check-in drafts (standing rule, ALL current clients incl. Guarantee Travel Group by name in a **private** check-in, which is allowed — the "never name" rule is about public/outreach-to-others content only).
+- **Purpose:** The most complex routine — daily whole-pipeline management across 8 parts (A–H): prioritized call/email plan with stall thresholds; multi-step follow-up sequences; RFQ→bid-package assembly (mirrors Proposal Drafting but with prices marked "confirm with Ala"); cross-sell/re-engagement scan; call scripts; Saturday-only weekly pipeline forecast; results-tracking roll-up (sent/replied/won by sector/service/language/angle — feeds Outreach Drafting and Copywriting); and recurring-client 90-day check-in drafts (standing rule, ALL current clients incl. the event-management/AV channel partner by name in a **private** check-in, which is allowed — the "never name" rule is about public/outreach-to-others content only).
 - **Unique stall thresholds (exact, must be preserved verbatim if merged):**
   - "New" 3+ days, no proposal → needs bid package.
   - "Proposal Drafted" 5+ days, no stage change → follow-up sequence.

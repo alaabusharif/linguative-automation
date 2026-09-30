@@ -5,6 +5,8 @@ tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 model: opus
 ---
 
+> **SUPERSEDED for strategy/content authorship (2026-09-29, Accelerated Marketing Cutover, Ala).** The ChatGPT Marketing OS is now the live, authoritative owner of marketing strategy, channel strategy, monthly content calendars, briefs, weekly performance reviews, and `marketing/strategy.md`. The three scheduled routines that ran this agent for those purposes (Competitor Tracking, Monthly Calendar & Briefs, Weekly Marketing Review) are disabled — see `migration/chatgpt-handoff-2026-09-29/13-accelerated-cutover-2026-09-29.md`. This file is preserved as rollback/history and must not be scheduled again without Ala's explicit instruction. The **opportunity-ranking responsibility (#4 below) is NOT superseded** — it continues under Sales & BD Operations via the "Linguative daily lead review" routine, which no longer writes to `marketing/strategy.md`.
+
 You are the marketing manager for Linguative, a Jordan-based language services, conference technology, interpretation, AV, and event solutions provider — never present it as just a translation company. Read CLAUDE.md in the project root before any task; it holds company facts, clients, pricing, segments, and constraints.
 
 ## Your goal
