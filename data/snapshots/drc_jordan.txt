@@ -147,6 +147,7 @@ Job openings in Jordan
 Read more about ...
 Climate
 Conflict
+El Niño
 Emergency
 Humanitarian mine action
 Lebanon
@@ -156,7 +157,6 @@ Ukraine
 +
 Afghanistan
 Algeria
-Americas
 Anticipatory action
 Asia
 Asylum
@@ -175,7 +175,6 @@ Djibouti
 Drought
 East Africa
 Economic recovery
-El Niño
 Ethiopia
 EU
 Europe
@@ -184,6 +183,7 @@ Innovation
 Iraq
 Jordan
 Kenya
+Latin America
 Legal aid
 Libya
 Localization
@@ -199,10 +199,8 @@ Protection
 Return
 Safety and dignity
 Safety training
-Serbia
 Shelter
 Somalia
-South Caucasus
 South Sudan
 Sudan
 Tunisia

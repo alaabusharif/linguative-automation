@@ -95,7 +95,6 @@ Training Cities
 Training Category
 Course Finder
 Choose a month
-September
 October
 November
 December
@@ -107,6 +106,7 @@ May                                                2027
 June                                                2027
 July                                                2027
 August                                                2027
+September                                                2027
 Choose a category
 Energy and Water Management
 Marine Management
