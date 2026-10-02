@@ -15,8 +15,10 @@ Wed
 Thu
 Fri
 Sat
+27
+28
+29
 30
-31
 1
 2
 3
@@ -47,6 +49,7 @@ Sat
 28
 29
 30
+31
 1
 2
 3
@@ -54,27 +57,13 @@ Sat
 5
 6
 7
-8
-9
-10
 Reset date
 Theme
-Film (1)
 Language (1)
 Literature (1)
-Visual Arts (1)
 Online events only
 Remove all
 A system error occurred. Please try again later.
-29.09.2026
-|
-7:00 PM
-Interwoven Journeys
-Exhibition & Film Screening
-|
-Yemeni Perspectives in Amman
-Dialogpunkt, GJU SABE, Jabal Amman
-Details
 17.10.2026
 |
 8:00 AM-4:30 PM
@@ -230,3 +219,6 @@ Sun
 Reset date
 {{filter.name}}
 {{getChipLabel}}
+Forbidden
+Forbidden
+Your request was forbidden by the server.
