@@ -77,7 +77,26 @@ Per Ala's 2026-10-01 "media-first" instruction: authentic Linguative photography
 
 Used selectively: entrance fades/slides on scroll for section reveals, subtle hover states on cards/buttons, no parallax or scroll-jacking that risks usability or Core Web Vitals. Respect `prefers-reduced-motion`. No motion is load-bearing for understanding content — everything must read correctly with motion off (ties to Phase 23's semantic-HTML/no-content-locked-in-animation rule).
 
-## 6. Bricks build discipline (per Ala's instruction)
+## 6. Design-judgment layer (anti-"AI slop" rules)
+
+Ala approved (2026-10-04) folding judgment rules from the open-source "Taste Skill" project (github.com/Leonxlnx/taste-skill) into this spec — not installing the package itself, just adopting its design principles. **BRAND.md still wins on every specific** (colors, fonts, logo rule, photography rule); this section only governs layout/motion/density judgment calls BRAND.md doesn't already settle.
+
+**Why this is here:** Ala has already rejected AI-generated work for reading as generic "AI slop" — see the first rebrand video, rejected for exactly that (glow/gradient filler with no real direction). These rules exist to stop the Bricks build from drifting the same way.
+
+**Variant:** closest fit for a premium navy/gold/ivory B2B services brand is **Soft-Skill** — polished, calm, soft contrast, premium typography, spring-based motion (not Minimalist-Skill's flat editorial look or Brutalist-Skill's sharp Swiss-type contrast).
+
+**Dials, kept low-to-mid throughout** (these tune judgment, they aren't literal config keys in Bricks):
+- `DESIGN_VARIANCE` low-to-mid — generous asymmetry where it serves the content (per BRAND.md's own "strong asymmetrical compositions"), never experimental-for-its-own-sake layout on a professional services site.
+- `MOTION_INTENSITY` low-to-mid — matches section 5 above: hover and scroll-reveal motion, not scroll-jacking or magnetic/parallax effects.
+- `VISUAL_DENSITY` low-to-mid — spacious, generous negative space (BRAND.md again), never a dense dashboard feel.
+
+**Anti-slop principles to build by:**
+- Asymmetric, intentional compositions over generic centered boxes — one dominant idea per section, not a stack of identical cards.
+- Strong typographic hierarchy; no em-dashes in any copy placed on the site.
+- Premium, generous whitespace over cramped, info-dense interfaces.
+- Real, direction-driven motion (actual easing/spring behavior) over default fade-ins — but still bounded by section 5's performance/accessibility limits above.
+
+## 7. Bricks build discipline (per Ala's instruction)
 
 - Global classes and design tokens defined once, referenced everywhere — no per-page overrides for things covered by this system.
 - Reusable components/templates for every repeating pattern (cards, forms, nav, footer, CTAs).
@@ -85,7 +104,7 @@ Used selectively: entrance fades/slides on scroll for section reveals, subtle ho
 - Minimal plugins — only what the audit (once the backup is in hand) shows is actually load-bearing.
 - Semantic HTML throughout (`main`, `article`, `section`, `header`, `nav`, `footer`) — Bricks supports this natively via element tag settings; enforced at build time, not left to defaults.
 
-## 7. Open until the backup/live-site audit lands
+## 8. Open until the backup/live-site audit lands
 
 - Exact existing typography rendering and any live overrides (can't confirm without the theme/CSS).
 - Current plugin stack, which determines how much of "minimal unnecessary plugins" is a removal task vs. a clean start.
