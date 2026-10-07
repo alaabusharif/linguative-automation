@@ -196,10 +196,6 @@ Three weeks
 Search
 Upcoming Programs
 BOOKING
-IT Infrastructure Management
-5/10/2026
-Prague
-BOOKING
 Turbidite Facies Architecture, Reservoir Applications and Predictive Stratigraphy (N107)
 11/10/2026
 Istanbul
@@ -219,6 +215,10 @@ BOOKING
 Database Fundamentals for Infrastructure Professionals
 19/10/2026
 London
+BOOKING
+Professional in Business Analysis (PMI-PBA Exam Preperation)
+19/10/2026
+Barcelona
 More Upcoming Programs...
 Training Course
 Cultural Intelligence Program (CQ)
