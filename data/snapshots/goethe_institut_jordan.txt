@@ -59,8 +59,9 @@ Sat
 7
 Reset date
 Theme
-Language (3)
+Language (4)
 Literature (1)
+Modern Life (1)
 Online events only
 Remove all
 A system error occurred. Please try again later.
@@ -73,6 +74,15 @@ Language Café
 Practice German, meet people, and have relaxed conversations.
 Info-Zentrum Vorintegration
 Details
+14.10.2026
+|
+8:00 PM-10:00 PM
+Layali Al Sayfiya – Community Night: Neighbourhood Stories
+Community Event
+|
+An evening of community exchange, cultural encounters, and neighbourhood stories.
+Tajalla For Art And Music
+Details
 17.10.2026
 |
 8:00 AM-4:30 PM
@@ -83,6 +93,15 @@ Motto: DaF morgen
 Goethe-Institut Amman, Amman
 Details
 19.10.2026
+|
+6:00 PM
+Language Café
+Language Café
+|
+Practice German, meet people, and have relaxed conversations.
+Info-Zentrum Vorintegration
+Details
+26.10.2026
 |
 6:00 PM
 Language Café
