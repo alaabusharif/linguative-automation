@@ -38,6 +38,21 @@ This public repository is **not** the master store for private client names, con
 2. Local B2B: NGOs, UN agencies, embassies, conference organizers, companies, and LTA-holding travel agencies in Jordan.
 3. Regional B2B: KSA and wider Gulf/MENA clients, international organizations running regional events.
 
+### Approved Sales/BD priority — embassies & diplomatic missions (2026-10-14)
+Ala explicitly approved **embassies and diplomatic missions physically operating in Jordan** as a priority account-based lead-scouting and outreach segment.
+
+Sales & BD / lead scouting must:
+- verify active missions from official mission/government sources;
+- prioritize Procurement / General Services / Administration, Public Diplomacy / Public Affairs / Cultural Affairs, Development Cooperation / Programme teams, Economic / Commercial sections, and Protocol / Executive offices;
+- capture public vendor-registration and procurement links where available;
+- prefer reliable named functional contacts or official role inboxes; **never pattern-guess email addresses**;
+- deduplicate against HubSpot and Gmail history before drafting outreach;
+- prioritize missions with visible event/program activity, delegations, trade/economic programming, cultural/public-diplomacy activity, or procurement signals;
+- position Linguative as **one accountable local partner for the language and technology behind multilingual events in Jordan**, not merely as a translation agency;
+- keep all embassy outreach **draft-only** until Ala reviews it. Nothing is sent automatically.
+
+The live crawler/lead-scouting tracking issue is GitHub **issue #35 ("Lead scouting: new candidates")**. Treat directives posted there as active scouting input.
+
 ## Known constraints
 - linguative.net's mail is fixed and verified (SPF, DKIM, DMARC, MX all correct; server IP checked clean, not blacklisted). Staying on the current AxenCloud hosting — no migration planned. Warmup of sales@linguative.net and marketing@linguative.net is in progress (manual ramp, real contacts first). Agents may plan email outreach, but sending volume must follow the warmup schedule until warmup is complete — don't recommend jumping straight to full-volume campaigns from these addresses.
 - The website is due for a rebuild.
