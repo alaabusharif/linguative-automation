@@ -72,6 +72,18 @@ The target architecture consolidates capability ownership. A source routine is n
 ## Brand guide
 Any visual design work — the Design routine, a future designer agent, slides, social graphics — must follow `marketing/brand/BRAND.md` exactly: locked logo files (never redrawn/regenerated), exact brand colors and fonts, and the design/photography rules there. Read it before producing anything visual.
 
+
+## Cross-agent synchronization — hard rule
+
+Marketing strategy and lead-scouting must never drift apart.
+
+- `marketing/strategy.md` is the marketing source of truth.
+- GitHub issue **#35 — "Lead scouting: new candidates"** is the live lead-scouting intake/handoff thread.
+- Whenever Marketing changes targeting, positioning, priority sectors, buyer personas, outreach angles, qualification logic, or any other decision that materially affects prospect discovery or outreach, that change must be conveyed automatically to Claude Sales & BD / lead scouting through issue #35 and shared context.
+- Whenever Claude lead scouting learns a durable new targeting rule, source pattern, search gotcha, contact-persona rule, or segment priority that affects Marketing, it must be reflected back into shared context and surfaced to Marketing.
+- Do not rely on a separate new issue for cross-agent handoff unless the live intake thread also receives the directive.
+- The intended end state is automated synchronization from repository changes; until the automation is fully wired and verified, every agent run must explicitly read the latest `marketing/strategy.md` and issue #35 before prospect discovery/outreach work.
+
 ## Working rules for all agents
 - Nothing is published, sent, or submitted without Ala's approval.
 - Write for Arabic and English audiences; default to English for international B2B and Arabic for local B2C unless told otherwise.
