@@ -6,6 +6,30 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 
 ## Strategy changes
 
+### 2026-10-14 — Market-response refinement: event continuity, institutional credibility, specialist human language work
+
+**Decision:** Keep Linguative's core positioning unchanged, but sharpen buyer messaging around three themes: **multilingual event continuity and dependable technical delivery**, **institutional/procurement readiness**, and **specialist human language expertise where context, confidentiality and consequences matter**.
+
+**Why:** The October market review found three relevant shifts: regional event organizers are placing greater emphasis on hybrid/remote participation resilience; Arabic-language enterprise AI is moving deeper into corporate and government workflows; and institutional buyers in Jordan are actively engaging qualified local suppliers. None justifies a strategic pivot, but all make generic "translation/interpretation" or "one vendor" claims less distinctive.
+
+**Applies to:** Website / SEO-GEO / content / social / buyer messaging / procurement-facing collateral.
+
+**Required downstream behavior:**
+- Preserve the master positioning: **one accountable partner for the language and technology behind multilingual events**.
+- Add **event continuity** as a supporting message for Hybrid & Virtual Conference Solutions: multilingual participation should remain dependable when speakers, delegates or plans change. Keep claims tied to confirmed capabilities.
+- Show operational proof: real booths, Bosch DICENTIS / Bosch INTEGRUS, signal/distribution workflow, testing, rehearsals, technicians and event-day verification. Avoid generic "breaking language barriers" creative when stronger delivery proof is available.
+- Increase institutional-buyer content: capability clarity, service coverage, technical readiness, procurement-friendly FAQs and anonymised/approved case-study proof.
+- Translation messaging should not compete with AI on generic speed/scale claims. Explain where specialist human review, terminology control, context, confidentiality and accountability matter; do not frame human and AI as mutually exclusive.
+- SEO/GEO content should strengthen buyer-intent themes around hybrid conference solutions in Jordan, remote multilingual participation, conference AV + interpretation technical support, institutional event support, and destination/event planning in Jordan. Treat proposed phrases as content themes unless validated by search data.
+- For Arabic Amman targeting, use **عمّان، الأردن** or equivalent disambiguation rather than ambiguous **عمان** alone.
+- LinkedIn should carry the strongest procurement/institutional and technical-authority adaptations; GBP should emphasize local service/location relevance; YouTube should prioritize demonstrations and evergreen explainers.
+- Do not name clients or use logos/testimonials unless the Client Reference Register and separate permissions allow that use.
+- This approval authorizes strategy/calendar/brief updates. Final public assets remain subject to the established content QA/approval gate before publication.
+
+**Effective:** immediately.
+
+**Evidence/source:** Ala-approved competitor and market review, 14 October 2026.
+
 ### 2026-09-30 — Measurement, website-builder and production-workflow correction
 
 **Decision:** Treat GA4 as a broken measurement signal until live tagging is repaired; Bricks is the selected website builder; and social creative production is standardized on the local HTML-render workflow for deterministic finished graphics. Adobe Express may be used only when it is useful and reliable, not as a mandatory finishing dependency.
@@ -112,5 +136,6 @@ Ala: "Beginning Sunday, all posts should be about rebranding" / "Also, all posts
 - Google Business Profile: local search and conversion.
 - YouTube: searchable visual authority and evergreen explainers.
 - Operating model: three master concepts per week, adapted by channel; rolling 70% English / 30% Arabic and 60% static / 40% video.
-- Primary commercial positioning: one premium partner for multilingual events — interpreters, interpretation technology, hybrid support, AV, and multilingual content.
+- Primary commercial positioning: one accountable premium partner for the language and technology behind multilingual events — interpreters, interpretation technology, hybrid support, AV, and multilingual content.
+- Supporting buyer themes: multilingual event continuity; dependable technical delivery; institutional/procurement readiness; specialist human language expertise where context and accountability matter.
 - Approval gate: nothing publishes or schedules without Ala's explicit approval.
