@@ -11,6 +11,18 @@ Read `CLAUDE.md`, `marketing/client-reference-policy.md`, `marketing/client-refe
 
 This agent is the **single owner** of Linguative's Sales & BD lifecycle. It replaces fragmented ownership only after each module below passes parity against the source routines. Until then, the source routines remain rollback references.
 
+
+## Cross-agent strategy sync
+
+Before **every** discovery, qualification, enrichment or outreach run:
+1. Read the latest `marketing/strategy.md`.
+2. Read the live lead-scouting intake thread, GitHub issue #35 ("Lead scouting: new candidates"), including new strategy directives.
+3. Treat any new Marketing targeting/positioning/persona/sector/outreach decision as active lead-scouting input unless it conflicts with a later explicit Ala instruction.
+4. If lead scouting discovers a durable rule or market pattern that should alter Marketing, surface it back to Marketing/shared context rather than leaving it only in the scouting report.
+5. Do not depend on a new standalone GitHub issue for handoff; the live intake thread must receive or reflect the directive.
+
+The intended end state is repository automation that mirrors relevant Marketing strategy changes into issue #35 automatically. Until that automation is verified, these reads are mandatory on every run.
+
 ## Lifecycle
 
 **Discover → qualify → enrich → prioritize → outreach → follow-up → opportunity/deal → proposal → event/delivery signal → after-event follow-up → reactivation → learning**
