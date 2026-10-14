@@ -74,13 +74,13 @@ The first 10 concepts are deliberately sequenced to hit the locked **7 EN / 3 AR
 | 5 | Oct 8 | LNG-SOC-2026-005 | EN | Video | What participants actually hear in a multilingual room | Explain the signal path / participant experience | Plan the participant experience |
 | 6 | Oct 11 | LNG-SOC-2026-006 | EN | Static | Owned conference technology changes the risk profile | Differentiate from ad-hoc rental/broker models without attacking competitors | Request equipment + technician |
 | 7 | Oct 13 | LNG-SOC-2026-007 | AR | Static | متى تحتاج الفعالية إلى مترجمين اثنين؟ | Buyer education; defend professional staffing standards | اطلب توصية بعدد المترجمين |
-| 8 | Oct 15 | LNG-SOC-2026-008 | EN | Video | Behind the scenes: test, route, listen, verify | Show execution discipline and BTS professionalism | Bring us in before event day |
-| 9 | Oct 18 | LNG-SOC-2026-009 | EN | Static | Conference interpretation equipment: the buyer's checklist | Capture equipment-rental/search intent | Request the equipment checklist / quote |
-| 10 | Oct 20 | LNG-SOC-2026-010 | AR | Video | فعالية متعددة اللغات من مورد واحد | Arabic conversion piece for bundled event support | تواصل معنا لعرض متكامل |
-| 11 | Oct 22 | LNG-SOC-2026-011 | EN | Static | Translation that supports the event before and after the room | Cross-sell translation/transcription without repositioning as an agency | Ask about multilingual content support |
-| 12 | Oct 25 | LNG-SOC-2026-012 | EN | Video | From event footage to bilingual content | Cross-sell subtitling/video/event-production support | Extend the life of your event |
-| 13 | Oct 27 | LNG-SOC-2026-013 | AR | Static | كيف تختار عدد أجهزة الاستقبال ونظام الترجمة؟ | Local buyer education for interpretation equipment | اطلب توصية فنية |
-| 14 | Oct 29 | LNG-SOC-2026-014 | EN | Static | Planning a multilingual event in Jordan? Start with the room, languages and audience | Direct Q4 conversion | Request a quote / consultation |
+| 8 | Oct 15 | LNG-SOC-2026-008 | EN | Video | Event continuity starts before event day: test, route, connect, verify | Show how rehearsals, signal checks and technical verification reduce multilingual-event risk | Bring us in before event day |
+| 9 | Oct 18 | LNG-SOC-2026-009 | EN | Static | The institutional buyer's checklist for multilingual conference delivery | Help procurement/event teams evaluate language + technology readiness, not equipment alone | Request the planning checklist / quote |
+| 10 | Oct 20 | LNG-SOC-2026-010 | AR | Video | عندما تتغير خطط المشاركة، يجب ألا تتعطل التجربة متعددة اللغات | Arabic authority piece on hybrid continuity and dependable technical delivery | تواصل معنا لتخطيط فعالية أكثر جاهزية |
+| 11 | Oct 22 | LNG-SOC-2026-011 | EN | Static | When specialist human review matters in a technology-assisted language workflow | Differentiate on context, terminology, confidentiality and accountability without anti-AI messaging | Ask about the right workflow for your content |
+| 12 | Oct 25 | LNG-SOC-2026-012 | EN | Video | One event, one accountable delivery chain | Show how interpretation, AV/hybrid support and multilingual content connect before, during and after the event | Plan the full multilingual workflow |
+| 13 | Oct 27 | LNG-SOC-2026-013 | AR | Static | ما الذي يجب أن يتحقق منه فريق المشتريات قبل اعتماد مزود فعالية متعددة اللغات؟ | Arabic institutional-buyer education on scope, readiness, support and accountability | اطلب قائمة التحقق الفنية |
+| 14 | Oct 29 | LNG-SOC-2026-014 | EN | Static | Bringing an international multilingual event to Jordan? Plan language and technology together | Destination-oriented conversion for organizers, DMCs and institutions using Jordan venues | Request a planning consultation |
 
 ## 6. Platform adaptation rules
 
@@ -170,3 +170,19 @@ Workflow:
 **Concept → Copy → Visual → QA → Ala approval → Metricool → Publish → Measure**
 
 No publishing is autonomous unless Ala explicitly delegates that category later.
+
+
+## 11. Approved market-response emphasis — 14 October
+
+For the remainder of October, adapt the calendar around four supporting messages without changing the locked language/format ratios:
+
+1. **Event continuity:** hybrid/remote participation, rehearsals, technical checks and fallback-aware planning as part of dependable multilingual delivery.
+2. **Institutional readiness:** procurement-friendly checklists, clearly scoped responsibilities, technical readiness and evidence-led capability messaging.
+3. **Specialist human language work:** explain when context, terminology, confidentiality and accountability justify specialist human review; never use anti-AI fear messaging.
+4. **Jordan destination relevance:** create useful, factual content for organizers bringing multilingual conferences to Amman, the Dead Sea and Aqaba. Do not invent venue relationships or event-delivery claims.
+
+**SEO/GEO themes to reuse in website/Insights drafts:** hybrid conference solutions Jordan; remote multilingual participation; conference AV and interpretation technical support; institutional multilingual event support; simultaneous interpretation Jordan; conference interpretation equipment Jordan; destination planning for multilingual events in Jordan. These are content-intent themes, not claimed keyword-volume winners until validated.
+
+**Arabic location rule:** write **عمّان، الأردن** (or another explicit Jordan reference) when targeting Amman to avoid confusion with Oman.
+
+**Approval rule:** the strategic themes and briefs are approved for production. Final captions/visuals still pass normal QA and the established public-asset approval gate before publishing.
