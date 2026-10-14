@@ -66,21 +66,54 @@ Output: deduplicated HubSpot Company (+ Contact if available) with likely-servic
 ## Module B — Institutional & corporate scouting
 
 Maintain and use the current hand-tuned lead classes:
-1. banks
-2. law firms
-3. insurers
-4. federations/associations
-5. global corporates
-6. litigation/arbitration firms
-7. deposition/court-reporting agencies
-8. healthcare accreditation bodies
-9. international NGOs/UN not yet contacted
-10. major industrial/mining/logistics/port/airport companies
+1. **embassies and diplomatic missions in Jordan**
+2. banks
+3. law firms
+4. insurers
+5. federations/associations
+6. global corporates
+7. litigation/arbitration firms
+8. deposition/court-reporting agencies
+9. healthcare accreditation bodies
+10. international NGOs/UN not yet contacted
+11. major industrial/mining/logistics/port/airport companies
 
 Preserve learned search behavior from the existing Institutional & Corporate Lead Scouting routine. Known examples include:
 - use Jordan country filtering where the current prompt requires it;
 - preserve known entity-name/search mismatches;
 - fold newly learned search gotchas into this module rather than losing them.
+
+### Embassy / diplomatic-mission scouting — approved 2026-10-14
+
+Treat **embassies and diplomatic missions in Jordan as a priority account-based outreach segment**, not as a generic mailing list.
+
+**Why:** Diplomatic missions regularly run bilateral meetings, public-diplomacy programs, workshops, delegations, trade/economic events and multilingual institutional events that can require interpretation, translation, conference technology, AV/hybrid support and on-site technical delivery. Marketing has approved this segment as strategically aligned with Linguative's positioning.
+
+**Target functions/personas, in priority order where publicly discoverable:**
+- Procurement / General Services / Administration — vendor registration, RFQs, equipment, language and event-service procurement.
+- Public Diplomacy / Public Affairs / Cultural Affairs — conferences, workshops, launches, screenings, visiting delegations and public programs.
+- Development Cooperation / Programme teams — donor-funded workshops, consultations and stakeholder events.
+- Economic / Commercial sections — business forums, trade delegations, investment events and conferences.
+- Protocol / Executive offices — high-level visits, receptions and official multilingual meetings.
+
+**Scouting rules:**
+- Start from a current list of diplomatic missions physically operating in Jordan; verify the mission's official website or official government source before treating it as active.
+- Prefer named functional contacts when publicly and reliably available; otherwise use an official role inbox (procurement, admin, public affairs, etc.). Never pattern-guess an address.
+- Record vendor-registration/procurement pages and supplier-registration instructions when available.
+- Avoid generic embassy-wide blasting. One mission may justify different contacts only when the functions and use cases are genuinely distinct.
+- Deduplicate against HubSpot and existing Gmail history before preparing any outreach.
+- Prioritize missions with visible event/program activity, visiting delegations, bilateral/economic programming, cultural/public-diplomacy programming, or published procurement/vendor-registration activity.
+- Keep private contact details and CRM information out of this public repository.
+
+**Approved outreach positioning:**
+> One accountable local partner for the language and technology behind multilingual events in Jordan.
+
+Supporting idea:
+> From a bilateral meeting or workshop to a multilingual conference, Linguative can coordinate the language and technical side through one Jordan-based team.
+
+Do not lead with "translation agency." Lead with interpretation + conference technology + AV/hybrid + multilingual event support, then introduce translation where relevant.
+
+**Outreach control:** prepare personalized outreach as **drafts only**. Nothing is sent automatically. Use the current approved Linguative company profile as supporting collateral and follow the current signature/from-address rules. Ala has explicitly requested that embassy outreach remain in draft until reviewed.
 
 **Do not retire the old Institutional & Corporate Lead Scouting trigger until its complete hand-tuned prompt has been captured in a secure successor source and parity-tested.**
 
