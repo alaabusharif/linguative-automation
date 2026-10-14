@@ -6,6 +6,31 @@ Other Linguative routines and agents (copywriter, designer, publisher, outreach 
 
 ## Strategy changes
 
+### 2026-10-14 — Embassies & diplomatic missions become a formal account-based outreach segment
+
+**Decision:** Add embassies, diplomatic missions and the EU Delegation in Jordan as a formal priority B2B audience. Treat this as account-based institutional outreach, not a bulk email campaign.
+
+**Why:** Diplomatic missions in Jordan routinely run official meetings, workshops, delegations, development programmes, public-diplomacy events and procurement processes that can require interpretation, translation, conference technology, AV/hybrid support and multilingual event delivery. The fit is directly aligned with Linguative's one-accountable-partner positioning.
+
+**Applies to:** Outreach / institutional buyer messaging / procurement monitoring / website Industries content / SEO-GEO support content.
+
+**Required downstream behavior:**
+- Build outreach around verified official mission contacts only; do not guess personal email addresses.
+- Prioritize Administration / Procurement / General Services, Public Diplomacy / Culture, Development Cooperation / Programme teams, Economic / Commercial sections, and Protocol / executive offices where appropriate.
+- Lead with: **one accountable local partner for the language and technology behind multilingual events in Jordan**.
+- Do not lead with "translation agency" positioning.
+- Company profile is attached as a real file, not provided only as a Drive link.
+- Outreach remains personalized by mission; no bulk-blast copy.
+- Initial contact asks to be routed to the correct procurement/vendor-registration path when the public address is general.
+- Use `info@linguative.net` for procurement/vendor introductions where possible; use `admin@linguative.net` selectively for senior/personal outreach from Ala. Do not use warmed-up sales/marketing mailboxes for this segment unless Ala changes the rule.
+- All embassy outreach emails remain **draft-only until Ala explicitly approves sending**.
+- Monitor official embassy/delegation procurement and expression-of-interest pages for relevant interpretation, language, AV, conference-technology and event opportunities. Never submit automatically.
+- Client-reference and brand rules remain unchanged.
+
+**Effective:** immediately.
+
+**Evidence/source:** Ala-approved embassy outreach implementation, 14 October 2026.
+
 ### 2026-10-14 — Market-response refinement: event continuity, institutional credibility, specialist human language work
 
 **Decision:** Keep Linguative's core positioning unchanged, but sharpen buyer messaging around three themes: **multilingual event continuity and dependable technical delivery**, **institutional/procurement readiness**, and **specialist human language expertise where context, confidentiality and consequences matter**.
@@ -134,6 +159,7 @@ Ala: "Beginning Sunday, all posts should be about rebranding" / "Also, all posts
 - Instagram: premium visual discovery; prepare variants, but do not schedule until the Metricool connection exists.
 - Facebook: local reach and buyer education.
 - Google Business Profile: local search and conversion.
+- Embassies & diplomatic missions: formal account-based institutional outreach segment; target procurement/administration/programme/event functions using verified official routes only.
 - YouTube: searchable visual authority and evergreen explainers.
 - Operating model: three master concepts per week, adapted by channel; rolling 70% English / 30% Arabic and 60% static / 40% video.
 - Primary commercial positioning: one accountable premium partner for the language and technology behind multilingual events — interpreters, interpretation technology, hybrid support, AV, and multilingual content.
