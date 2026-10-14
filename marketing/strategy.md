@@ -4,6 +4,18 @@ This is the single source of truth for Linguative's current channel strategy. Th
 
 Other Linguative routines and agents (copywriter, designer, publisher, outreach drafting, lead scouting/enrichment) should read the **Strategy changes** section below before acting, so a strategy change reaches them without needing a message between sessions.
 
+
+## Lead-scouting synchronization protocol
+
+Any strategy change that materially affects **who Linguative should target, how prospects are prioritized, which buyer roles matter, which sectors/markets are in focus, what outreach angle should be used, or what qualification logic applies** is also a lead-scouting input.
+
+Standing rule:
+- After such a change is recorded here, it must be propagated to Claude Sales & BD / lead scouting via the live GitHub handoff thread: **issue #35, "Lead scouting: new candidates."**
+- Lead scouting should not wait for a separate manual briefing.
+- The repository automation should mirror the relevant strategy delta into issue #35 automatically once implemented.
+- Until that automation is verified, Claude lead scouting must read this file directly at the start of every run.
+- Durable learnings discovered by lead scouting that affect Marketing should flow back into shared context / this strategy process rather than remaining only in a crawler comment.
+
 ## Strategy changes
 
 ### 2026-10-14 — Embassies & diplomatic missions become a formal account-based outreach segment
