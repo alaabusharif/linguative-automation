@@ -23,6 +23,34 @@ const LOGO_PATH = path.join(__dirname, '..', 'public', 'assets', 'logo-navy-gold
 // inside an Arabic-shaped line (see lib/bidi.js).
 const ARABIC_FONT_PATH = path.join(__dirname, '..', 'assets', 'fonts', 'Cairo-Regular.ttf');
 
+// Linguative's own public company details — legal/contact info that belongs
+// on every invoice and quote, not client data, so it's fine to keep in code.
+const COMPANY = {
+  address: 'Khilda – Wasfi Al-Tall Street, Amman, Jordan',
+  phones: '+962 79 290 9080   |   +962 79 737 5914',
+  email: 'info@linguative.net',
+  website: 'linguative.net',
+  registrationNo: '54517',
+  taxNo: '178170917',
+};
+
+// Bank details for the "Payment Details" block on invoices — real banking
+// info, so it's read from the server's own .env rather than hardcoded here
+// (never commit real values; see .env.example). Left unset, the block is
+// simply skipped.
+function bankDetails() {
+  const d = {
+    beneficiary: process.env.BANK_BENEFICIARY,
+    accountNumber: process.env.BANK_ACCOUNT_NUMBER,
+    bankName: process.env.BANK_NAME,
+    branch: process.env.BANK_BRANCH,
+    bankAddress: process.env.BANK_ADDRESS,
+    iban: process.env.BANK_IBAN,
+    swift: process.env.BANK_SWIFT,
+  };
+  return Object.values(d).some(Boolean) ? d : null;
+}
+
 function fmtMoney(n, currency) {
   return `${currency} ${Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 }
@@ -38,10 +66,11 @@ function renderDocumentPdf(doc, items, res) {
   if (fs.existsSync(LOGO_PATH)) {
     pdf.image(LOGO_PATH, 40, 36, { width: 160 });
   }
-  // Company contact block, under the logo — fills what was otherwise blank
-  // header space and gives the recipient a way to reach Linguative directly.
+  // Company address/contact block, under the logo — fills what was otherwise
+  // blank header space and gives the recipient a way to reach Linguative directly.
   pdf.fillColor('#555555').fontSize(8.5).font('Helvetica')
-    .text('info@linguative.net   |   +962 79 290 9080   |   Amman, Jordan', 40, 100, { width: 250 });
+    .text(COMPANY.address, 40, 100, { width: 260 })
+    .text(`${COMPANY.phones}   |   ${COMPANY.email}`, 40, pdf.y, { width: 260 });
   pdf.fillColor(BRAND.navy)
     .fontSize(22)
     .text(doc.kind === 'invoice' ? 'INVOICE' : 'QUOTATION', 0, 40, { align: 'right' });
@@ -61,7 +90,7 @@ function renderDocumentPdf(doc, items, res) {
   // text cursor parked at x=0 (from the right-aligned title block), so
   // without it this heading and the whole block under it render flush with
   // the page edge, outside the left margin.
-  pdf.fillColor(BRAND.navy).fontSize(13).text('PREPARED FOR', 40, pdf.y, { continued: false });
+  pdf.fillColor(BRAND.navy).fontSize(13).text(doc.kind === 'invoice' ? 'BILL TO' : 'PREPARED FOR', 40, pdf.y, { continued: false });
   pdf.fillColor(BRAND.charcoal).fontSize(11);
   pdf.text(`Client / Organization: ${doc.client_name || ''}`);
   if (doc.contact_person) pdf.text(`Contact Person: ${doc.contact_person}`);
@@ -127,6 +156,27 @@ function renderDocumentPdf(doc, items, res) {
     pdf.moveDown(2).font('Helvetica').fontSize(10.5).fillColor(BRAND.charcoal).text(doc.notes, 40, pdf.y, { width: 515 });
   }
 
+  // Payment Details — invoices only, and only once the server's .env has
+  // real bank values configured (see bankDetails() above).
+  if (doc.kind === 'invoice') {
+    const bank = bankDetails();
+    if (bank) {
+      pdf.moveDown(1.5);
+      pdf.fillColor(BRAND.navy).fontSize(12).font('Helvetica-Bold').text('PAYMENT DETAILS', 40, pdf.y);
+      pdf.moveDown(0.4);
+      pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10);
+      const rows = [
+        ['Beneficiary:', bank.beneficiary], ['Account Number:', bank.accountNumber], ['Bank Name:', bank.bankName],
+        ['Branch:', bank.branch], ['Bank Address:', bank.bankAddress], ['IBAN:', bank.iban], ['SWIFT Code:', bank.swift],
+      ];
+      for (const [label, value] of rows) {
+        if (!value) continue;
+        pdf.text(`${label} ${value}`, 40, pdf.y, { width: 515 });
+        pdf.moveDown(0.2);
+      }
+    }
+  }
+
   pdf.moveDown(2);
   pdf.fontSize(9.5).fillColor(BRAND.gold).text('COMMUNICATION BEYOND LANGUAGE.', 40, pdf.y);
 
@@ -134,13 +184,14 @@ function renderDocumentPdf(doc, items, res) {
   pdf.end();
 }
 
-// Master template's footer line, pinned near the bottom of the page.
-// Stays just above the page's bottom margin — pdfkit silently starts a new
-// page if text would land inside the margin, even with an explicit y.
+// Master template's footer, pinned near the bottom of the page. Stays just
+// above the page's bottom margin — pdfkit silently starts a new page if
+// text would land inside the margin, even with an explicit y.
 function drawPageFooter(pdf) {
-  const y = pdf.page.height - pdf.page.margins.bottom - 12;
+  const y = pdf.page.height - pdf.page.margins.bottom - 24;
   pdf.fontSize(8.5).fillColor('#777777').font('Helvetica')
-    .text('linguative.net   |   Amman, Jordan   |   Communication Beyond Language', 40, y, { width: 515, align: 'center', lineBreak: false });
+    .text(`${COMPANY.registrationNo ? `Registration No. ${COMPANY.registrationNo}   |   ` : ''}Tax No. ${COMPANY.taxNo}`, 40, y, { width: 515, align: 'center', lineBreak: false })
+    .text('linguative.net   |   Amman, Jordan   |   Communication Beyond Language', 40, y + 12, { width: 515, align: 'center', lineBreak: false });
 }
 
 // Arabic layout: same brand system and page geometry as the English one,
@@ -161,10 +212,11 @@ function renderDocumentPdfAr(doc, items, res) {
   if (fs.existsSync(LOGO_PATH)) {
     pdf.image(LOGO_PATH, 40, 36, { width: 160 });
   }
-  // Company contact block, under the logo, kept LTR (addresses/phone numbers
-  // read the same in both layouts) — matches the English layout.
+  // Company address/contact block, under the logo, kept LTR (addresses/phone
+  // numbers read the same in both layouts) — matches the English layout.
   pdf.font('Helvetica').fillColor('#555555').fontSize(8.5)
-    .text('info@linguative.net   |   +962 79 290 9080   |   Amman, Jordan', 40, 100, { width: 250 });
+    .text(COMPANY.address, 40, 100, { width: 260 })
+    .text(`${COMPANY.phones}   |   ${COMPANY.email}`, 40, pdf.y, { width: 260 });
   pdf.font('Cairo').fillColor(BRAND.navy).fontSize(22);
   drawBidiLine(pdf, doc.kind === 'invoice' ? L.invoice : L.quotation, LEFT, 40, FULL);
   pdf.fillColor(BRAND.charcoal).fontSize(11);
@@ -180,7 +232,7 @@ function renderDocumentPdfAr(doc, items, res) {
 
   // Client block
   pdf.fillColor(BRAND.navy).fontSize(13);
-  drawBidiLine(pdf, L.preparedFor, LEFT, pdf.y, FULL);
+  drawBidiLine(pdf, doc.kind === 'invoice' ? L.billTo : L.preparedFor, LEFT, pdf.y, FULL);
   pdf.moveDown(0.6);
   pdf.fillColor(BRAND.charcoal).fontSize(11);
   const rows = [[L.client, doc.client_name || '']];
@@ -249,6 +301,28 @@ function renderDocumentPdfAr(doc, items, res) {
       drawBidiLine(pdf, line, LEFT, pdf.y, FULL);
       pdf.moveDown(0.5);
     });
+  }
+
+  // Payment Details — invoices only, and only once the server's .env has
+  // real bank values configured (see bankDetails() above).
+  if (doc.kind === 'invoice') {
+    const bank = bankDetails();
+    if (bank) {
+      pdf.moveDown(1.5);
+      pdf.fillColor(BRAND.navy).fontSize(12);
+      drawBidiLine(pdf, L.paymentDetails, LEFT, pdf.y, FULL);
+      pdf.moveDown(0.5);
+      pdf.fillColor(BRAND.charcoal).fontSize(10);
+      const rows = [
+        [L.bank.beneficiary, bank.beneficiary], [L.bank.accountNumber, bank.accountNumber], [L.bank.bankName, bank.bankName],
+        [L.bank.branch, bank.branch], [L.bank.bankAddress, bank.bankAddress], [L.bank.iban, bank.iban], [L.bank.swift, bank.swift],
+      ];
+      for (const [label, value] of rows) {
+        if (!value) continue;
+        drawBidiLine(pdf, `${label} ${value}`, LEFT, pdf.y, FULL);
+        pdf.moveDown(0.5);
+      }
+    }
   }
 
   pdf.moveDown(2);

@@ -61,5 +61,6 @@ Everything (quotes, invoices, users, item catalog) lives in `data/quotes.db`. Si
 ## Notes
 
 - The repo this code lives in is public — `data/` and `.env` are git-ignored on purpose and must never be committed. Only the application code itself is in the repo.
-- The logo and colors come directly from `marketing/brand/logos/` and `marketing/brand/BRAND.md` in the main repo — nothing is redrawn.
+- The logo (`public/assets/`) and colors match `marketing/brand/BRAND.md` in the main repo — nothing is redrawn.
 - PO-scan OCR is a best-effort reader (Tesseract) — it shows its guesses for you to confirm, never fills fields silently.
+- To show your bank details in the "Payment Details" section of invoice PDFs (never on quotes), set `BANK_BENEFICIARY`, `BANK_ACCOUNT_NUMBER`, `BANK_NAME`, `BANK_BRANCH`, `BANK_ADDRESS`, `BANK_IBAN`, and `BANK_SWIFT` in the server's own `.env` (see `.env.example`). Left unset, that section is simply skipped — nothing breaks.
