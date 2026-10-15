@@ -11,8 +11,13 @@ const BRAND = {
   charcoal: '#2B2B2B',
 };
 
-// The locked brand logo file, shipped with the repo — never redrawn or regenerated.
-const LOGO_PATH = path.join(__dirname, '..', '..', 'marketing', 'brand', 'logos', 'logo-navy-gold-light-bg.png');
+// The locked brand logo file, never redrawn or regenerated. The deployed app
+// is just the quotes-system/ folder on its own (see README "Get the code
+// onto the server"), not a checkout of the whole repo, so this must point at
+// the copy shipped inside quotes-system/public/assets/, not at
+// marketing/brand/logos/ two directories up — that path only exists in a
+// full monorepo checkout and silently resolves to nothing on the server.
+const LOGO_PATH = path.join(__dirname, '..', 'public', 'assets', 'logo-navy-gold-light-bg.png');
 // Cairo covers both Arabic and Latin/digits in one font file, which is what
 // lets item codes, PO numbers and totals stay in normal left-to-right order
 // inside an Arabic-shaped line (see lib/bidi.js).
@@ -33,6 +38,10 @@ function renderDocumentPdf(doc, items, res) {
   if (fs.existsSync(LOGO_PATH)) {
     pdf.image(LOGO_PATH, 40, 36, { width: 160 });
   }
+  // Company contact block, under the logo — fills what was otherwise blank
+  // header space and gives the recipient a way to reach Linguative directly.
+  pdf.fillColor('#555555').fontSize(8.5).font('Helvetica')
+    .text('info@linguative.net   |   +962 79 290 9080   |   Amman, Jordan', 40, 100, { width: 250 });
   pdf.fillColor(BRAND.navy)
     .fontSize(22)
     .text(doc.kind === 'invoice' ? 'INVOICE' : 'QUOTATION', 0, 40, { align: 'right' });
@@ -48,8 +57,11 @@ function renderDocumentPdf(doc, items, res) {
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
   pdf.moveDown(1);
 
-  // Client block
-  pdf.fillColor(BRAND.navy).fontSize(13).text('PREPARED FOR', { continued: false });
+  // Client block — explicit x=40 here matters: the header above left the
+  // text cursor parked at x=0 (from the right-aligned title block), so
+  // without it this heading and the whole block under it render flush with
+  // the page edge, outside the left margin.
+  pdf.fillColor(BRAND.navy).fontSize(13).text('PREPARED FOR', 40, pdf.y, { continued: false });
   pdf.fillColor(BRAND.charcoal).fontSize(11);
   pdf.text(`Client / Organization: ${doc.client_name || ''}`);
   if (doc.contact_person) pdf.text(`Contact Person: ${doc.contact_person}`);
@@ -65,15 +77,19 @@ function renderDocumentPdf(doc, items, res) {
   }
   pdf.moveDown(1.2);
 
-  // Items table
+  // Items table — all six header cells share one explicit y so they can
+  // never drift apart, instead of each one re-deriving it from pdf.y after
+  // the previous cell's own .text() call already advanced it.
   const colX = { desc: 40, days: 300, qty: 335, unit: 375, price: 425, total: 490 };
+  const tableHeaderY = pdf.y;
   pdf.fillColor(BRAND.navy).fontSize(10).font('Helvetica-Bold');
-  pdf.text('Description', colX.desc, pdf.y);
-  pdf.text('Days', colX.days, pdf.y - pdf.currentLineHeight());
-  pdf.text('Qty', colX.qty, pdf.y - pdf.currentLineHeight());
-  pdf.text('Unit', colX.unit, pdf.y - pdf.currentLineHeight());
-  pdf.text('Price', colX.price, pdf.y - pdf.currentLineHeight());
-  pdf.text('Total', colX.total, pdf.y - pdf.currentLineHeight());
+  pdf.text('Description', colX.desc, tableHeaderY);
+  pdf.text('Days', colX.days, tableHeaderY);
+  pdf.text('Qty', colX.qty, tableHeaderY);
+  pdf.text('Unit', colX.unit, tableHeaderY);
+  pdf.text('Price', colX.price, tableHeaderY);
+  pdf.text('Total', colX.total, tableHeaderY);
+  pdf.y = tableHeaderY + pdf.currentLineHeight();
   pdf.moveDown(0.5);
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.charcoal).lineWidth(0.5).stroke();
   pdf.moveDown(0.3);
@@ -145,7 +161,11 @@ function renderDocumentPdfAr(doc, items, res) {
   if (fs.existsSync(LOGO_PATH)) {
     pdf.image(LOGO_PATH, 40, 36, { width: 160 });
   }
-  pdf.fillColor(BRAND.navy).fontSize(22);
+  // Company contact block, under the logo, kept LTR (addresses/phone numbers
+  // read the same in both layouts) — matches the English layout.
+  pdf.font('Helvetica').fillColor('#555555').fontSize(8.5)
+    .text('info@linguative.net   |   +962 79 290 9080   |   Amman, Jordan', 40, 100, { width: 250 });
+  pdf.font('Cairo').fillColor(BRAND.navy).fontSize(22);
   drawBidiLine(pdf, doc.kind === 'invoice' ? L.invoice : L.quotation, LEFT, 40, FULL);
   pdf.fillColor(BRAND.charcoal).fontSize(11);
   drawBidiLine(pdf, `${doc.number}${doc.version > 1 ? `  (v${doc.version})` : ''}`, LEFT, 66, FULL);
