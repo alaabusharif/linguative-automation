@@ -34,19 +34,23 @@ const COMPANY = {
   taxNo: '178170917',
 };
 
-// Bank details for the "Payment Details" block on invoices — real banking
-// info, so it's read from the server's own .env rather than hardcoded here
-// (never commit real values; see .env.example). Left unset, the block is
-// simply skipped.
-function bankDetails() {
+// Bank details for the "Payment Details" block on invoices — one account per
+// currency (JOD/USD), picked automatically by the invoice's own Currency
+// field. Real banking info, so it's read from the server's own .env rather
+// than hardcoded here (never commit real values; see .env.example). Left
+// unset for a given currency, that currency's block is simply skipped —
+// including for a currency (e.g. EUR) with no account configured at all.
+function bankDetails(currency) {
+  const prefix = currency === 'USD' ? 'BANK_USD_' : currency === 'JOD' ? 'BANK_JOD_' : null;
+  if (!prefix) return null;
   const d = {
-    beneficiary: process.env.BANK_BENEFICIARY,
-    accountNumber: process.env.BANK_ACCOUNT_NUMBER,
-    bankName: process.env.BANK_NAME,
-    branch: process.env.BANK_BRANCH,
-    bankAddress: process.env.BANK_ADDRESS,
-    iban: process.env.BANK_IBAN,
-    swift: process.env.BANK_SWIFT,
+    beneficiary: process.env[`${prefix}BENEFICIARY`],
+    accountNumber: process.env[`${prefix}ACCOUNT_NUMBER`],
+    bankName: process.env[`${prefix}NAME`],
+    branch: process.env[`${prefix}BRANCH`],
+    bankAddress: process.env[`${prefix}ADDRESS`],
+    iban: process.env[`${prefix}IBAN`],
+    swift: process.env[`${prefix}SWIFT`],
   };
   return Object.values(d).some(Boolean) ? d : null;
 }
@@ -108,8 +112,11 @@ function renderDocumentPdf(doc, items, res) {
 
   // Items table — all six header cells share one explicit y so they can
   // never drift apart, instead of each one re-deriving it from pdf.y after
-  // the previous cell's own .text() call already advanced it.
-  const colX = { desc: 40, days: 300, qty: 335, unit: 375, price: 425, total: 490 };
+  // the previous cell's own .text() call already advanced it. Price/Total
+  // get a wider column than Days/Qty/Unit — a 4-digit amount like
+  // "JOD 1,000.00" doesn't fit in a narrow column and runs into its
+  // neighbor otherwise.
+  const colX = { desc: 40, days: 260, qty: 290, unit: 320, price: 365, total: 465 };
   const tableHeaderY = pdf.y;
   pdf.fillColor(BRAND.navy).fontSize(10).font('Helvetica-Bold');
   pdf.text('Description', colX.desc, tableHeaderY);
@@ -126,7 +133,7 @@ function renderDocumentPdf(doc, items, res) {
   pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10.5);
   for (const it of items) {
     const y = pdf.y;
-    pdf.text(it.description, colX.desc, y, { width: 250 });
+    pdf.text(it.description, colX.desc, y, { width: 210 });
     const afterDescY = pdf.y;
     pdf.text(String(it.days), colX.days, y);
     pdf.text(String(it.qty), colX.qty, y);
@@ -159,7 +166,7 @@ function renderDocumentPdf(doc, items, res) {
   // Payment Details — invoices only, and only once the server's .env has
   // real bank values configured (see bankDetails() above).
   if (doc.kind === 'invoice') {
-    const bank = bankDetails();
+    const bank = bankDetails(doc.currency);
     if (bank) {
       pdf.moveDown(1.5);
       pdf.fillColor(BRAND.navy).fontSize(12).font('Helvetica-Bold').text('PAYMENT DETAILS', 40, pdf.y);
@@ -250,9 +257,12 @@ function renderDocumentPdfAr(doc, items, res) {
   pdf.moveDown(0.7);
 
   // Items table — headers right-aligned per column, columns kept in the
-  // same left-to-right order as the English layout for consistency.
-  const colX = { total: 40, price: 105, unit: 175, qty: 225, days: 270, desc: 315 };
-  const colW = { total: 60, price: 65, unit: 45, qty: 40, days: 40, desc: 240 };
+  // same left-to-right order as the English layout for consistency. Total/
+  // Price get wider columns than Unit/Qty/Days — a 4-digit amount wraps
+  // onto a second line in a too-narrow column and throws the row out of
+  // alignment with its neighbors otherwise.
+  const colX = { total: 40, price: 130, unit: 215, qty: 265, days: 305, desc: 345 };
+  const colW = { total: 85, price: 80, unit: 45, qty: 35, days: 35, desc: 210 };
   pdf.fillColor(BRAND.navy).fontSize(10);
   const headerY = pdf.y;
   drawBidiLine(pdf, L.col.total, colX.total, headerY, colW.total);
@@ -306,7 +316,7 @@ function renderDocumentPdfAr(doc, items, res) {
   // Payment Details — invoices only, and only once the server's .env has
   // real bank values configured (see bankDetails() above).
   if (doc.kind === 'invoice') {
-    const bank = bankDetails();
+    const bank = bankDetails(doc.currency);
     if (bank) {
       pdf.moveDown(1.5);
       pdf.fillColor(BRAND.navy).fontSize(12);
