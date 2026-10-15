@@ -3,6 +3,7 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 const { drawBidiLine } = require('./bidi');
 const { labelsFor, formatDate, taxLabel } = require('./labels');
+const { getCompanySettings, bankDetailsFor } = require('./settings');
 
 const BRAND = {
   navy: '#071A2E',
@@ -23,37 +24,16 @@ const LOGO_PATH = path.join(__dirname, '..', 'public', 'assets', 'logo-navy-gold
 // inside an Arabic-shaped line (see lib/bidi.js).
 const ARABIC_FONT_PATH = path.join(__dirname, '..', 'assets', 'fonts', 'Cairo-Regular.ttf');
 
-// Linguative's own public company details — legal/contact info that belongs
-// on every invoice and quote, not client data, so it's fine to keep in code.
+// Linguative's own public contact details — not client data, so it's fine
+// to keep in code. The tax ID, registration number and bank accounts are
+// admin-editable (Settings screen, lib/settings.js) rather than hardcoded
+// here, since Ala needs to change bank details himself without a code change.
 const COMPANY = {
   address: 'Khilda – Wasfi Al-Tall Street, Amman, Jordan',
   phones: '+962 79 290 9080   |   +962 79 737 5914',
   email: 'info@linguative.net',
   website: 'linguative.net',
-  registrationNo: '54517',
-  taxNo: '178170917',
 };
-
-// Bank details for the "Payment Details" block on invoices — one account per
-// currency (JOD/USD), picked automatically by the invoice's own Currency
-// field. Real banking info, so it's read from the server's own .env rather
-// than hardcoded here (never commit real values; see .env.example). Left
-// unset for a given currency, that currency's block is simply skipped —
-// including for a currency (e.g. EUR) with no account configured at all.
-function bankDetails(currency) {
-  const prefix = currency === 'USD' ? 'BANK_USD_' : currency === 'JOD' ? 'BANK_JOD_' : null;
-  if (!prefix) return null;
-  const d = {
-    beneficiary: process.env[`${prefix}BENEFICIARY`],
-    accountNumber: process.env[`${prefix}ACCOUNT_NUMBER`],
-    bankName: process.env[`${prefix}NAME`],
-    branch: process.env[`${prefix}BRANCH`],
-    bankAddress: process.env[`${prefix}ADDRESS`],
-    iban: process.env[`${prefix}IBAN`],
-    swift: process.env[`${prefix}SWIFT`],
-  };
-  return Object.values(d).some(Boolean) ? d : null;
-}
 
 function fmtMoney(n, currency) {
   return `${currency} ${Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
@@ -164,9 +144,9 @@ function renderDocumentPdf(doc, items, res) {
   }
 
   // Payment Details — invoices only, and only once the server's .env has
-  // real bank values configured (see bankDetails() above).
+  // a bank account saved for that currency in the Settings screen (see lib/settings.js).
   if (doc.kind === 'invoice') {
-    const bank = bankDetails(doc.currency);
+    const bank = bankDetailsFor(doc.currency);
     if (bank) {
       pdf.moveDown(1.5);
       pdf.fillColor(BRAND.navy).fontSize(12).font('Helvetica-Bold').text('PAYMENT DETAILS', 40, pdf.y);
@@ -195,9 +175,10 @@ function renderDocumentPdf(doc, items, res) {
 // above the page's bottom margin — pdfkit silently starts a new page if
 // text would land inside the margin, even with an explicit y.
 function drawPageFooter(pdf) {
+  const { taxNo, registrationNo } = getCompanySettings();
   const y = pdf.page.height - pdf.page.margins.bottom - 24;
   pdf.fontSize(8.5).fillColor('#777777').font('Helvetica')
-    .text(`${COMPANY.registrationNo ? `Registration No. ${COMPANY.registrationNo}   |   ` : ''}Tax No. ${COMPANY.taxNo}`, 40, y, { width: 515, align: 'center', lineBreak: false })
+    .text(`${registrationNo ? `Registration No. ${registrationNo}   |   ` : ''}Tax No. ${taxNo}`, 40, y, { width: 515, align: 'center', lineBreak: false })
     .text('linguative.net   |   Amman, Jordan   |   Communication Beyond Language', 40, y + 12, { width: 515, align: 'center', lineBreak: false });
 }
 
@@ -314,9 +295,9 @@ function renderDocumentPdfAr(doc, items, res) {
   }
 
   // Payment Details — invoices only, and only once the server's .env has
-  // real bank values configured (see bankDetails() above).
+  // a bank account saved for that currency in the Settings screen (see lib/settings.js).
   if (doc.kind === 'invoice') {
-    const bank = bankDetails(doc.currency);
+    const bank = bankDetailsFor(doc.currency);
     if (bank) {
       pdf.moveDown(1.5);
       pdf.fillColor(BRAND.navy).fontSize(12);

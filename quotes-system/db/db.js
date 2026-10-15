@@ -39,6 +39,15 @@ CREATE TABLE IF NOT EXISTS counters (
   value INTEGER NOT NULL DEFAULT 0
 );
 
+-- Simple key/value store for app-wide settings an admin edits in the UI
+-- (company tax ID, bank accounts for invoice PDFs) rather than through
+-- server files — see lib/settings.js. Each value is a JSON string.
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS documents (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   kind TEXT NOT NULL, -- 'quote' | 'invoice'

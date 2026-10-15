@@ -40,6 +40,7 @@ function showApp() {
   document.getElementById('app').hidden = false;
   document.getElementById('whoami').textContent = `${state.user.display_name} (${state.user.role})`;
   document.getElementById('users-tab-btn').hidden = state.user.role !== 'admin';
+  document.getElementById('settings-tab-btn').hidden = state.user.role !== 'admin';
   renderTab();
 }
 
@@ -73,6 +74,7 @@ document.querySelectorAll('nav button[data-tab]').forEach(btn => {
 
 function renderTab() {
   if (state.tab === 'users') return renderUsers();
+  if (state.tab === 'settings') return renderSettings();
   if (state.view === 'edit') return renderEditor(state.tab, state.currentDoc);
   return renderList(state.tab);
 }
@@ -564,6 +566,67 @@ window.removeUser = async (id) => {
   if (!confirm('Remove this user?')) return;
   await api(`/api/users/${id}`, { method: 'DELETE' });
   renderUsers();
+};
+
+// ---------- Settings (admin only) ----------
+
+const BANK_FIELD_LABELS = [
+  ['beneficiary', 'Beneficiary'], ['accountNumber', 'Account Number'], ['bankName', 'Bank Name'],
+  ['branch', 'Branch'], ['bankAddress', 'Bank Address'], ['iban', 'IBAN'], ['swift', 'SWIFT Code'],
+];
+
+function bankFieldsHtml(prefix, bank) {
+  return BANK_FIELD_LABELS.map(([key, label]) =>
+    `<div class="field"><label>${label}</label><input id="${prefix}-${key}" value="${(bank[key] || '').replace(/"/g, '&quot;')}"></div>`
+  ).join('');
+}
+
+async function renderSettings() {
+  const main = document.getElementById('main');
+  const { settings } = await api('/api/settings');
+  main.innerHTML = `
+    <div class="card">
+      <h2 style="margin-top:0; color:#071A2E;">Settings</h2>
+      <p class="muted">Shown on every invoice/quote PDF. Bank accounts only ever appear on invoices, and only the one matching that invoice's own currency.</p>
+      <div class="grid grid-2">
+        <div class="field"><label>Tax No.</label><input id="st-tax-no" value="${(settings.taxNo || '').replace(/"/g, '&quot;')}"></div>
+        <div class="field"><label>Registration No.</label><input id="st-reg-no" value="${(settings.registrationNo || '').replace(/"/g, '&quot;')}"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">JOD Bank Account</h3>
+      <div class="grid grid-2">${bankFieldsHtml('st-jod', settings.bankJod)}</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">USD Bank Account</h3>
+      <div class="grid grid-2">${bankFieldsHtml('st-usd', settings.bankUsd)}</div>
+    </div>
+    <button class="primary" onclick="saveSettings()">Save Settings</button>
+    <div class="error" id="st-error"></div>
+    <div id="st-saved" style="color:#071A2E; margin-top:8px;"></div>
+  `;
+}
+
+function bankFieldsFromForm(prefix) {
+  const bank = {};
+  for (const [key] of BANK_FIELD_LABELS) bank[key] = val(`${prefix}-${key}`) || '';
+  return bank;
+}
+
+window.saveSettings = async () => {
+  try {
+    document.getElementById('st-error').textContent = '';
+    document.getElementById('st-saved').textContent = '';
+    await api('/api/settings', { method: 'PUT', body: {
+      taxNo: val('st-tax-no'),
+      registrationNo: val('st-reg-no'),
+      bankJod: bankFieldsFromForm('st-jod'),
+      bankUsd: bankFieldsFromForm('st-usd'),
+    }});
+    document.getElementById('st-saved').textContent = 'Saved.';
+  } catch (e) {
+    document.getElementById('st-error').textContent = e.message;
+  }
 };
 
 init();

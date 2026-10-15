@@ -11,6 +11,7 @@ const itemRoutes = require('./routes/items');
 const clientRoutes = require('./routes/clients');
 const documentRoutes = require('./routes/documents');
 const ocrRoutes = require('./routes/ocr');
+const settingsRoutes = require('./routes/settings');
 const { requireLogin } = require('./middleware/auth');
 
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/items', itemRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/ocr', ocrRoutes);
+app.use('/api/settings', settingsRoutes);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
