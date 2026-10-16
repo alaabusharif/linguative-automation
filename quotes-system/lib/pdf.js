@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
+const PNGJS = require('png-js');
 const PDFDocument = require('pdfkit');
 const { drawBidiLine } = require('./bidi');
 const { labelsFor, formatDate, taxLabel } = require('./labels');
@@ -164,11 +166,63 @@ function renderDocumentPdf(doc, items, res) {
     }
   }
 
+  drawJofotaraQr(pdf, doc);
+
   pdf.moveDown(2);
   pdf.fontSize(9.5).fillColor(BRAND.gold).text('COMMUNICATION BEYOND LANGUAGE.', 40, pdf.y);
 
   drawPageFooter(pdf);
   pdf.end();
+}
+
+// pdfkit's PNG decoding (via its png-js dependency) decompresses the image
+// data on a zlib callback that throws rather than passing an error — with
+// no listener on that path, a corrupt PNG crashes the whole Node process
+// (confirmed locally: a bad buffer took the entire server down, not just
+// this one PDF request). So before ever handing a QR image to pdf.image(),
+// decode it ourselves with a synchronous zlib call we can actually catch.
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+function isValidPng(buffer) {
+  // Cheap checks first: PNGJS's own parser has no bounds check on
+  // malformed chunk sizes, and fed 500 random bytes it looped for over
+  // 17 seconds (tested locally) before finally throwing — far too slow
+  // to risk on every PDF render for data that isn't even a PNG to begin with.
+  if (!Buffer.isBuffer(buffer) || buffer.length < 8 || buffer.length > 2 * 1024 * 1024) return false;
+  if (!buffer.subarray(0, 8).equals(PNG_SIGNATURE)) return false;
+  try {
+    const png = new PNGJS(buffer);
+    const imgData = Buffer.isBuffer(png.imgData) ? png.imgData : Buffer.concat(png.imgData.map((a) => Buffer.from(a)));
+    zlib.inflateSync(imgData);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// JoFotara (Jordan e-invoicing) prints a QR code it generates and returns
+// on clearance — ISTD's own code, never generated locally. Only appears
+// once an invoice has actually been submitted and accepted (see
+// routes/documents.js's jofotara/submit); everything else about the PDF
+// stays exactly as it was before this was added.
+function drawJofotaraQr(pdf, doc) {
+  if (doc.kind !== 'invoice' || !doc.jofotara_qr) return;
+  try {
+    const base64 = doc.jofotara_qr.includes(',') ? doc.jofotara_qr.split(',').pop() : doc.jofotara_qr;
+    const buffer = Buffer.from(base64, 'base64');
+    if (!isValidPng(buffer)) {
+      console.error('[pdf] JoFotara QR for', doc.number, 'is not a decodable PNG — skipping it on the PDF');
+      return;
+    }
+    pdf.moveDown(1);
+    const top = pdf.y;
+    pdf.image(buffer, 40, top, { width: 90, height: 90 });
+    pdf.fontSize(8).fillColor('#777777').font('Helvetica')
+      .text('JoFotara / ISTD e-invoice QR', 140, top + 38, { width: 200 });
+    pdf.y = top + 90 + 10; // .image() doesn't move the cursor itself
+  } catch (e) {
+    console.error('[pdf] could not render JoFotara QR:', e.message);
+  }
 }
 
 // Master template's footer, pinned near the bottom of the page. Stays just
@@ -315,6 +369,8 @@ function renderDocumentPdfAr(doc, items, res) {
       }
     }
   }
+
+  drawJofotaraQr(pdf, doc);
 
   pdf.moveDown(2);
   // Tagline stays in English exactly as locked in the brand guide.

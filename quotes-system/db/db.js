@@ -115,6 +115,15 @@ for (const [table, column, ddl] of [
   ['items_catalog', 'name_ar', 'ALTER TABLE items_catalog ADD COLUMN name_ar TEXT'],
   ['documents', 'valid_until', 'ALTER TABLE documents ADD COLUMN valid_until TEXT'],
   ['documents', 'service_dates', 'ALTER TABLE documents ADD COLUMN service_dates TEXT'],
+  // JoFotara (Jordan's national e-invoicing system) submission, per invoice —
+  // optional and off by default; see lib/jofotara.js.
+  ['documents', 'jofotara_enabled', 'ALTER TABLE documents ADD COLUMN jofotara_enabled INTEGER NOT NULL DEFAULT 0'],
+  ['documents', 'jofotara_status', 'ALTER TABLE documents ADD COLUMN jofotara_status TEXT'], // NULL | 'submitted' | 'failed'
+  ['documents', 'jofotara_uuid', 'ALTER TABLE documents ADD COLUMN jofotara_uuid TEXT'],
+  ['documents', 'jofotara_number', 'ALTER TABLE documents ADD COLUMN jofotara_number TEXT'], // ISTD's national invoice number, once accepted
+  ['documents', 'jofotara_qr', 'ALTER TABLE documents ADD COLUMN jofotara_qr TEXT'], // base64 QR image returned by ISTD, printed on the PDF
+  ['documents', 'jofotara_error', 'ALTER TABLE documents ADD COLUMN jofotara_error TEXT'],
+  ['documents', 'jofotara_submitted_at', 'ALTER TABLE documents ADD COLUMN jofotara_submitted_at TEXT'],
 ]) {
   const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
   if (!cols.includes(column)) db.exec(ddl);

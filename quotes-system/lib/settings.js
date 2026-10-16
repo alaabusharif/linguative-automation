@@ -1,6 +1,7 @@
 const db = require('../db/db');
 
 const COMPANY_KEY = 'company';
+const JOFOTARA_KEY = 'jofotara';
 
 // Bank fields kept for each currency account.
 const BANK_FIELDS = ['beneficiary', 'accountNumber', 'bankName', 'branch', 'bankAddress', 'iban', 'swift'];
@@ -83,4 +84,58 @@ function bankDetailsFor(currency) {
   return Object.values(bank).some(Boolean) ? bank : null;
 }
 
-module.exports = { getCompanySettings, updateCompanySettings, bankDetailsFor, BANK_FIELDS };
+// JoFotara (Jordan national e-invoicing) credentials — the client ID,
+// secret key and activity/income-source number Ala generates himself from
+// the JoFotara portal's "ربط الأجهزة" (Device Linking) screen. Stored the
+// same way as the bank accounts above (admin-only, in the app's own DB,
+// never in the repo), but the secret key is a live API credential rather
+// than information meant to be shown to anyone — so unlike the bank
+// fields, getJofotaraSettings() masks it for display and the real value is
+// only ever read server-side by lib/jofotara.js via getJofotaraSecret().
+function maskSecret(secret) {
+  if (!secret) return '';
+  return secret.length <= 4 ? '••••' : `••••${secret.slice(-4)}`;
+}
+
+function getJofotaraSettingsRaw() {
+  const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(JOFOTARA_KEY);
+  const saved = row ? JSON.parse(row.value) : {};
+  return {
+    clientId: saved.clientId || process.env.JOFOTARA_CLIENT_ID || '',
+    secretKey: saved.secretKey || process.env.JOFOTARA_SECRET_KEY || '',
+    incomeSource: saved.incomeSource || process.env.JOFOTARA_INCOME_SOURCE || '',
+  };
+}
+
+// Safe to send to the browser — secretKey is masked.
+function getJofotaraSettings() {
+  const raw = getJofotaraSettingsRaw();
+  return { ...raw, secretKey: maskSecret(raw.secretKey) };
+}
+
+// Server-side only (lib/jofotara.js) — never send this object to a client.
+function getJofotaraSecret() {
+  return getJofotaraSettingsRaw();
+}
+
+function updateJofotaraSettings(partial) {
+  const current = getJofotaraSettingsRaw();
+  const next = {
+    clientId: typeof partial.clientId === 'string' ? partial.clientId.trim() : current.clientId,
+    // Blank, or a masked value ("••••1234") coming back from the browser
+    // unchanged, means "leave it as is" — only overwrite with a real new value.
+    secretKey: typeof partial.secretKey === 'string' && partial.secretKey.trim() && !partial.secretKey.includes('••••')
+      ? partial.secretKey.trim() : current.secretKey,
+    incomeSource: typeof partial.incomeSource === 'string' ? partial.incomeSource.trim() : current.incomeSource,
+  };
+  db.prepare(`
+    INSERT INTO settings (key, value, updated_at) VALUES (?, ?, datetime('now'))
+    ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+  `).run(JOFOTARA_KEY, JSON.stringify(next));
+  return getJofotaraSettings();
+}
+
+module.exports = {
+  getCompanySettings, updateCompanySettings, bankDetailsFor, BANK_FIELDS,
+  getJofotaraSettings, getJofotaraSecret, updateJofotaraSettings,
+};

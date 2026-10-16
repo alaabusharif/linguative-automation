@@ -479,8 +479,49 @@ function renderActions(doc) {
     btns.push(`<button class="plain" onclick="docAction(${doc.id}, 'mark-paid')">Mark as Paid</button>`);
   }
 
-  el.innerHTML = `<div style="display:flex; gap:8px; flex-wrap:wrap;">${btns.join('')}</div><div class="error" id="action-error"></div>`;
+  el.innerHTML = `<div style="display:flex; gap:8px; flex-wrap:wrap;">${btns.join('')}</div><div class="error" id="action-error"></div>${jofotaraSectionHtml(doc)}`;
 }
+
+// Optional per-invoice JoFotara (Jordan e-invoicing) submission — off by
+// default, chosen one invoice at a time. Quotes never show this.
+function jofotaraSectionHtml(doc) {
+  if (!doc.id || doc.kind !== 'invoice') return '';
+  const status = doc.jofotara_status;
+  let statusHtml = '<span class="muted">Not sent</span>';
+  if (status === 'submitted') statusHtml = `<span style="color:#1a7f37;">✓ Submitted${doc.jofotara_number ? ` — ${doc.jofotara_number}` : ''}</span>`;
+  if (status === 'failed') statusHtml = `<span style="color:#b42318;">Failed: ${(doc.jofotara_error || '').replace(/</g, '&lt;')}</span>`;
+
+  return `
+    <div class="card" style="margin-top:12px;">
+      <label style="display:flex; align-items:center; gap:8px; margin:0;">
+        <input type="checkbox" id="jf-enabled-${doc.id}" ${doc.jofotara_enabled ? 'checked' : ''}
+          ${status === 'submitted' ? 'disabled' : ''} onchange="toggleJofotara(${doc.id}, this.checked)">
+        Send this invoice to JoFotara (Jordan e-invoicing)
+      </label>
+      <div style="margin-top:8px;">${statusHtml}</div>
+      ${doc.jofotara_enabled && status !== 'submitted' ? `<button class="gold" style="margin-top:8px;" onclick="submitJofotara(${doc.id})">Submit to JoFotara</button>` : ''}
+    </div>`;
+}
+
+window.toggleJofotara = async (id, enabled) => {
+  try {
+    const result = await api(`/api/documents/${id}/jofotara-toggle`, { method: 'PUT', body: { enabled } });
+    state.currentDoc = result.document;
+    renderTab();
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+window.submitJofotara = async (id) => {
+  try {
+    const result = await api(`/api/documents/${id}/jofotara/submit`, { method: 'POST', body: {} });
+    state.currentDoc = result.document;
+    renderTab();
+  } catch (e) {
+    alert(e.message);
+  }
+};
 
 window.saveDraft = async (mode) => {
   const values = currentFormValues();
@@ -584,6 +625,7 @@ function bankFieldsHtml(prefix, bank) {
 async function renderSettings() {
   const main = document.getElementById('main');
   const { settings } = await api('/api/settings');
+  const { settings: jf } = await api('/api/settings/jofotara');
   main.innerHTML = `
     <div class="card">
       <h2 style="margin-top:0; color:#071A2E;">Settings</h2>
@@ -604,6 +646,19 @@ async function renderSettings() {
     <button class="primary" onclick="saveSettings()">Save Settings</button>
     <div class="error" id="st-error"></div>
     <div id="st-saved" style="color:#071A2E; margin-top:8px;"></div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3 style="margin-top:0;">JoFotara (Jordan e-invoicing)</h3>
+      <p class="muted">Credentials from the JoFotara portal's "ربط الأجهزة" (Device Linking) screen. Once set, you choose per invoice whether to send it — this doesn't turn anything on by itself.</p>
+      <div class="grid grid-2">
+        <div class="field"><label>Client ID (رقم المستخدم)</label><input id="jf-client-id" value="${(jf.clientId || '').replace(/"/g, '&quot;')}"></div>
+        <div class="field"><label>Secret Key (المفتاح السري)</label><input id="jf-secret-key" type="password" placeholder="${jf.secretKey || 'not set'}" value=""><div class="muted" style="font-size:11px;">Leave blank to keep the current key.</div></div>
+        <div class="field"><label>Income Source Number</label><input id="jf-income-source" value="${(jf.incomeSource || '').replace(/"/g, '&quot;')}"></div>
+      </div>
+      <button class="primary" onclick="saveJofotaraSettings()">Save JoFotara Settings</button>
+      <div class="error" id="jf-error"></div>
+      <div id="jf-saved" style="color:#071A2E; margin-top:8px;"></div>
+    </div>
   `;
 }
 
@@ -626,6 +681,22 @@ window.saveSettings = async () => {
     document.getElementById('st-saved').textContent = 'Saved.';
   } catch (e) {
     document.getElementById('st-error').textContent = e.message;
+  }
+};
+
+window.saveJofotaraSettings = async () => {
+  try {
+    document.getElementById('jf-error').textContent = '';
+    document.getElementById('jf-saved').textContent = '';
+    await api('/api/settings/jofotara', { method: 'PUT', body: {
+      clientId: val('jf-client-id'),
+      secretKey: val('jf-secret-key'), // blank = unchanged, see updateJofotaraSettings()
+      incomeSource: val('jf-income-source'),
+    }});
+    document.getElementById('jf-saved').textContent = 'Saved.';
+    renderSettings();
+  } catch (e) {
+    document.getElementById('jf-error').textContent = e.message;
   }
 };
 
