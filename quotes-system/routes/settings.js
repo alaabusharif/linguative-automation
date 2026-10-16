@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireAdmin } = require('../middleware/auth');
-const { getCompanySettings, updateCompanySettings } = require('../lib/settings');
+const { getCompanySettings, updateCompanySettings, getJofotaraSettings, updateJofotaraSettings } = require('../lib/settings');
 
 const router = express.Router();
 
@@ -12,6 +12,19 @@ router.get('/', requireAdmin, (req, res) => {
 
 router.put('/', requireAdmin, (req, res) => {
   const settings = updateCompanySettings(req.body || {});
+  res.json({ settings });
+});
+
+// JoFotara (Jordan e-invoicing) credentials — same admin-only rule, kept
+// separate from company settings since this is a live API credential, not
+// company info. getJofotaraSettings() masks the secret key before it ever
+// leaves the server.
+router.get('/jofotara', requireAdmin, (req, res) => {
+  res.json({ settings: getJofotaraSettings() });
+});
+
+router.put('/jofotara', requireAdmin, (req, res) => {
+  const settings = updateJofotaraSettings(req.body || {});
   res.json({ settings });
 });
 

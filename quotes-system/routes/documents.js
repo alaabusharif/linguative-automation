@@ -5,6 +5,7 @@ const { calcTotals, lineTotal } = require('../lib/calc');
 const { nextNumber } = require('../lib/numbering');
 const { renderDocumentPdf } = require('../lib/pdf');
 const { buildDocumentDocx } = require('../lib/docx');
+const { submitInvoice } = require('../lib/jofotara');
 
 const router = express.Router();
 
@@ -265,6 +266,46 @@ router.post('/:id/mark-paid', requireLogin, (req, res) => {
   if (!doc) return res.status(404).json({ error: 'Not found' });
   db.prepare("UPDATE documents SET payment_status='paid', updated_at=datetime('now') WHERE id=?").run(doc.id);
   res.json({ ok: true });
+});
+
+// Per-invoice "send this one to JoFotara" choice — off by default. Only
+// invoices that haven't already gone through successfully can be re-toggled.
+router.put('/:id/jofotara-toggle', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (doc.jofotara_status === 'submitted') return res.status(400).json({ error: 'Already submitted to JoFotara — cannot turn off.' });
+  db.prepare("UPDATE documents SET jofotara_enabled=?, updated_at=datetime('now') WHERE id=?")
+    .run(req.body.enabled ? 1 : 0, doc.id);
+  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+});
+
+// Sends this invoice to JoFotara for clearance. Safe to retry after a
+// failure (same UUID is reused); refuses once it has already succeeded,
+// since ISTD treats a resend as a duplicate/amended document, not a no-op.
+router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (!doc.jofotara_enabled) return res.status(400).json({ error: 'JoFotara is not turned on for this invoice.' });
+  if (doc.jofotara_status === 'submitted') return res.status(400).json({ error: 'Already submitted to JoFotara.' });
+
+  const items = getItems(doc.id);
+  try {
+    const result = await submitInvoice(doc, items);
+    if (result.ok) {
+      db.prepare(`UPDATE documents SET jofotara_status='submitted', jofotara_uuid=?, jofotara_number=?,
+        jofotara_qr=?, jofotara_error=NULL, jofotara_submitted_at=datetime('now'), updated_at=datetime('now') WHERE id=?`)
+        .run(result.uuid, result.number, result.qr, doc.id);
+    } else {
+      db.prepare(`UPDATE documents SET jofotara_status='failed', jofotara_uuid=?, jofotara_error=?,
+        updated_at=datetime('now') WHERE id=?`).run(result.uuid, result.message, doc.id);
+    }
+    res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+  } catch (e) {
+    console.error('[jofotara] submit failed:', e);
+    db.prepare("UPDATE documents SET jofotara_status='failed', jofotara_error=?, updated_at=datetime('now') WHERE id=?")
+      .run(e.message || 'Could not reach JoFotara', doc.id);
+    res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+  }
 });
 
 // "Prepared by" is always the user who created the document — never a
