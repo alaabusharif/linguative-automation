@@ -1,8 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const PNGJS = require('png-js');
 const PDFDocument = require('pdfkit');
+// Resolved via pdfkit's own dependency, not a plain require('png-js'): npm
+// doesn't always hoist a transitive dependency to the top-level
+// node_modules (depends on the exact install history), and this server is
+// deployed by uploading a pre-built node_modules through FastPanel, not by
+// running npm install here — so a plain require('png-js') that happened to
+// work in one install can throw MODULE_NOT_FOUND in another. pdfkit already
+// requires png-js to do its own PNG work, so resolving relative to pdfkit
+// finds the exact copy it uses, wherever npm actually put it.
+const PNGJS = require(require.resolve('png-js', { paths: [path.dirname(require.resolve('pdfkit'))] }));
 const { drawBidiLine } = require('./bidi');
 const { labelsFor, formatDate, taxLabel } = require('./labels');
 const { getCompanySettings, bankDetailsFor } = require('./settings');
