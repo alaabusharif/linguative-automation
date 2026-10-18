@@ -1,9 +1,9 @@
-import copy,importlib.util,json,pathlib,shutil,subprocess,tempfile,unittest
+import copy,importlib.util,json,os,pathlib,shutil,subprocess,tempfile,unittest
 from unittest import mock
 MODULE=pathlib.Path(__file__).parents[1]/'publisher.py';spec=importlib.util.spec_from_file_location('publisher',MODULE);p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)
-SNAPSHOT=pathlib.Path('/workspace/scratch/linguative-experience-20261016/snapshot')
+SNAPSHOT=pathlib.Path(os.environ.get('LINGUATIVE_TEST_SNAPSHOT','/workspace/scratch/linguative-experience-20261016/snapshot'))
 def example():
- c={'title':'Test article <safe>','description':'A test-only description.','summary':'An internal test only.','sections':[{'heading':'Test heading','paragraphs':['Text <script>alert(1)</script> stays escaped.'],'bullets':['One item']}],'related':['simultaneous-interpretation']}
+ c={'title':'Test article <safe>','description':'A test-only description.','summary':'An internal test only.','intro':'A test short answer.','eyebrow':'Practical planning guide','readingTime':'3 min read','checklistTitle':'Test checklist','checklist':['Test checklist item'],'faq':[['Test question?','Test answer.']],'relatedHeading':'Related services','ctaLabel':'Request a quote ↗','sections':[{'heading':'Test heading','paragraphs':['Text <script>alert(1)</script> stays escaped.'],'bullets':['One item']}],'related':['simultaneous-interpretation']}
  a={'slug':'publisher-test-only','status':'approved','en':c,'ar':dict(c,title='مقال للاختبار فقط')}
  a['approval']={'by':'Ala','record':'https://github.com/alaabusharif/linguative-automation/pull/1','content_sha256':p.sha(p.canonical({k:a[k] for k in ['slug','en','ar']}))}
  return {'version':1,'articles':[a]}
@@ -39,6 +39,47 @@ class Site(unittest.TestCase):
   self.assertIn('window.LinguativeAnalytics?.trackLead',(self.root/ref.lstrip('/')).read_text())
   empty={'version':1,'articles':[]}
   with self.assertRaises(ValueError):p.run(self.root,empty,True)
+ def test_matches_existing_article_design(self):
+  self.assertEqual(p.run(self.root,self.c,True)['status'],'published')
+  for prefix in ['', 'ar/']:
+   old=p.DOM((self.root/prefix/p.TEMPLATE).read_text()).root
+   new=p.DOM((self.root/prefix/'insights/publisher-test-only.html').read_text()).root
+   # Existing hero sizing, typography, grid, sidebar, article, checklist, FAQ,
+   # related services and final CTA must retain their exact design attributes.
+   for tag,cls in [
+    ('section','relative isolate overflow-hidden bg-navy text-ivory'),
+    ('article','mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24'),
+    ('div','grid gap-12 lg:grid-cols-[.72fr_1.28fr] lg:gap-20'),
+    ('aside','max-w-sm'),
+    ('section','mt-8 bg-navy p-7 text-ivory sm:p-9'),
+    ('section','mt-14'),
+    ('section','mx-auto max-w-7xl border-t border-gold/35 px-5 py-14 sm:px-8'),
+    ('section','lng-cta-band bg-navy text-ivory')]:
+    self.assertEqual(new.one(tag,cls).attrs,old.one(tag,cls).attrs)
+   self.assertEqual(new.one('h1').attrs,old.one('h1').attrs)
+   self.assertEqual(new.one('section','lng-cta-band bg-navy text-ivory').render(),old.one('section','lng-cta-band bg-navy text-ivory').render())
+   self.assertEqual([n.attrs for n in new.nodes('link') if n.attrs.get('rel')=='stylesheet'],[n.attrs for n in old.nodes('link') if n.attrs.get('rel')=='stylesheet'])
+   self.assertEqual(len(new.nodes('script',type='application/ld+json')),len(old.nodes('script',type='application/ld+json')))
+   self.assertEqual(new.one('a',href='#section-1').children,['Test heading'])
+   self.assertEqual(len(new.nodes('a',href=('/insights/' if prefix else '/ar/insights/')+'publisher-test-only')),1)
+  import re
+  ref=re.search(r'src="(/assets/index-blog-[^"]+)',(self.root/'index.html').read_text())[1]
+  bundle=(self.root/ref.lstrip('/')).read_text()
+  self.assertNotIn('LinguativeBlogPage',bundle)
+  self.assertIn('articleSlug:"publisher-test-only"',bundle)
+  self.assertIn('children:n.byline||(',bundle)
+  self.assertIn('dateModified:n.modified||',bundle)
+ def test_empty_catalog_never_writes_site(self):
+  before={f.relative_to(self.root):f.read_bytes() for f in self.root.rglob('*') if f.is_file()}
+  self.assertEqual(p.run(self.root,{'version':1,'articles':[]},True)['status'],'empty; no publication')
+  self.assertEqual(before,{f.relative_to(self.root):f.read_bytes() for f in self.root.rglob('*') if f.is_file()})
+ def test_incompatible_build_stops_before_publication(self):
+  import re
+  ref=re.search(r'src="(/assets/index-[^"?]+)',(self.root/'index.html').read_text())[1]
+  (self.root/ref.lstrip('/')).write_text('Unknown application build')
+  before={f.relative_to(self.root):f.read_bytes() for f in self.root.rglob('*') if f.is_file()}
+  with self.assertRaises(AssertionError):p.run(self.root,self.c,True)
+  self.assertEqual(before,{f.relative_to(self.root):f.read_bytes() for f in self.root.rglob('*') if f.is_file()})
  def test_existing_pages_are_protected(self):
   c=example();c['articles'][0]['slug']='conference-interpretation-equipment-rental-brief';c['articles'][0]['approval']['content_sha256']=p.sha(p.canonical({k:c['articles'][0][k] for k in ['slug','en','ar']}))
   with self.assertRaises(ValueError):p.run(self.root,c,True)
