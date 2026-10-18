@@ -1,7 +1,6 @@
 Go directly to content
 Events
 City
-Amman (1)
 Online (1)
 Date
 Today
@@ -59,20 +58,11 @@ Sat
 7
 Reset date
 Theme
-Language (2)
+Language (1)
 Literature (1)
 Online events only
 Remove all
 A system error occurred. Please try again later.
-17.10.2026
-|
-8:00 AM-4:30 PM
-17. Jordanischer Deutschlehrendentag 2026
-Workshop
-|
-Motto: DaF morgen
-Goethe-Institut Amman, Amman
-Details
 19.10.2026
 |
 6:00 PM
