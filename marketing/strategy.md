@@ -81,7 +81,7 @@ Standing rule:
 - Use the local HTML-render pipeline with locked brand assets for deterministic static social designs; preserve exact official logos and approved equipment references.
 - Adobe Express is optional rather than a required final step.
 - Instagram remains a strategic channel but is not schedulable until its Metricool connection exists.
-- LinkedIn is intentionally connected in Metricool as the current personal-profile target; do not treat this as an issue or propose changing the account unless Ala explicitly reopens that decision.
+- LinkedIn's intended publishing destination is the official **Linguative Jordan company page** https://www.linkedin.com/company/linguative/. Ala explicitly confirms it is NOT a personal profile. Metricool's `linkedinData` field returns `urn:li:person:ykKVdfHmOT`; this integration value must not be treated as independent proof of the public post's author. Verify any actual public-post destination if needed, retain the user's existing authorized connection, and never impose a personal-account hold based solely on that field.
 - Nothing is published or scheduled without Ala's explicit approval.
 
 **Effective:** immediately.
