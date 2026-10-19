@@ -1,6 +1,6 @@
 # Linguative article publishing — prepared, not activated
 
-Ala requested automatic blog publishing on 18 October 2026. The existing self-hosted site stores articles in its application bundle; adding a writing reminder alone cannot publish new pages. This publisher extends that build without changing hosting platforms or the enquiry API.
+Ala requested automatic blog publishing on 18 October 2026. The existing self-hosted site stores articles in its application bundle; adding a writing reminder alone cannot publish new pages. This publisher extends that build without changing hosting platforms or the enquiry API. New articles clone the current EN/AR Insights article document and use the existing React article component. Hero sizing, fonts, content widths, the contents sidebar, section spacing, checklist, FAQs, related-service cards and final quote band retain the existing design and CSS.
 
 ## Workflow
 
@@ -14,7 +14,7 @@ No subscription, external CMS account, root password in chat, or new inbound pub
 
 ## What has and has not been verified
 
-Prepared and locally tested against the reviewed 16 October self-hosted snapshot: bilingual rendering/metadata, safe text escaping, application JavaScript syntax, routes and index updates, consent-first analytics route additions, unchanged enquiry adapter, duplicate-run no-op, existing-article protection, content-approval hash checks and recovery after a simulated write failure.
+Prepared and locally tested against the reviewed 16 October self-hosted snapshot: bilingual rendering/metadata, matching the current article template’s structural classes and styles, safe text escaping, application JavaScript syntax, routes and index updates, consent-first analytics route additions, unchanged enquiry adapter, duplicate-run no-op, existing-article protection, content-approval hash checks and recovery after a simulated write failure.
 
 Not installed on Axencloud. No production article or account setting has changed. The live browser layout and an actual server sync have not been verified. The publisher checks known build integration points and fails closed if the deployed application has changed incompatibly. It must be checked against the live build at installation, including any Experience-page deployment.
 
@@ -48,7 +48,7 @@ The publisher writes a local JSON receipt and private log, not notification emai
 
 ## Article data contract
 
-Each entry has `slug`, `status`, `en`, `ar`, `approval`. `en` and `ar` contain `title`, `description`, `summary`, `sections` (heading, paragraphs, optional bullets), and `related` (approved service slugs). Text is escaped; raw HTML and executable snippets are not accepted as markup. Do not put confidential client records, internal rates, procurement details or unpublished permissions in the public catalog.
+Each entry has `slug`, `status`, `en`, `ar`, `approval`. `en` and `ar` contain `title`, `description`, `summary` (hero lead), `intro` (sidebar short answer), `eyebrow`, `readingTime`, `sections` (heading, paragraphs, optional bullets), `checklistTitle`, `checklist`, `faq` (question/answer pairs), `relatedHeading`, `related` (approved service slugs), and `ctaLabel`. Optional `quoteService` preselects an approved service. These fields populate the existing article layout rather than creating a separate layout. All text in both languages, including FAQ and checklist content, must be reviewed as part of the content approval. Text is escaped; raw HTML and executable snippets are not accepted as markup. Do not put confidential client records, internal rates, procurement details or unpublished permissions in the public catalog.
 
 Approved records contain `by: "Ala"`, `record: "https://github.com/alaabusharif/linguative-automation/pull/<number>"`, and `content_sha256`. The hash input is precisely `{slug, en, ar}` encoded by the script's canonical JSON function. Only create this approval record after Ala's real approval; a test fixture is not publication authority.
 
@@ -60,4 +60,4 @@ Existing brand, client-reference, real-equipment, bilingual and one-team positio
 python3 -m unittest discover -s website/blog-publisher/tests -v
 ```
 
-The three integration tests use a reviewed local site snapshot if available; otherwise they are explicitly skipped. The three approval/path validation tests run without a site snapshot. For a different snapshot path, update the test fixture configuration before executing the integration tests.
+The six integration tests use a reviewed local site snapshot if available; otherwise they are explicitly skipped. The three approval/path validation tests run without a site snapshot. For a different snapshot path, set `LINGUATIVE_TEST_SNAPSHOT` to that directory before executing the integration tests. Browser rendering was attempted but could not run because this environment has no installed Chromium executable; structural template comparisons and JavaScript syntax checks passed. Both live EN/AR source layouts were independently read on 18 October and matched the reviewed snapshot.
