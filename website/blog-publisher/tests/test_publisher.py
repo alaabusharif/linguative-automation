@@ -56,6 +56,13 @@ class Site(unittest.TestCase):
     ('section','mx-auto max-w-7xl border-t border-gold/35 px-5 py-14 sm:px-8'),
     ('section','lng-cta-band bg-navy text-ivory')]:
     self.assertEqual(new.one(tag,cls).attrs,old.one(tag,cls).attrs)
+   # React renders title and arrow as separate children. Preserve its SSR separator.
+   related=new.one('section','mx-auto max-w-7xl border-t border-gold/35 px-5 py-14 sm:px-8')
+   links=related.nodes('a');self.assertEqual(len(links),1)
+   self.assertEqual(len(links[0].children),3)
+   self.assertIsInstance(links[0].children[1],p.Node)
+   self.assertEqual(links[0].children[1].render(),'<!-- -->')
+   self.assertEqual(links[0].children[2],' ↗')
    self.assertEqual(new.one('h1').attrs,old.one('h1').attrs)
    self.assertEqual(new.one('section','lng-cta-band bg-navy text-ivory').render(),old.one('section','lng-cta-band bg-navy text-ivory').render())
    self.assertEqual([n.attrs for n in new.nodes('link') if n.attrs.get('rel')=='stylesheet'],[n.attrs for n in old.nodes('link') if n.attrs.get('rel')=='stylesheet'])

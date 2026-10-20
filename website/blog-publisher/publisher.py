@@ -154,7 +154,8 @@ def new_page(template,a,lang,service_titles):
   node=copy.deepcopy(prototype);node.one('h3').put(question);node.one('p').put(answer);answers.children.append(node)
  body.children.extend([check,faq]);related.one('h2').put(n['relatedHeading']);items=related.one('ul');prototype=copy.deepcopy(items.nodes('li')[0]);items.children=[]
  for slug in n['related']:
-  node=copy.deepcopy(prototype);link=node.one('a');link.attrs['href']=pre+'/services/'+slug;link.put(service_titles[slug]+' ↗');items.children.append(node)
+  # Match React's adjacent text-node boundary; merging these strings causes #425.
+  node=copy.deepcopy(prototype);link=node.one('a');link.attrs['href']=pre+'/services/'+slug;link.children=[service_titles[slug],Node('!',children=['<!-- -->']),' ↗'];items.children.append(node)
  return doc.render()
 
 def build(root,catalog,state):
