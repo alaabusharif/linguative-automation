@@ -191,6 +191,11 @@
         ],
         "ctaLabel": "ناقش متطلبات مؤتمرك معنا ↗",
         "quoteService": "simultaneous-interpretation"
+      },
+      "approval": {
+        "by": "Ala",
+        "record": "https://github.com/alaabusharif/linguative-automation/pull/95",
+        "content_sha256": "1a650d31126f4250eaa58df93c43930e7f5d540d4f30be2a93fb7357eb0676c6"
       }
     }
   ]
