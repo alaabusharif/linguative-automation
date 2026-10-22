@@ -23,7 +23,7 @@ The mode depends on format, audience size and time. **Consecutive:** small meeti
 5. CTA slide: "Not sure? Send us your agenda and we'll recommend the setup." + logo + linguative.net
 
 ## Proof points
-- Linguative has run both: consecutive for the **EU-funded land administration Twinning project** (Sept 2026, Department of Lands and Survey). *Name "EU Twinning" only if Ala approves; fallback: "an EU-funded institutional training in Amman."* Simultaneous with owned **Bosch DICENTIS** for conferences.
+- Linguative has run both: consecutive for an EU-funded land administration project (Sept 2026, Department of Lands and Survey). Don't name the project; use "an EU-funded institutional training in Amman." Simultaneous with owned **Bosch DICENTIS** for conferences.
 - No prices, no equipment counts.
 
 ## Call to action

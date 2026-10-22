@@ -16,9 +16,9 @@ Organizers of regional meetings where part of the audience is remote, and teams 
 "In a hybrid meeting, remote participants should get the interpretation too, not just the room audio. We connect the interpreters, conference system, cameras and Zoom/Teams so everyone follows in their language, and a technician runs it all."
 
 ## Proof points
-- Regional hybrid DRR workshop, Dec 2025, ~70 participants (name UNDRR only if Ala approves; otherwise "a UN regional hybrid workshop").
+- Regional hybrid DRR workshop, Dec 2025, ~70 participants (name the UN agency only if Ala approves; otherwise "a UN regional hybrid workshop").
 - Hybrid **Persian / Arabic / English** workshop in Amman, Oct 2025 (client unnamed): three languages, in-room and remote.
-- **Expertise France** justice-sector sessions with hybrid Zoom camera support (approved name).
+- A justice-sector program client's sessions with hybrid Zoom camera support (approved name — see the private reference).
 - Capabilities to name generically: conference cameras, remote participant audio, Zoom/Teams integration, interpretation routing, recording, livestreaming, dedicated technician. **Don't name camera or streaming brands.** Owned PTZ camera status is unconfirmed, so say "conference cameras" and never "our PTZ cameras".
 
 ## Call to action
@@ -32,7 +32,7 @@ Organizers of regional meetings where part of the audience is remote, and teams 
 | GBP | English + Arabic | 60-80 words | 1200x900 |
 
 ## Visual direction
-- Real photo showing a room with a screen of remote participants, a camera or the tech desk. Check the ICT Hilton and Danish Institute Drive folders and the UNDRR/IFRC material. If there isn't one, use a type-led design; **don't generate hybrid equipment with AI** (BRAND.md: no invented devices or ports).
+- Real photo showing a room with a screen of remote participants, a camera or the tech desk. Check the hotel-venue and government-institute event Drive folders and the UN-agency/humanitarian-federation material. If there isn't one, use a type-led design; **don't generate hybrid equipment with AI** (BRAND.md: no invented devices or ports).
 - Type-led fallback: Deep Navy background; headline in Warm Ivory "In the room or online. Everyone hears the interpreter." / «في القاعة أو عبر الإنترنت، الجميع يسمع المترجم»; thin gold rule; white + gold logo.
 
 ## Deadline

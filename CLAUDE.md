@@ -11,37 +11,78 @@ Services:
 
 Owner: Ala.
 
-## Clients and history
-- Recurring/current: Guarantee Travel Group (event management, AV, branding, hybrid work — a standing source of business), DRC (Danish Refugee Council, contact Mr. Ma'en), FCA (Finn Church Aid), IFRC Jordan (framework agreement renewed through May 2028), NRC (Norwegian Refugee Council), and Bank of Jordan (procurement-led).
-- Notable delivered work: S&P Global Ratings (W Hotel Amman, Jan 2026), NTU International for the EU Delegation (Feb 2026), UNODA (InterContinental, Jan 2026), UNDRR hybrid regional workshop (Dec 2025), IGC Jordan (Nov-Dec 2025), IFRC (Crowne Plaza, Oct 2025), EU Twinning land administration project (Sept 2026).
-- Proposals in play (not yet delivered): NCHR "Climate Change and Human Rights" conference at the King Hussein Convention Center, Dead Sea (Dec 2026, under Royal patronage), EMGS Study in Malaysia Fair (Jan 2026).
-- Main challenge: thin client base and weak off-season income. Goal is steady, predictable revenue.
+## Clients, history, and rates
+This repository is public, so specific client names, contacts, delivered/prospective engagements, and rate figures (interpretation, translation, and any other service) are kept out of it. Before any proposal, quote, sales email, or client-facing content, read `/mnt/project-files/linguative-company-memory.md` (the full private company reference) for that detail — it is generated, not proof for naming clients publicly, and always confirm current rates with Ala before quoting.
 
-## Market facts
-- Interpretation reference rate: JOD 125 per interpreter per day, Arabic-English (historical; real projects vary — IGC ran about JOD 175/day, NTU JOD 250/day, EU Twinning EUR 125/day). Events usually need at least 2 interpreters. Always confirm current rate with Ala before quoting.
+- Main challenge: thin client base and weak off-season income. Goal is steady, predictable revenue.
 - Price competition is very tight, especially when AV equipment is bundled with interpreters. The Jordanian market is very price-sensitive.
-- Many UN agencies hold Long-Term Agreements (LTAs) with travel/tourism agencies that subcontract event services, so direct tender bids are hard to win. Relationships with those LTA holders (e.g. Guarantee Travel Group) matter.
-- Translation reference rate: JOD 10 per 250 words Arabic-English, JOD 18 per 250 words French (historical, January 2025 rate card). Always confirm current rate with Ala before quoting.
-- No priced rate exists yet for transcription, editing/proofreading, or localization/subtitling/dubbing — flag "confirm rate with Ala" rather than inventing one. Transcription is a proven service (delivered for NRC, 2024); the others are advertised but not yet sold.
+- Many UN agencies hold Long-Term Agreements (LTAs) with travel/tourism agencies that subcontract event services, so direct tender bids are hard to win — relationships with LTA holders matter (see the private reference for names).
+- Transcription is a proven, delivered service; editing/proofreading and localization/subtitling/dubbing are advertised but not yet sold — no priced rate exists for these yet, flag "confirm rate with Ala" rather than inventing one.
+
+## Client reference governance
+Linguative uses a **private Client Reference Register** as the source of truth for whether a real client/reference may be named in proposals, public case studies, website content, social posts, capability statements, testimonials, logo walls, or other materials.
+
+This public repository is **not** the master store for private client names, contacts, rates, project details, or permission records. See `marketing/client-reference-policy.md` for the public-safe operating rules and `marketing/client-reference-workflow.md` for proposal-reference selection and case-study handling.
+
+- Named proposal references require `PUBLIC_NAMED` or `PROPOSAL_NAMED`.
+- Named public case studies/marketing require `PUBLIC_NAMED`.
+- `ANONYMISED_ONLY` may be described publicly without identifying the organization.
+- `PENDING`, `PRIVATE_ONLY`, and `PROSPECT_ONLY` may not be used as named external credentials.
+- Never infer permission merely because Linguative performed work for an organization.
+- Public naming permission does not automatically authorize logo use, testimonial quotation, participant names, rates, confidential documents, or detailed outcomes.
+- Context-specific exceptions are governed by the private register; a client may be permitted in a private communication addressed directly to that client while prohibited in public/third-party use.
+- Proposal and case-study workflows must check the private register before naming a client and must follow the eligibility/scoring/evidence rules in `marketing/client-reference-workflow.md`.
 
 ## Segments
 1. Local B2C: individuals needing certified or personal translation in Jordan.
 2. Local B2B: NGOs, UN agencies, embassies, conference organizers, companies, and LTA-holding travel agencies in Jordan.
 3. Regional B2B: KSA and wider Gulf/MENA clients, international organizations running regional events.
 
+### Approved Sales/BD priority — embassies & diplomatic missions (2026-10-14)
+Ala explicitly approved **embassies and diplomatic missions physically operating in Jordan** as a priority account-based lead-scouting and outreach segment.
+
+Sales & BD / lead scouting must:
+- verify active missions from official mission/government sources;
+- prioritize Procurement / General Services / Administration, Public Diplomacy / Public Affairs / Cultural Affairs, Development Cooperation / Programme teams, Economic / Commercial sections, and Protocol / Executive offices;
+- capture public vendor-registration and procurement links where available;
+- prefer reliable named functional contacts or official role inboxes; **never pattern-guess email addresses**;
+- deduplicate against HubSpot and Gmail history before drafting outreach;
+- prioritize missions with visible event/program activity, delegations, trade/economic programming, cultural/public-diplomacy activity, or procurement signals;
+- position Linguative as **one accountable local partner for the language and technology behind multilingual events in Jordan**, not merely as a translation agency;
+- keep all embassy outreach **draft-only** until Ala reviews it. Nothing is sent automatically.
+
+The live crawler/lead-scouting tracking issue is GitHub **issue #35 ("Lead scouting: new candidates")**. Treat directives posted there as active scouting input.
+
 ## Known constraints
 - linguative.net's mail is fixed and verified (SPF, DKIM, DMARC, MX all correct; server IP checked clean, not blacklisted). Staying on the current AxenCloud hosting — no migration planned. Warmup of sales@linguative.net and marketing@linguative.net is in progress (manual ramp, real contacts first). Agents may plan email outreach, but sending volume must follow the warmup schedule until warmup is complete — don't recommend jumping straight to full-volume campaigns from these addresses.
 - The website is due for a rebuild.
 
-## Agent team (planned)
-- marketing-manager: strategy, channels, calendar, briefs (built)
-- copywriter: writes posts, emails, web copy from briefs (planned)
-- designer: social visuals from briefs (planned)
-- publisher: schedules and posts approved content (planned)
-- rfq-watcher: reviews crawler output for matching tenders (planned)
+## Agent team / role ownership
+
+- **ChatGPT — Linguative Marketing Manager:** brand, marketing strategy, SEO/GEO strategy, website messaging/UX/CRO, content, social strategy, competitor interpretation, marketing analytics, reputation/case-study strategy. ChatGPT owns `marketing/strategy.md`.
+- **sales-bd-operations:** consolidated Sales & BD lifecycle owner; see `.claude/agents/sales-bd-operations.md`. Source routines remain rollback references until module-level parity passes.
+- **operations-monitor:** consolidated monitoring/routing owner; see `.claude/agents/operations-monitor.md`.
+- **Claude Code — Web & Automation Engineer:** website/WordPress/code, technical SEO/schema/hreflang/canonicals/sitemaps/redirects/performance/accessibility, integrations, GitHub Actions, crawler, quotes-system, DNS/SSL/hosting, debugging.
+- **rfq-watcher:** specialist formal-tender logic operating under Operations Monitor; retained because formal dated tenders are distinct from ordinary lead discovery.
+- **lead-to-deal skill:** stateful helper under Sales & BD Operations; may remain callable where its audit/approval mechanics are useful.
+- **linguative-design skill:** legacy/fallback design implementation only until the new Adobe Express Premium + Higgsfield workflow passes the locked QA threshold.
+
+The target architecture consolidates capability ownership. A source routine is not kept forever merely because it once contained unique logic; that logic must be transferred and parity-tested before the source trigger is disabled.
 
 ## Brand guide
 Any visual design work — the Design routine, a future designer agent, slides, social graphics — must follow `marketing/brand/BRAND.md` exactly: locked logo files (never redrawn/regenerated), exact brand colors and fonts, and the design/photography rules there. Read it before producing anything visual.
+
+
+## Cross-agent synchronization — hard rule
+
+Marketing strategy and lead-scouting must never drift apart.
+
+- `marketing/strategy.md` is the marketing source of truth.
+- GitHub issue **#35 — "Lead scouting: new candidates"** is the live lead-scouting intake/handoff thread.
+- Whenever Marketing changes targeting, positioning, priority sectors, buyer personas, outreach angles, qualification logic, or any other decision that materially affects prospect discovery or outreach, that change must be conveyed automatically to Claude Sales & BD / lead scouting through issue #35 and shared context.
+- Whenever Claude lead scouting learns a durable new targeting rule, source pattern, search gotcha, contact-persona rule, or segment priority that affects Marketing, it must be reflected back into shared context and surfaced to Marketing.
+- Do not rely on a separate new issue for cross-agent handoff unless the live intake thread also receives the directive.
+- The intended end state is automated synchronization from repository changes; until the automation is fully wired and verified, every agent run must explicitly read the latest `marketing/strategy.md` and issue #35 before prospect discovery/outreach work.
 
 ## Working rules for all agents
 - Nothing is published, sent, or submitted without Ala's approval.

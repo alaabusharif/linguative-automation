@@ -7,7 +7,7 @@
 - **Status:** Brief. Nothing is sent without Ala's approval.
 
 ## Objective
-Many UN agencies in Jordan buy event services through LTA-holding travel agencies, which then subcontract interpretation and AV. That's why direct tender bids are hard to win. Guarantee Travel Group proves the model works, but it's a single point of dependency. Goal: **start 1-2 new subcontracting relationships** so that Q1-Q2 2027 UN/NGO work isn't dependent on one agency. Target: 2 intro meetings or calls from 6 approaches.
+Many UN agencies in Jordan buy event services through LTA-holding travel agencies, which then subcontract interpretation and AV. That's why direct tender bids are hard to win. Linguative's existing event-management/AV channel partner proves the model works, but it's a single point of dependency. Goal: **start 1-2 new subcontracting relationships** so that Q1-Q2 2027 UN/NGO work isn't dependent on one agency. Target: 2 intro meetings or calls from 6 approaches.
 
 ## Shortlist (from `marketing/competitors/roster.md`, travel-agency MICE section)
 | Priority | Firm | Why |
@@ -28,8 +28,8 @@ These are **cold** contacts, which are the riskiest for a warming domain. So: ma
 "We're the interpretation and conference-technology partner you can subcontract. Owned Bosch DICENTIS system, interpreter booth, infrared language distribution, sound, hybrid setup, experienced Arabic-English (and French) interpreters, and our own technician on site. You keep the client relationship; we make the multilingual part run without surprises."
 
 ## Proof points
-- Named, approved: IMF, Expertise France, COP28 Water Pavilion, IFRC, S&P Global Ratings, NTU/EU Delegation.
-- Experience working **through** travel agencies on UN-related meetings. Say it without naming Guarantee Travel Group.
+- Named, approved: see the private company reference for the current list of clients cleared for public naming.
+- Experience working **through** travel agencies on UN-related meetings. Say it without naming the existing channel partner.
 - Reliability: rehearsed setups and a single technical lead.
 - **No prices** in the first message. Partner rates get discussed in a meeting, with Ala.
 
@@ -40,6 +40,6 @@ These are **cold** contacts, which are the riskiest for a warming domain. So: ma
 English (Arabic if the firm communicates primarily in Arabic), 90-120 words for email and 50-70 words for a LinkedIn message. Signed by Ala.
 
 ## Guardrails
-- **Channel-conflict check:** Ala should consider whether approaching GTG's direct competitors affects that relationship. Default is to proceed, since vendors commonly serve several agencies, but it's his call.
+- **Channel-conflict check:** Ala should consider whether approaching the existing channel partner's direct competitors affects that relationship. Default is to proceed, since vendors commonly serve several agencies, but it's his call.
 - These firms are also listed as competitors on the events side. Pitch Linguative as a specialist subcontractor, not a rival PCO.
 - Log each approach and outcome for the weekly review.

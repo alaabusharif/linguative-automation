@@ -16,8 +16,8 @@ Communications/visibility officers at NGOs and UN agencies, event leads at insti
 "The same team that runs your interpretation can brand the venue and film the event: backdrops, roll-ups, signage, and an edited event video with Arabic and English subtitles, ready for your donors and social channels."
 
 ## Proof points
-- **IMF** (approved): videography and photography, video walls and language distribution for international events.
-- **COP28 Water Pavilion** (approved): 10-day international event environment.
+- An international financial institution client (approved): videography and photography, video walls and language distribution for international events.
+- A major international climate-summit engagement (approved): 10-day international event environment.
 - Services from the company memory: roll-ups, backdrops, LED backdrops, directional signage, event photography/videography, edited videos in social formats, bilingual subtitling, logo integration.
 - **No prices** (historical video add-on rates stay internal).
 

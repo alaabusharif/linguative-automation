@@ -115,13 +115,6 @@ SOURCES = [
         "category": "training_provider",
         "verified": False,
     },
-    {
-        "key": "gh4t",
-        "name": "Global Horizon Training Center (GH4T)",
-        "url": "https://gh4t.com/",
-        "category": "training_provider",
-        "verified": False,
-    },
     # --- Tender portals (not yet represented by any HubSpot lead) ---
     {
         "key": "jordan_gtd_eprocurement",

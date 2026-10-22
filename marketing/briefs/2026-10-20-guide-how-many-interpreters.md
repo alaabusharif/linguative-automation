@@ -24,7 +24,7 @@ Simultaneous interpretation is done in teams. For a full day, each language pair
 
 ## Proof points
 - Linguative schedules two interpreters per pair for full-day simultaneous as standard (CLAUDE.md: events usually need at least 2).
-- Multi-language experience: trilingual EN/FR/AR (Expertise France, approved name); Persian/Arabic/English hybrid workshop in Amman, Oct 2025 (client unnamed).
+- Multi-language experience: trilingual EN/FR/AR (a justice-sector program client, approved name — see the private reference); Persian/Arabic/English hybrid workshop in Amman, Oct 2025 (client unnamed).
 - **No prices, no day rates.** Don't write "interpreters cost X".
 
 ## Call to action

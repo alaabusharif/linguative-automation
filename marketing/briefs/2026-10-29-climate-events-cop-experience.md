@@ -1,4 +1,4 @@
-# Brief: Climate and water events: COP28 Water Pavilion experience, ahead of COP31 (LinkedIn, Facebook) / Review request (GBP)
+# Brief: Climate and water events: past climate-summit experience, ahead of COP31 (LinkedIn, Facebook) / Review request (GBP)
 
 - **Post date:** Thu 29 Oct 2026 (COP31, Antalya, runs 9-20 Nov 2026, [UNFCCC](https://unfccc.int/cop31/ifp))
 - **Channels:** LinkedIn + Facebook (climate/water angle); GBP (review request, a different piece on the same day)
@@ -9,17 +9,17 @@
 ## Part A: LinkedIn + Facebook
 
 ### Objective
-Position Linguative for the climate, water and environment events that cluster around COP season and year-end in Jordan and the region (national consultations, COP read-outs, water-security and adaptation workshops). This also builds relevant public credibility ahead of December, **without mentioning the NCHR proposal or any unannounced event.**
+Position Linguative for the climate, water and environment events that cluster around COP season and year-end in Jordan and the region (national consultations, COP read-outs, water-security and adaptation workshops). This also builds relevant public credibility ahead of December, **without mentioning the unannounced flagship proposal or any other unannounced event.**
 
 ### Audience
 Climate, water and environment program staff at UN agencies, INGOs, embassies, EU projects, ministries and research centers in Jordan, plus regional organizers.
 
 ### Key message
-"Climate talks are multilingual by design. We supported the **COP28 Water Pavilion** across ten days of international events, and we bring the same interpretation, conference technology and event support to climate and water meetings in Jordan."
+"Climate talks are multilingual by design. We supported a major international climate-summit water pavilion across ten days of international events, and we bring the same interpretation, conference technology and event support to climate and water meetings in Jordan."
 
 ### Proof points
-- **COP28 Water Pavilion** (approved; "Featured Experience", 10-day high-profile international event). Don't add details beyond what the locked website copy says: no invented session counts or outcomes.
-- Related real work in Jordan (unnamed unless approved): drought-adaptation roundtable (Nov 2025), water-conflict and community-resilience event (Nov 2025, IFRC is an approved name).
+- A major international climate-summit engagement (approved; "Featured Experience", 10-day high-profile international event). See the private company reference for the exact naming Ala has approved. Don't add details beyond what the locked website copy says: no invented session counts or outcomes.
+- Related real work in Jordan (unnamed unless approved): drought-adaptation roundtable (Nov 2025), water-conflict and community-resilience event (Nov 2025).
 - COP31 is a timing hook only. **Don't imply Linguative is working at COP31.**
 
 ### Call to action
@@ -32,7 +32,7 @@ Climate, water and environment program staff at UN agencies, INGOs, embassies, E
 | Facebook | Arabic | 60-90 words | Single 1080x1350 |
 
 ### Visual direction
-- A real photo from the **French Embassy - HTU** drought roundtable or the **IFRC - Royal** water event (unnamed). If a real COP28 Water Pavilion photo exists in Ala's archive, use it instead. Ask Ala; don't use stock "COP" imagery or UN/UNFCCC logos.
+- A real photo from the **diplomatic-mission roundtable** (drought adaptation) or the **international humanitarian-federation water-resilience event** (unnamed). If a real photo from the climate-summit engagement above exists in Ala's archive, use it instead. Ask Ala; don't use stock "COP" imagery or UN/UNFCCC logos.
 - Headline in Futura PT / Cairo: "Climate talks, every language." / «حوارات المناخ، بكل اللغات». Thin gold rule, logo file to match the background.
 - No globes, leaves or water-drop icons (BRAND.md: avoid generic icons).
 
