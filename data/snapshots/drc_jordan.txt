@@ -150,7 +150,6 @@ Conflict
 El Niño
 Emergency
 Humanitarian mine action
-Lebanon
 Occupied Palestinian territory
 Syria
 Ukraine
@@ -184,6 +183,7 @@ Iraq
 Jordan
 Kenya
 Latin America
+Lebanon
 Legal aid
 Libya
 Localization
