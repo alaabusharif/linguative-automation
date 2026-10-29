@@ -124,6 +124,10 @@ for (const [table, column, ddl] of [
   ['documents', 'jofotara_qr', 'ALTER TABLE documents ADD COLUMN jofotara_qr TEXT'], // base64 QR image returned by ISTD, printed on the PDF
   ['documents', 'jofotara_error', 'ALTER TABLE documents ADD COLUMN jofotara_error TEXT'],
   ['documents', 'jofotara_submitted_at', 'ALTER TABLE documents ADD COLUMN jofotara_submitted_at TEXT'],
+  // Uploaded PO attachment (PDF or image), stored as-is with no OCR/auto-fill —
+  // see routes/documents.js's :id/po-file routes.
+  ['documents', 'po_file_path', 'ALTER TABLE documents ADD COLUMN po_file_path TEXT'],
+  ['documents', 'po_file_name', 'ALTER TABLE documents ADD COLUMN po_file_name TEXT'],
 ]) {
   const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
   if (!cols.includes(column)) db.exec(ddl);

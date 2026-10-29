@@ -172,6 +172,10 @@ function renderEditor(kind, doc) {
         ${!isInvoice ? `<div class="field"><label>Valid Until</label><input id="f-valid-until" type="date" value="${doc.valid_until ? doc.valid_until.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>` : `<div class="field"><label>Due Date</label><input id="f-due" type="date" value="${doc.due_date ? doc.due_date.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>`}
       </div>
       ${editable ? `<button class="plain" id="po-scan-btn" type="button">📷 Scan PO (OCR)</button><div id="po-scan-result"></div>` : ''}
+      <div id="po-file-box" style="margin-top:10px;">
+        ${doc.po_file_path ? `<div>Attached PO file: <a href="/api/documents/${doc.id}/po-file" target="_blank">${doc.po_file_name || 'view'}</a>${editable ? ` <button class="plain" id="po-file-remove-btn" type="button">Remove</button>` : ''}</div>` : ''}
+        ${editable ? `<button class="plain" id="po-file-attach-btn" type="button" ${!doc.id ? 'disabled title="Save as draft first"' : ''}>📎 ${doc.po_file_path ? 'Replace' : 'Attach'} PO file (PDF or image)</button><div id="po-file-result"></div>` : ''}
+      </div>
     </div>
 
     <div class="card">
@@ -235,6 +239,11 @@ function renderEditor(kind, doc) {
 
   const poScanBtn = document.getElementById('po-scan-btn');
   if (poScanBtn) poScanBtn.addEventListener('click', triggerPoScan);
+
+  const poFileAttachBtn = document.getElementById('po-file-attach-btn');
+  if (poFileAttachBtn) poFileAttachBtn.addEventListener('click', () => triggerPoFileAttach(doc.id));
+  const poFileRemoveBtn = document.getElementById('po-file-remove-btn');
+  if (poFileRemoveBtn) poFileRemoveBtn.addEventListener('click', () => removePoFile(doc.id));
 
   const clientInput = document.getElementById('f-client');
   if (editable && clientInput) {
@@ -447,6 +456,36 @@ async function triggerPoScan() {
   input.click();
 }
 
+async function triggerPoFileAttach(docId) {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.pdf,image/png,image/jpeg,image/webp';
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const resultEl = document.getElementById('po-file-result');
+    resultEl.innerHTML = '<em>Uploading…</em>';
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const res = await fetch(`/api/documents/${docId}/po-file`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      state.currentDoc = data.document;
+      renderTab();
+    } catch (e) {
+      resultEl.innerHTML = `<div class="error">${e.message}</div>`;
+    }
+  };
+  input.click();
+}
+
+async function removePoFile(docId) {
+  if (!confirm('Remove the attached PO file?')) return;
+  const result = await api(`/api/documents/${docId}/po-file`, { method: 'DELETE' });
+  state.currentDoc = result.document;
+  renderTab();
+}
+
 function renderActions(doc) {
   const el = document.getElementById('actions-card');
   const btns = [];
@@ -491,6 +530,11 @@ function jofotaraSectionHtml(doc) {
   if (status === 'submitted') statusHtml = `<span style="color:#1a7f37;">✓ Submitted${doc.jofotara_number ? ` — ${doc.jofotara_number}` : ''}</span>`;
   if (status === 'failed') statusHtml = `<span style="color:#b42318;">Failed: ${(doc.jofotara_error || '').replace(/</g, '&lt;')}</span>`;
 
+  // Only for an invoice already submitted without ever picking up a QR
+  // (older submissions made before the response-field fix) — pastes it
+  // in locally, no JoFotara/ISTD API call involved.
+  const needsQrBackfill = status === 'submitted' && !doc.jofotara_qr;
+
   return `
     <div class="card" style="margin-top:12px;">
       <label style="display:flex; align-items:center; gap:8px; margin:0;">
@@ -500,6 +544,17 @@ function jofotaraSectionHtml(doc) {
       </label>
       <div style="margin-top:8px;">${statusHtml}</div>
       ${doc.jofotara_enabled && status !== 'submitted' ? `<button class="gold" style="margin-top:8px;" onclick="submitJofotara(${doc.id})">Submit to JoFotara</button>` : ''}
+      ${needsQrBackfill ? `
+        <div style="margin-top:12px; border-top:1px solid #e5e5e5; padding-top:10px;">
+          <div class="muted" style="margin-bottom:6px;">No QR code on file for this one yet. On the JoFotara portal, save the QR as a .png image, then upload it here — this only saves it on our side, it never calls JoFotara again.</div>
+          <button class="plain" type="button" onclick="triggerJofotaraQrUpload(${doc.id})">📎 Upload QR image (.png)</button>
+          <div id="jf-qr-result-${doc.id}"></div>
+          <details style="margin-top:8px;">
+            <summary class="muted" style="cursor:pointer;">No image file? Paste the QR's base64 text instead</summary>
+            <textarea id="jf-qr-${doc.id}" rows="3" style="width:100%; font-family:monospace; font-size:11px; margin-top:6px;" placeholder="Paste QR image base64 here"></textarea>
+            <button class="plain" style="margin-top:6px;" onclick="attachJofotaraQr(${doc.id})">Save pasted QR code</button>
+          </details>
+        </div>` : ''}
     </div>`;
 }
 
@@ -521,6 +576,41 @@ window.submitJofotara = async (id) => {
   } catch (e) {
     alert(e.message);
   }
+};
+
+window.attachJofotaraQr = async (id) => {
+  const qr = document.getElementById(`jf-qr-${id}`).value.trim();
+  if (!qr) return alert('Paste the QR code\'s base64 data first.');
+  try {
+    const result = await api(`/api/documents/${id}/jofotara/qr`, { method: 'PUT', body: { qr } });
+    state.currentDoc = result.document;
+    renderTab();
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+window.triggerJofotaraQrUpload = (docId) => {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/png';
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const resultEl = document.getElementById(`jf-qr-result-${docId}`);
+    if (resultEl) resultEl.innerHTML = '<em>Uploading…</em>';
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const res = await fetch(`/api/documents/${docId}/jofotara/qr-file`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      state.currentDoc = data.document;
+      renderTab();
+    } catch (e) {
+      if (resultEl) resultEl.innerHTML = `<div class="error">${e.message}</div>`;
+    }
+  };
+  input.click();
 };
 
 window.saveDraft = async (mode) => {

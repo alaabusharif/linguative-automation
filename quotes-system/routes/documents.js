@@ -1,4 +1,8 @@
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 const express = require('express');
+const multer = require('multer');
 const db = require('../db/db');
 const { requireLogin, requireAdmin } = require('../middleware/auth');
 const { calcTotals, lineTotal } = require('../lib/calc');
@@ -8,6 +12,23 @@ const { buildDocumentDocx } = require('../lib/docx');
 const { submitInvoice } = require('../lib/jofotara');
 
 const router = express.Router();
+
+// Uploaded PO attachments (PDF or image) — stored as-is, never parsed/OCR'd.
+// Lives under data/ like the sqlite file, so it survives code-only redeploys.
+const PO_FILES_DIR = path.join(__dirname, '..', 'data', 'po-files');
+if (!fs.existsSync(PO_FILES_DIR)) fs.mkdirSync(PO_FILES_DIR, { recursive: true });
+
+const PO_FILE_TYPES = {
+  'application/pdf': '.pdf',
+  'image/png': '.png',
+  'image/jpeg': '.jpg',
+  'image/webp': '.webp',
+};
+
+const poFileUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 },
+});
 
 function getItems(documentId) {
   return db.prepare('SELECT * FROM document_items WHERE document_id = ? ORDER BY sort_order').all(documentId);
@@ -286,7 +307,10 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
   const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
   if (!doc) return res.status(404).json({ error: 'Not found' });
   if (!doc.jofotara_enabled) return res.status(400).json({ error: 'JoFotara is not turned on for this invoice.' });
-  if (doc.jofotara_status === 'submitted') return res.status(400).json({ error: 'Already submitted to JoFotara.' });
+  // Once submitted, re-sending is only ever a no-op retry to recover a
+  // missing QR (ISTD returns the original on a resend of the same
+  // number+UUID) — never allowed once we actually have one.
+  if (doc.jofotara_status === 'submitted' && doc.jofotara_qr) return res.status(400).json({ error: 'Already submitted to JoFotara.' });
 
   const items = getItems(doc.id);
   try {
@@ -296,6 +320,7 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
         jofotara_qr=?, jofotara_error=NULL, jofotara_submitted_at=datetime('now'), updated_at=datetime('now') WHERE id=?`)
         .run(result.uuid, result.number, result.qr, doc.id);
     } else {
+      console.error(`[jofotara] submit rejected for doc ${doc.id} (HTTP ${result.status}): ${result.message}\nRaw response: ${result.raw}`);
       db.prepare(`UPDATE documents SET jofotara_status='failed', jofotara_uuid=?, jofotara_error=?,
         updated_at=datetime('now') WHERE id=?`).run(result.uuid, result.message, doc.id);
     }
@@ -306,6 +331,61 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
       .run(e.message || 'Could not reach JoFotara', doc.id);
     res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
   }
+});
+
+// Manual backfill for an invoice that was submitted to JoFotara before the
+// EINV_QR response field was mapped correctly (fixed 2026-10-29) — stores a
+// QR image pasted/uploaded from the JoFotara portal directly, with NO call
+// to the JoFotara/ISTD API. Only for a submitted invoice that has no QR yet;
+// never touches jofotara_status, jofotara_number or jofotara_uuid.
+function checkQrBackfillAllowed(doc) {
+  if (!doc) return 'Not found';
+  if (doc.jofotara_status !== 'submitted') return 'This invoice has not been submitted to JoFotara.';
+  if (doc.jofotara_qr) return 'This invoice already has a QR code on file.';
+  return null;
+}
+
+function isPng(buffer) {
+  return Buffer.isBuffer(buffer) && buffer.length > 8 && buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+}
+
+function saveQrBackfill(docId, base64) {
+  db.prepare("UPDATE documents SET jofotara_qr=?, updated_at=datetime('now') WHERE id=?").run(base64, docId);
+  return withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(docId));
+}
+
+// Advanced/fallback path: pasting the QR's base64 text (or a data: URL) by hand.
+router.put('/:id/jofotara/qr', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
+  const blocked = checkQrBackfillAllowed(doc);
+  if (blocked === 'Not found') return res.status(404).json({ error: blocked });
+  if (blocked) return res.status(400).json({ error: blocked });
+
+  const raw = String(req.body.qr || '').trim();
+  const base64 = raw.includes(',') ? raw.split(',').pop() : raw;
+  if (!base64) return res.status(400).json({ error: 'Paste the QR image\'s base64 data (or a data: URL) from the JoFotara portal.' });
+  let buffer;
+  try { buffer = Buffer.from(base64, 'base64'); } catch { buffer = Buffer.alloc(0); }
+  if (!buffer.length || !isPng(buffer)) return res.status(400).json({ error: 'That doesn\'t look like a valid PNG image.' });
+
+  res.json({ document: saveQrBackfill(doc.id, base64) });
+});
+
+// Main path: uploading the QR image file directly (e.g. saved/downloaded
+// from the JoFotara portal). PNG only — same format the real QR always
+// comes back as, and the only format the PDF's QR renderer trusts (see
+// lib/pdf.js's isValidPng — a deliberate limit, not an oversight).
+const qrFileUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 * 1024 * 1024 } });
+router.post('/:id/jofotara/qr-file', requireLogin, qrFileUpload.single('file'), (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
+  const blocked = checkQrBackfillAllowed(doc);
+  if (blocked === 'Not found') return res.status(404).json({ error: blocked });
+  if (blocked) return res.status(400).json({ error: blocked });
+
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded.' });
+  if (!isPng(req.file.buffer)) return res.status(400).json({ error: 'That file isn\'t a PNG image — on the JoFotara portal, save or screenshot the QR as a .png file.' });
+
+  res.json({ document: saveQrBackfill(doc.id, req.file.buffer.toString('base64')) });
 });
 
 // "Prepared by" is always the user who created the document — never a
@@ -337,6 +417,45 @@ router.get('/:id/docx', requireLogin, async (req, res) => {
     console.error('[docx] failed:', e);
     res.status(500).send('Could not generate the .docx');
   }
+});
+
+// Attaches a PO file (PDF or image) to this document, replacing any
+// previous attachment. Stored as-is — no OCR/auto-fill runs on it.
+router.post('/:id/po-file', requireLogin, poFileUpload.single('file'), (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const ext = PO_FILE_TYPES[req.file.mimetype];
+  if (!ext) return res.status(400).json({ error: 'Only PDF, PNG, JPEG or WebP files are accepted' });
+
+  if (doc.po_file_path) {
+    fs.rm(path.join(PO_FILES_DIR, doc.po_file_path), { force: true }, () => {});
+  }
+
+  const storedName = `${doc.id}-${crypto.randomBytes(6).toString('hex')}${ext}`;
+  fs.writeFileSync(path.join(PO_FILES_DIR, storedName), req.file.buffer);
+  db.prepare("UPDATE documents SET po_file_path=?, po_file_name=?, updated_at=datetime('now') WHERE id=?")
+    .run(storedName, req.file.originalname || `PO${ext}`, doc.id);
+  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+});
+
+router.get('/:id/po-file', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc || !doc.po_file_path) return res.status(404).send('No PO file attached');
+  const filePath = path.join(PO_FILES_DIR, doc.po_file_path);
+  if (!fs.existsSync(filePath)) return res.status(404).send('File missing');
+  res.setHeader('Content-Disposition', `inline; filename="${doc.po_file_name || doc.po_file_path}"`);
+  res.sendFile(filePath);
+});
+
+router.delete('/:id/po-file', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (doc.po_file_path) {
+    fs.rm(path.join(PO_FILES_DIR, doc.po_file_path), { force: true }, () => {});
+  }
+  db.prepare("UPDATE documents SET po_file_path=NULL, po_file_name=NULL, updated_at=datetime('now') WHERE id=?").run(doc.id);
+  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
 });
 
 module.exports = router;

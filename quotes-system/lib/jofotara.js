@@ -27,49 +27,76 @@ function xmlEscape(s) {
 // invoices are services on credit terms (due date, bank transfer), so 022.
 const INVOICE_TYPE_NAME = '022';
 
+// Only these rates are accepted for a standard ("S") tax category line —
+// 0% uses category Z (exempt) or O (zero-rated) instead, never S.
+const VAT_RATE = 16;
+
 function buildInvoiceXml(doc, items) {
   const company = getCompanySettings();
   const { incomeSource } = getJofotaraSecret();
   const issueDate = (doc.created_at || new Date().toISOString()).slice(0, 10);
   const uuid = doc.jofotara_uuid || crypto.randomUUID();
+  const taxed = doc.tax_type === '16';
+  const cur = doc.currency;
 
   const lines = items.map((it, idx) => {
     const lineExtension = Number(it.line_total) || 0;
-    const taxAmount = doc.tax_type === '16' ? lineExtension * 0.16 : 0;
+    const taxAmount = taxed ? lineExtension * (VAT_RATE / 100) : 0;
+    const roundingAmount = lineExtension + taxAmount;
+    const taxCategoryId = taxed ? 'S' : 'O';
     return `
   <cac:InvoiceLine>
     <cbc:ID>${idx + 1}</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="PCE">${Number(it.qty) || 1}</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="${doc.currency}">${lineExtension.toFixed(2)}</cbc:LineExtensionAmount>
+    <cbc:InvoicedQuantity unitCode="PCE">${(Number(it.qty) || 1).toFixed(2)}</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="${cur}">${lineExtension.toFixed(2)}</cbc:LineExtensionAmount>
     <cac:TaxTotal>
-      <cbc:TaxAmount currencyID="${doc.currency}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
+      <cbc:TaxAmount currencyID="${cur}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
+      <cbc:RoundingAmount currencyID="${cur}">${roundingAmount.toFixed(2)}</cbc:RoundingAmount>
+      <cac:TaxSubtotal>
+        <cbc:TaxAmount currencyID="${cur}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
+        <cac:TaxCategory>
+          <cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5305">${taxCategoryId}</cbc:ID>
+          ${taxed ? `<cbc:Percent>${VAT_RATE.toFixed(2)}</cbc:Percent>` : ''}
+          <cac:TaxScheme><cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5153">VAT</cbc:ID></cac:TaxScheme>
+        </cac:TaxCategory>
+      </cac:TaxSubtotal>
     </cac:TaxTotal>
     <cac:Item>
       <cbc:Name>${xmlEscape(it.description)}</cbc:Name>
     </cac:Item>
     <cac:Price>
-      <cbc:PriceAmount currencyID="${doc.currency}">${Number(it.unit_price).toFixed(2)}</cbc:PriceAmount>
+      <cbc:PriceAmount currencyID="${cur}">${Number(it.unit_price).toFixed(2)}</cbc:PriceAmount>
+      <cac:AllowanceCharge>
+        <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+        <cbc:AllowanceChargeReason>DISCOUNT</cbc:AllowanceChargeReason>
+        <cbc:Amount currencyID="${cur}">0.00</cbc:Amount>
+      </cac:AllowanceCharge>
     </cac:Price>
   </cac:InvoiceLine>`;
   }).join('');
 
+  // JoFotara's own invoice counter — see the comment on submitInvoice's
+  // caller; we reuse the document's own (monotonic, unique) row id since
+  // there's no separate JoFotara-specific sequence kept today.
+  const icv = doc.id;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
-<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
-         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
-         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
   <cbc:ProfileID>reporting:1.0</cbc:ProfileID>
   <cbc:ID>${xmlEscape(doc.number)}</cbc:ID>
   <cbc:UUID>${uuid}</cbc:UUID>
   <cbc:IssueDate>${issueDate}</cbc:IssueDate>
   <cbc:InvoiceTypeCode name="${INVOICE_TYPE_NAME}">388</cbc:InvoiceTypeCode>
-  <cbc:DocumentCurrencyCode>${doc.currency}</cbc:DocumentCurrencyCode>
-  <cbc:TaxCurrencyCode>${doc.currency}</cbc:TaxCurrencyCode>
+  <cbc:Note></cbc:Note>
+  <cbc:DocumentCurrencyCode>${cur}</cbc:DocumentCurrencyCode>
+  <cbc:TaxCurrencyCode>${cur}</cbc:TaxCurrencyCode>
   <cac:AdditionalDocumentReference>
-    <cbc:ID>${xmlEscape(incomeSource)}</cbc:ID>
-    <cbc:UUID>1</cbc:UUID>
+    <cbc:ID>ICV</cbc:ID>
+    <cbc:UUID>${icv}</cbc:UUID>
   </cac:AdditionalDocumentReference>
   <cac:AccountingSupplierParty>
     <cac:Party>
+      <cac:PostalAddress><cac:Country><cbc:IdentificationCode>JO</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
       <cac:PartyTaxScheme>
         <cbc:CompanyID>${xmlEscape(company.taxNo)}</cbc:CompanyID>
         <cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme>
@@ -79,29 +106,32 @@ function buildInvoiceXml(doc, items) {
   </cac:AccountingSupplierParty>
   <cac:AccountingCustomerParty>
     <cac:Party>
+      <cac:PartyIdentification><cbc:ID schemeID="TN">0</cbc:ID></cac:PartyIdentification>
+      <cac:PostalAddress><cac:Country><cbc:IdentificationCode>JO</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
       <cac:PartyLegalEntity><cbc:RegistrationName>${xmlEscape(doc.client_name)}</cbc:RegistrationName></cac:PartyLegalEntity>
     </cac:Party>
   </cac:AccountingCustomerParty>
+  <cac:SellerSupplierParty>
+    <cac:Party>
+      <cac:PartyIdentification><cbc:ID>${xmlEscape(incomeSource)}</cbc:ID></cac:PartyIdentification>
+    </cac:Party>
+  </cac:SellerSupplierParty>
   <cac:PaymentMeans>
-    <cbc:PaymentMeansCode>${doc.payment_status === 'paid' ? '10' : '30'}</cbc:PaymentMeansCode>
+    <cbc:PaymentMeansCode listID="UN/ECE 4461">${doc.payment_status === 'paid' ? '10' : '30'}</cbc:PaymentMeansCode>
   </cac:PaymentMeans>
+  <cac:AllowanceCharge>
+    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+    <cbc:AllowanceChargeReason>discount</cbc:AllowanceChargeReason>
+    <cbc:Amount currencyID="${cur}">${Number(doc.discount_amount || 0).toFixed(2)}</cbc:Amount>
+  </cac:AllowanceCharge>
   <cac:TaxTotal>
-    <cbc:TaxAmount currencyID="${doc.currency}">${Number(doc.tax_amount).toFixed(2)}</cbc:TaxAmount>
-    <cac:TaxSubtotal>
-      <cbc:TaxableAmount currencyID="${doc.currency}">${Number(doc.subtotal - doc.discount_amount).toFixed(2)}</cbc:TaxableAmount>
-      <cbc:TaxAmount currencyID="${doc.currency}">${Number(doc.tax_amount).toFixed(2)}</cbc:TaxAmount>
-      <cac:TaxCategory>
-        <cbc:Percent>${doc.tax_type === '16' ? '16' : '0'}</cbc:Percent>
-        <cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme>
-      </cac:TaxCategory>
-    </cac:TaxSubtotal>
+    <cbc:TaxAmount currencyID="${cur}">${Number(doc.tax_amount).toFixed(2)}</cbc:TaxAmount>
   </cac:TaxTotal>
   <cac:LegalMonetaryTotal>
-    <cbc:LineExtensionAmount currencyID="${doc.currency}">${Number(doc.subtotal).toFixed(2)}</cbc:LineExtensionAmount>
-    <cbc:TaxExclusiveAmount currencyID="${doc.currency}">${Number(doc.subtotal - doc.discount_amount).toFixed(2)}</cbc:TaxExclusiveAmount>
-    <cbc:TaxInclusiveAmount currencyID="${doc.currency}">${Number(doc.grand_total).toFixed(2)}</cbc:TaxInclusiveAmount>
-    <cbc:AllowanceTotalAmount currencyID="${doc.currency}">${Number(doc.discount_amount).toFixed(2)}</cbc:AllowanceTotalAmount>
-    <cbc:PayableAmount currencyID="${doc.currency}">${Number(doc.grand_total).toFixed(2)}</cbc:PayableAmount>
+    <cbc:TaxExclusiveAmount currencyID="${cur}">${Number(doc.subtotal).toFixed(2)}</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="${cur}">${Number(doc.grand_total).toFixed(2)}</cbc:TaxInclusiveAmount>
+    <cbc:AllowanceTotalAmount currencyID="${cur}">${Number(doc.discount_amount || 0).toFixed(2)}</cbc:AllowanceTotalAmount>
+    <cbc:PayableAmount currencyID="${cur}">${Number(doc.grand_total).toFixed(2)}</cbc:PayableAmount>
   </cac:LegalMonetaryTotal>${lines}
 </Invoice>`;
 }
@@ -145,7 +175,7 @@ async function submitInvoice(doc, items) {
   }
 
   const status = parsed?.EINV_STATUS || parsed?.status || 'submitted';
-  const qr = parsed?.EINV_QR_SOURCE || parsed?.qrCode || parsed?.qr || null;
+  const qr = parsed?.EINV_QR || parsed?.EINV_QR_SOURCE || parsed?.qrCode || parsed?.qr || null;
   const number = parsed?.EINV_NUM || parsed?.invoiceNumber || null;
 
   return { ok: true, status, number, uuid, qr, raw };
