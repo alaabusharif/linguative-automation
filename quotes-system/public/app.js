@@ -530,6 +530,11 @@ function jofotaraSectionHtml(doc) {
   if (status === 'submitted') statusHtml = `<span style="color:#1a7f37;">✓ Submitted${doc.jofotara_number ? ` — ${doc.jofotara_number}` : ''}</span>`;
   if (status === 'failed') statusHtml = `<span style="color:#b42318;">Failed: ${(doc.jofotara_error || '').replace(/</g, '&lt;')}</span>`;
 
+  // Only for an invoice already submitted without ever picking up a QR
+  // (older submissions made before the response-field fix) — pastes it
+  // in locally, no JoFotara/ISTD API call involved.
+  const needsQrBackfill = status === 'submitted' && !doc.jofotara_qr;
+
   return `
     <div class="card" style="margin-top:12px;">
       <label style="display:flex; align-items:center; gap:8px; margin:0;">
@@ -539,6 +544,12 @@ function jofotaraSectionHtml(doc) {
       </label>
       <div style="margin-top:8px;">${statusHtml}</div>
       ${doc.jofotara_enabled && status !== 'submitted' ? `<button class="gold" style="margin-top:8px;" onclick="submitJofotara(${doc.id})">Submit to JoFotara</button>` : ''}
+      ${needsQrBackfill ? `
+        <div style="margin-top:12px; border-top:1px solid #e5e5e5; padding-top:10px;">
+          <div class="muted" style="margin-bottom:6px;">No QR code on file for this one yet. Paste the QR image from the JoFotara portal (as its base64 data, or a data:image/png;base64,... URL) — this only saves it here, it never calls JoFotara again.</div>
+          <textarea id="jf-qr-${doc.id}" rows="3" style="width:100%; font-family:monospace; font-size:11px;" placeholder="Paste QR image base64 here"></textarea>
+          <button class="plain" style="margin-top:6px;" onclick="attachJofotaraQr(${doc.id})">Save QR code</button>
+        </div>` : ''}
     </div>`;
 }
 
@@ -555,6 +566,18 @@ window.toggleJofotara = async (id, enabled) => {
 window.submitJofotara = async (id) => {
   try {
     const result = await api(`/api/documents/${id}/jofotara/submit`, { method: 'POST', body: {} });
+    state.currentDoc = result.document;
+    renderTab();
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+window.attachJofotaraQr = async (id) => {
+  const qr = document.getElementById(`jf-qr-${id}`).value.trim();
+  if (!qr) return alert('Paste the QR code\'s base64 data first.');
+  try {
+    const result = await api(`/api/documents/${id}/jofotara/qr`, { method: 'PUT', body: { qr } });
     state.currentDoc = result.document;
     renderTab();
   } catch (e) {

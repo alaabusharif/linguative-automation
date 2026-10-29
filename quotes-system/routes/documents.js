@@ -333,6 +333,32 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
   }
 });
 
+// Manual backfill for an invoice that was submitted to JoFotara before the
+// EINV_QR response field was mapped correctly (fixed 2026-10-29) — stores a
+// QR image pasted/uploaded from the JoFotara portal directly, with NO call
+// to the JoFotara/ISTD API. Only for a submitted invoice that has no QR yet;
+// never touches jofotara_status, jofotara_number or jofotara_uuid.
+router.put('/:id/jofotara/qr', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (doc.jofotara_status !== 'submitted') return res.status(400).json({ error: 'This invoice has not been submitted to JoFotara.' });
+  if (doc.jofotara_qr) return res.status(400).json({ error: 'This invoice already has a QR code on file.' });
+
+  const raw = String(req.body.qr || '').trim();
+  const base64 = raw.includes(',') ? raw.split(',').pop() : raw;
+  if (!base64) return res.status(400).json({ error: 'Paste the QR image\'s base64 data (or a data: URL) from the JoFotara portal.' });
+  let buffer;
+  try { buffer = Buffer.from(base64, 'base64'); } catch { buffer = Buffer.alloc(0); }
+  if (!buffer.length || !isPng(buffer)) return res.status(400).json({ error: 'That doesn\'t look like a valid PNG image.' });
+
+  db.prepare("UPDATE documents SET jofotara_qr=?, updated_at=datetime('now') WHERE id=?").run(base64, doc.id);
+  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+});
+
+function isPng(buffer) {
+  return buffer.length > 8 && buffer.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+}
+
 // "Prepared by" is always the user who created the document — never a
 // manually-typed field, so it can't be edited after the fact.
 function withPreparedBy(doc) {
