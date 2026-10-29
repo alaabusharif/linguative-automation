@@ -317,6 +317,7 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
         jofotara_qr=?, jofotara_error=NULL, jofotara_submitted_at=datetime('now'), updated_at=datetime('now') WHERE id=?`)
         .run(result.uuid, result.number, result.qr, doc.id);
     } else {
+      console.error(`[jofotara] submit rejected for doc ${doc.id} (HTTP ${result.status}): ${result.message}\nRaw response: ${result.raw}`);
       db.prepare(`UPDATE documents SET jofotara_status='failed', jofotara_uuid=?, jofotara_error=?,
         updated_at=datetime('now') WHERE id=?`).run(result.uuid, result.message, doc.id);
     }
