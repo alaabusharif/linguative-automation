@@ -172,6 +172,10 @@ function renderEditor(kind, doc) {
         ${!isInvoice ? `<div class="field"><label>Valid Until</label><input id="f-valid-until" type="date" value="${doc.valid_until ? doc.valid_until.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>` : `<div class="field"><label>Due Date</label><input id="f-due" type="date" value="${doc.due_date ? doc.due_date.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>`}
       </div>
       ${editable ? `<button class="plain" id="po-scan-btn" type="button">📷 Scan PO (OCR)</button><div id="po-scan-result"></div>` : ''}
+      <div id="po-file-box" style="margin-top:10px;">
+        ${doc.po_file_path ? `<div>Attached PO file: <a href="/api/documents/${doc.id}/po-file" target="_blank">${doc.po_file_name || 'view'}</a>${editable ? ` <button class="plain" id="po-file-remove-btn" type="button">Remove</button>` : ''}</div>` : ''}
+        ${editable ? `<button class="plain" id="po-file-attach-btn" type="button" ${!doc.id ? 'disabled title="Save as draft first"' : ''}>📎 ${doc.po_file_path ? 'Replace' : 'Attach'} PO file (PDF or image)</button><div id="po-file-result"></div>` : ''}
+      </div>
     </div>
 
     <div class="card">
@@ -235,6 +239,11 @@ function renderEditor(kind, doc) {
 
   const poScanBtn = document.getElementById('po-scan-btn');
   if (poScanBtn) poScanBtn.addEventListener('click', triggerPoScan);
+
+  const poFileAttachBtn = document.getElementById('po-file-attach-btn');
+  if (poFileAttachBtn) poFileAttachBtn.addEventListener('click', () => triggerPoFileAttach(doc.id));
+  const poFileRemoveBtn = document.getElementById('po-file-remove-btn');
+  if (poFileRemoveBtn) poFileRemoveBtn.addEventListener('click', () => removePoFile(doc.id));
 
   const clientInput = document.getElementById('f-client');
   if (editable && clientInput) {
@@ -445,6 +454,36 @@ async function triggerPoScan() {
     }
   };
   input.click();
+}
+
+async function triggerPoFileAttach(docId) {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.pdf,image/png,image/jpeg,image/webp';
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const resultEl = document.getElementById('po-file-result');
+    resultEl.innerHTML = '<em>Uploading…</em>';
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const res = await fetch(`/api/documents/${docId}/po-file`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      state.currentDoc = data.document;
+      renderTab();
+    } catch (e) {
+      resultEl.innerHTML = `<div class="error">${e.message}</div>`;
+    }
+  };
+  input.click();
+}
+
+async function removePoFile(docId) {
+  if (!confirm('Remove the attached PO file?')) return;
+  const result = await api(`/api/documents/${docId}/po-file`, { method: 'DELETE' });
+  state.currentDoc = result.document;
+  renderTab();
 }
 
 function renderActions(doc) {

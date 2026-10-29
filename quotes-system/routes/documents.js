@@ -1,4 +1,8 @@
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 const express = require('express');
+const multer = require('multer');
 const db = require('../db/db');
 const { requireLogin, requireAdmin } = require('../middleware/auth');
 const { calcTotals, lineTotal } = require('../lib/calc');
@@ -8,6 +12,23 @@ const { buildDocumentDocx } = require('../lib/docx');
 const { submitInvoice } = require('../lib/jofotara');
 
 const router = express.Router();
+
+// Uploaded PO attachments (PDF or image) — stored as-is, never parsed/OCR'd.
+// Lives under data/ like the sqlite file, so it survives code-only redeploys.
+const PO_FILES_DIR = path.join(__dirname, '..', 'data', 'po-files');
+if (!fs.existsSync(PO_FILES_DIR)) fs.mkdirSync(PO_FILES_DIR, { recursive: true });
+
+const PO_FILE_TYPES = {
+  'application/pdf': '.pdf',
+  'image/png': '.png',
+  'image/jpeg': '.jpg',
+  'image/webp': '.webp',
+};
+
+const poFileUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 },
+});
 
 function getItems(documentId) {
   return db.prepare('SELECT * FROM document_items WHERE document_id = ? ORDER BY sort_order').all(documentId);
@@ -337,6 +358,45 @@ router.get('/:id/docx', requireLogin, async (req, res) => {
     console.error('[docx] failed:', e);
     res.status(500).send('Could not generate the .docx');
   }
+});
+
+// Attaches a PO file (PDF or image) to this document, replacing any
+// previous attachment. Stored as-is — no OCR/auto-fill runs on it.
+router.post('/:id/po-file', requireLogin, poFileUpload.single('file'), (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const ext = PO_FILE_TYPES[req.file.mimetype];
+  if (!ext) return res.status(400).json({ error: 'Only PDF, PNG, JPEG or WebP files are accepted' });
+
+  if (doc.po_file_path) {
+    fs.rm(path.join(PO_FILES_DIR, doc.po_file_path), { force: true }, () => {});
+  }
+
+  const storedName = `${doc.id}-${crypto.randomBytes(6).toString('hex')}${ext}`;
+  fs.writeFileSync(path.join(PO_FILES_DIR, storedName), req.file.buffer);
+  db.prepare("UPDATE documents SET po_file_path=?, po_file_name=?, updated_at=datetime('now') WHERE id=?")
+    .run(storedName, req.file.originalname || `PO${ext}`, doc.id);
+  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+});
+
+router.get('/:id/po-file', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc || !doc.po_file_path) return res.status(404).send('No PO file attached');
+  const filePath = path.join(PO_FILES_DIR, doc.po_file_path);
+  if (!fs.existsSync(filePath)) return res.status(404).send('File missing');
+  res.setHeader('Content-Disposition', `inline; filename="${doc.po_file_name || doc.po_file_path}"`);
+  res.sendFile(filePath);
+});
+
+router.delete('/:id/po-file', requireLogin, (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ?').get(req.params.id);
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  if (doc.po_file_path) {
+    fs.rm(path.join(PO_FILES_DIR, doc.po_file_path), { force: true }, () => {});
+  }
+  db.prepare("UPDATE documents SET po_file_path=NULL, po_file_name=NULL, updated_at=datetime('now') WHERE id=?").run(doc.id);
+  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
 });
 
 module.exports = router;
