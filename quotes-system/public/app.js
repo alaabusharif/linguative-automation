@@ -546,9 +546,14 @@ function jofotaraSectionHtml(doc) {
       ${doc.jofotara_enabled && status !== 'submitted' ? `<button class="gold" style="margin-top:8px;" onclick="submitJofotara(${doc.id})">Submit to JoFotara</button>` : ''}
       ${needsQrBackfill ? `
         <div style="margin-top:12px; border-top:1px solid #e5e5e5; padding-top:10px;">
-          <div class="muted" style="margin-bottom:6px;">No QR code on file for this one yet. Paste the QR image from the JoFotara portal (as its base64 data, or a data:image/png;base64,... URL) — this only saves it here, it never calls JoFotara again.</div>
-          <textarea id="jf-qr-${doc.id}" rows="3" style="width:100%; font-family:monospace; font-size:11px;" placeholder="Paste QR image base64 here"></textarea>
-          <button class="plain" style="margin-top:6px;" onclick="attachJofotaraQr(${doc.id})">Save QR code</button>
+          <div class="muted" style="margin-bottom:6px;">No QR code on file for this one yet. On the JoFotara portal, save the QR as a .png image, then upload it here — this only saves it on our side, it never calls JoFotara again.</div>
+          <button class="plain" type="button" onclick="triggerJofotaraQrUpload(${doc.id})">📎 Upload QR image (.png)</button>
+          <div id="jf-qr-result-${doc.id}"></div>
+          <details style="margin-top:8px;">
+            <summary class="muted" style="cursor:pointer;">No image file? Paste the QR's base64 text instead</summary>
+            <textarea id="jf-qr-${doc.id}" rows="3" style="width:100%; font-family:monospace; font-size:11px; margin-top:6px;" placeholder="Paste QR image base64 here"></textarea>
+            <button class="plain" style="margin-top:6px;" onclick="attachJofotaraQr(${doc.id})">Save pasted QR code</button>
+          </details>
         </div>` : ''}
     </div>`;
 }
@@ -583,6 +588,29 @@ window.attachJofotaraQr = async (id) => {
   } catch (e) {
     alert(e.message);
   }
+};
+
+window.triggerJofotaraQrUpload = (docId) => {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/png';
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const resultEl = document.getElementById(`jf-qr-result-${docId}`);
+    if (resultEl) resultEl.innerHTML = '<em>Uploading…</em>';
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const res = await fetch(`/api/documents/${docId}/jofotara/qr-file`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      state.currentDoc = data.document;
+      renderTab();
+    } catch (e) {
+      if (resultEl) resultEl.innerHTML = `<div class="error">${e.message}</div>`;
+    }
+  };
+  input.click();
 };
 
 window.saveDraft = async (mode) => {

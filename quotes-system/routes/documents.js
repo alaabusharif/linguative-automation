@@ -338,11 +338,28 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
 // QR image pasted/uploaded from the JoFotara portal directly, with NO call
 // to the JoFotara/ISTD API. Only for a submitted invoice that has no QR yet;
 // never touches jofotara_status, jofotara_number or jofotara_uuid.
+function checkQrBackfillAllowed(doc) {
+  if (!doc) return 'Not found';
+  if (doc.jofotara_status !== 'submitted') return 'This invoice has not been submitted to JoFotara.';
+  if (doc.jofotara_qr) return 'This invoice already has a QR code on file.';
+  return null;
+}
+
+function isPng(buffer) {
+  return Buffer.isBuffer(buffer) && buffer.length > 8 && buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+}
+
+function saveQrBackfill(docId, base64) {
+  db.prepare("UPDATE documents SET jofotara_qr=?, updated_at=datetime('now') WHERE id=?").run(base64, docId);
+  return withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(docId));
+}
+
+// Advanced/fallback path: pasting the QR's base64 text (or a data: URL) by hand.
 router.put('/:id/jofotara/qr', requireLogin, (req, res) => {
   const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
-  if (!doc) return res.status(404).json({ error: 'Not found' });
-  if (doc.jofotara_status !== 'submitted') return res.status(400).json({ error: 'This invoice has not been submitted to JoFotara.' });
-  if (doc.jofotara_qr) return res.status(400).json({ error: 'This invoice already has a QR code on file.' });
+  const blocked = checkQrBackfillAllowed(doc);
+  if (blocked === 'Not found') return res.status(404).json({ error: blocked });
+  if (blocked) return res.status(400).json({ error: blocked });
 
   const raw = String(req.body.qr || '').trim();
   const base64 = raw.includes(',') ? raw.split(',').pop() : raw;
@@ -351,13 +368,25 @@ router.put('/:id/jofotara/qr', requireLogin, (req, res) => {
   try { buffer = Buffer.from(base64, 'base64'); } catch { buffer = Buffer.alloc(0); }
   if (!buffer.length || !isPng(buffer)) return res.status(400).json({ error: 'That doesn\'t look like a valid PNG image.' });
 
-  db.prepare("UPDATE documents SET jofotara_qr=?, updated_at=datetime('now') WHERE id=?").run(base64, doc.id);
-  res.json({ document: withItems(db.prepare('SELECT * FROM documents WHERE id = ?').get(doc.id)) });
+  res.json({ document: saveQrBackfill(doc.id, base64) });
 });
 
-function isPng(buffer) {
-  return buffer.length > 8 && buffer.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
-}
+// Main path: uploading the QR image file directly (e.g. saved/downloaded
+// from the JoFotara portal). PNG only — same format the real QR always
+// comes back as, and the only format the PDF's QR renderer trusts (see
+// lib/pdf.js's isValidPng — a deliberate limit, not an oversight).
+const qrFileUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 * 1024 * 1024 } });
+router.post('/:id/jofotara/qr-file', requireLogin, qrFileUpload.single('file'), (req, res) => {
+  const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
+  const blocked = checkQrBackfillAllowed(doc);
+  if (blocked === 'Not found') return res.status(404).json({ error: blocked });
+  if (blocked) return res.status(400).json({ error: blocked });
+
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded.' });
+  if (!isPng(req.file.buffer)) return res.status(400).json({ error: 'That file isn\'t a PNG image — on the JoFotara portal, save or screenshot the QR as a .png file.' });
+
+  res.json({ document: saveQrBackfill(doc.id, req.file.buffer.toString('base64')) });
+});
 
 // "Prepared by" is always the user who created the document — never a
 // manually-typed field, so it can't be edited after the fact.
