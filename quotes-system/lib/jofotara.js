@@ -175,7 +175,7 @@ async function submitInvoice(doc, items) {
   }
 
   const status = parsed?.EINV_STATUS || parsed?.status || 'submitted';
-  const qr = parsed?.EINV_QR_SOURCE || parsed?.qrCode || parsed?.qr || null;
+  const qr = parsed?.EINV_QR || parsed?.EINV_QR_SOURCE || parsed?.qrCode || parsed?.qr || null;
   const number = parsed?.EINV_NUM || parsed?.invoiceNumber || null;
 
   return { ok: true, status, number, uuid, qr, raw };

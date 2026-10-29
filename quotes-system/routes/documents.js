@@ -307,7 +307,10 @@ router.post('/:id/jofotara/submit', requireLogin, async (req, res) => {
   const doc = db.prepare('SELECT * FROM documents WHERE id = ? AND kind = ?').get(req.params.id, 'invoice');
   if (!doc) return res.status(404).json({ error: 'Not found' });
   if (!doc.jofotara_enabled) return res.status(400).json({ error: 'JoFotara is not turned on for this invoice.' });
-  if (doc.jofotara_status === 'submitted') return res.status(400).json({ error: 'Already submitted to JoFotara.' });
+  // Once submitted, re-sending is only ever a no-op retry to recover a
+  // missing QR (ISTD returns the original on a resend of the same
+  // number+UUID) — never allowed once we actually have one.
+  if (doc.jofotara_status === 'submitted' && doc.jofotara_qr) return res.status(400).json({ error: 'Already submitted to JoFotara.' });
 
   const items = getItems(doc.id);
   try {
