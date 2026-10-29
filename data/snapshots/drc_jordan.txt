@@ -98,7 +98,7 @@ Jordan
 30 Apr 2024
 Jordan: As Azraq camp marks 10 years, long-term solutions remain elusive for Syrian…
 Jordan
-Camp
+Site
 +1
 27 Jul 2023
 Working with local organizations to develop a Theory of Change for long-term gender…
@@ -162,7 +162,6 @@ Asylum
 Bangladesh
 Burkina Faso
 Cameroon
-Camp
 Chad
 Children
 Civil society engagement
@@ -200,6 +199,7 @@ Return
 Safety and dignity
 Safety training
 Shelter
+Site
 Somalia
 South Sudan
 Sudan
