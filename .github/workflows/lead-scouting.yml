@@ -100,11 +100,12 @@ jobs:
           retention-days: 30
 
       - name: Post findings to a tracking issue
-        # Post whenever there's something worth a look OR a source failed to
-        # fetch — errors used to only surface piggybacked on a flagged run,
-        # so a quiet day with a broken source (e.g. an API start returning
-        # 403/400) went unreported until something else happened to flag.
-        if: (steps.crawl.outputs.flagged != '0' || steps.crawl.outputs.errors != '0') && steps.mode.outputs.dry_run != 'true'
+        # Post every run, including quiet ones (Ala, 2026-10-29) — the
+        # report body already says "Nothing new this run" plus the list of
+        # sources checked, so a quiet day still gets a visible comment
+        # instead of silence that's indistinguishable from the crawler not
+        # running at all.
+        if: steps.mode.outputs.dry_run != 'true'
         uses: actions/github-script@v7
         with:
           script: |
