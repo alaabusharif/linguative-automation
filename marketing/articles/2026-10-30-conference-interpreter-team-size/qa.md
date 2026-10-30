@@ -39,3 +39,15 @@ Publication is blocked until:
 
 Passing tests, opening or merging a draft-review PR, or approving the topic alone does not satisfy the content approval gate.
 
+## Exact approval — 30 October 2026
+
+Ala directly approved this exact bilingual revision for publication in the relevant ChatGPT conversation on 30 October 2026: “Approved for publication.” The approval followed delivery of PR #117, the EN/AR review package, the digest and the disclosed limitation that automated desktop/mobile screenshots could not be captured in this environment.
+
+Approval is tied to the unchanged canonical publisher digest over `{slug,en,ar}`:
+
+`2e4599ac7fdc200a7d012e95f649c8aac7ea800a8255d981242f9cd8794b98ff`
+
+This is a record of Ala’s direct human approval, not a claim that a separate GitHub review was submitted. No copy changed after approval. The catalog and focused article record may now change only from `draft` to `approved` and add this approval evidence. The existing publisher cron is responsible for publication after the metadata-only handoff merges.
+
+The missing automated screenshot capture remains disclosed; the exact current-template EN/AR HTML had already rendered successfully and all structural RTL, metadata and schema checks passed. Ala’s publication approval was given with that limitation stated.
+
