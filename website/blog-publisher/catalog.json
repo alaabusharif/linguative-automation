@@ -200,7 +200,7 @@
     },
     {
       "slug": "how-many-interpreters-conference-needs",
-      "status": "draft",
+      "status": "approved",
       "en": {
         "title": "How Many Interpreters Does a Conference Need?",
         "description": "Estimate conference interpreter staffing from languages, mode, duration, parallel rooms and relay—not attendee numbers alone.",
@@ -402,6 +402,11 @@
         ],
         "ctaLabel": "أرسل جدول الأعمال لتقدير فريق الترجمة ↗",
         "quoteService": "simultaneous-interpretation"
+      },
+      "approval": {
+        "by": "Ala",
+        "record": "https://github.com/alaabusharif/linguative-automation/pull/117",
+        "content_sha256": "2e4599ac7fdc200a7d012e95f649c8aac7ea800a8255d981242f9cd8794b98ff"
       }
     }
   ]
