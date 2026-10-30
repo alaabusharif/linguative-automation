@@ -197,6 +197,212 @@
         "record": "https://github.com/alaabusharif/linguative-automation/pull/95",
         "content_sha256": "1a650d31126f4250eaa58df93c43930e7f5d540d4f30be2a93fb7357eb0676c6"
       }
+    },
+    {
+      "slug": "how-many-interpreters-conference-needs",
+      "status": "draft",
+      "en": {
+        "title": "How Many Interpreters Does a Conference Need?",
+        "description": "Estimate conference interpreter staffing from languages, mode, duration, parallel rooms and relay—not attendee numbers alone.",
+        "summary": "The headcount depends on what must be interpreted at the same time. Map the language directions, active rooms and session length before deciding how many interpreters the programme needs.",
+        "intro": "For simultaneous interpretation, plan a team rather than a solo interpreter for every continuously active booth or output. A common starting point is at least two interpreters, but the final number depends on the languages, duration, subject, relay needs and parallel sessions. Consecutive meetings follow a different calculation.",
+        "eyebrow": "Interpretation planning",
+        "readingTime": "6 min read",
+        "sections": [
+          {
+            "heading": "Start with the agenda, not the attendee count",
+            "paragraphs": [
+              "The number of delegates affects receivers, microphones and room logistics, but it does not by itself determine the interpreter team. Staffing starts with the work: which sessions need interpretation, which languages will be spoken, which languages participants must hear and which sessions run at the same time.",
+              "Mark every interpreted block on the agenda. Include registration briefings, opening remarks, panels, questions, videos, breakout rooms, press interviews and site visits. A short item outside the plenary can create a separate staffing need if it overlaps with another interpreted session.",
+              "Send this marked agenda to the interpretation provider. A defensible proposal should connect each team to an identified session and language requirement rather than offer one unexplained total."
+            ]
+          },
+          {
+            "heading": "Write the language directions explicitly",
+            "paragraphs": [
+              "Do not write only “Arabic and English.” State whether speakers will use both languages and whether participants need to listen in both. Arabic into English only is a different assignment from two-way Arabic–English interpretation during presentations and questions.",
+              "For three or more languages, identify the required output channels and ask how the team will cover them. Direct interpretation may be available for some combinations; others may use relay, where one interpreted output becomes the source for another interpreter. Relay affects team composition, booth planning and the risk created by a single missing language connection.",
+              "Signed-language interpretation, whispered interpretation and spoken-language booths are not interchangeable lines in a headcount. Describe each access requirement separately and ask for the corresponding qualified team."
+            ],
+            "bullets": [
+              "Languages used by speakers.",
+              "Languages participants need to hear.",
+              "Whether questions are interpreted in both directions.",
+              "Any presentation, video or remote-speaker language outside the main plan."
+            ]
+          },
+          {
+            "heading": "Count concurrent rooms before counting interpreters",
+            "paragraphs": [
+              "One team cannot cover two sessions that happen at the same time. If the plenary continues while an interpreted breakout begins, the breakout needs its own qualified coverage and its own audio route or suitable interpretation setup.",
+              "Build a simple grid with time slots across the top and rooms down the side. In each active cell, write the mode and language directions. The highest number of simultaneous interpreted cells reveals the peak operational requirement; it is often more useful than the total number of sessions in the programme.",
+              "Check transitions as well. A team finishing in one room cannot be assumed to begin immediately in another building or join a remote channel without time for movement, access and a technical check."
+            ]
+          },
+          {
+            "heading": "Adjust for duration, density and technical difficulty",
+            "paragraphs": [
+              "Simultaneous interpreting requires sustained concentration and is normally organised as team work. Professional guidance commonly starts with at least two interpreters for a continuously active booth or output, while longer, denser or more complex assignments may need a different arrangement. Treat that as a planning baseline, not an automatic quotation formula.",
+              "Share the real timetable, including breaks, rehearsals and expected overruns. Flag rapid scripted speeches, specialist terminology, several written presentations, dense figures and sessions with frequent language switching. These factors can affect the skills and strength of the team even when the room and languages do not change.",
+              "Staffing and technology should be planned together. Each active team needs an appropriate working position, a reliable source feed and the correct output path. Adding a language or a parallel room late can require more than another name on the schedule."
+            ]
+          },
+          {
+            "heading": "Use a different calculation for consecutive work",
+            "paragraphs": [
+              "Consecutive interpretation can suit bilateral meetings, interviews, short training segments and some site visits. The interpreter listens to a section and then renders it, so the agenda must allow additional time. A booth and language-distribution system may not be needed, but that does not make staffing automatic.",
+              "The provider still needs the duration, language directions, subject, movement between locations and whether separate conversations may happen at once. A single interpreter may be appropriate for a limited assignment, while a long or demanding programme may require a team or a different mode.",
+              "If an event switches between consecutive and simultaneous work, show the change on the agenda. Do not assume the same people can cover both without checking timing, qualifications and the rest of their assignment."
+            ]
+          },
+          {
+            "heading": "Worked example: one plenary becomes two breakouts",
+            "paragraphs": [
+              "This is an illustrative planning scenario, not a Linguative project report. A conference in Amman, Jordan opens with an Arabic–English plenary using simultaneous interpretation. After lunch, the plenary stops and participants divide into two breakout rooms, both requiring two-way Arabic–English interpretation.",
+              "During the morning, one continuously active booth or output team covers the plenary. In the afternoon, two interpreted rooms operate at the same time, so the plan needs two separate qualified teams and two suitable technical paths. Moving the morning team into one breakout does not cover the second room.",
+              "If a French-speaking remote presenter joins only the first breakout, the organiser must define whether French is needed into Arabic, English or both, and whether relay is acceptable. The provider can then determine the additional language coverage and technical routing. Counting “three languages” without those directions would not produce a reliable team size."
+            ]
+          }
+        ],
+        "checklistTitle": "Information needed for a staffing plan",
+        "checklist": [
+          "Mark every session that requires interpretation, including Q&A and videos.",
+          "State the languages speakers will use and the outputs participants need.",
+          "Identify every pair of interpreted sessions that overlaps in time.",
+          "Distinguish simultaneous, consecutive, whispered and signed-language needs.",
+          "Include rehearsals, breaks, room changes, remote speakers and expected overruns.",
+          "Flag technical subjects, scripted speeches, figures and terminology-heavy panels.",
+          "Ask the provider to connect each proposed team and technical path to the agenda."
+        ],
+        "faq": [
+          [
+            "Do 500 delegates require more interpreters than 100 delegates?",
+            "Not necessarily. Delegate numbers mainly affect receivers, microphones and logistics. Interpreter staffing depends more directly on languages, outputs, mode, duration and how many interpreted rooms operate at once."
+          ],
+          [
+            "Is one interpreter enough for a full conference day?",
+            "Usually not for continuous simultaneous interpretation. It is normally team work, commonly starting with at least two interpreters for an active booth or output. The provider should confirm the team after reviewing the full agenda and language plan."
+          ],
+          [
+            "Does every additional language mean two more interpreters?",
+            "Not as a universal formula. The answer depends on the required language directions, available direct combinations, relay, session overlap and duration. Specify the inputs and outputs before calculating the team."
+          ],
+          [
+            "Can the same team cover two breakout rooms?",
+            "Only if the sessions do not overlap and the transition is operationally realistic. Concurrent interpreted rooms need separate qualified coverage and suitable technical paths."
+          ]
+        ],
+        "relatedHeading": "Plan the team and technical setup together",
+        "related": [
+          "simultaneous-interpretation",
+          "consecutive-interpretation",
+          "conference-technology-av",
+          "event-conference-management"
+        ],
+        "ctaLabel": "Send us your agenda for a staffing plan ↗",
+        "quoteService": "simultaneous-interpretation"
+      },
+      "ar": {
+        "title": "كم مترجمًا فوريًا يحتاج المؤتمر؟",
+        "description": "طريقة عملية لتقدير فريق الترجمة بحسب اللغات والنمط والمدة والقاعات المتزامنة، بدل الاعتماد على عدد الحضور فقط.",
+        "summary": "يتحدد حجم الفريق وفق ما يجب ترجمته في الوقت نفسه. ارسم اتجاهات اللغات والقاعات النشطة ومدة الجلسات قبل اعتماد عدد المترجمين.",
+        "intro": "في الترجمة الفورية، يُخطط عادة لفريق لكل كابينة أو قناة إخراج تعمل باستمرار، لا لمترجم منفرد. ويبدأ التقدير غالبًا بمترجمين اثنين على الأقل، ثم يُراجع وفق اللغات والمدة وتخصص الموضوع والحاجة إلى الترجمة المرحّلة والجلسات المتزامنة. أما الترجمة التتابعية فلها حساب مختلف.",
+        "eyebrow": "تخطيط الترجمة الفورية",
+        "readingTime": "قراءة في 6 دقائق",
+        "sections": [
+          {
+            "heading": "ابدأ بجدول الأعمال، لا بعدد الحضور",
+            "paragraphs": [
+              "يؤثر عدد المشاركين في عدد أجهزة الاستماع والميكروفونات وترتيبات القاعة، لكنه لا يحدد وحده حجم فريق الترجمة. يبدأ التقدير من طبيعة العمل: أي الجلسات تحتاج إلى ترجمة، وما اللغات التي سيتحدث بها المشاركون، وما اللغات التي يجب أن يستمع إليها الجمهور، وأي الجلسات تُعقد في الوقت نفسه.",
+              "ضع علامة على كل فقرة تحتاج إلى ترجمة: كلمات الافتتاح، والجلسات النقاشية، والأسئلة، والمقاطع المرئية، والقاعات الفرعية، والمقابلات الصحفية، والزيارات الميدانية. وقد تنشئ فقرة قصيرة خارج القاعة الرئيسية حاجة إلى فريق مستقل إذا تزامنت مع جلسة أخرى مترجمة.",
+              "شارك هذا الجدول المعلّم مع مزود الترجمة. ينبغي أن يربط العرض الواضح كل فريق بجلسة ومتطلب لغوي محددين، بدل تقديم رقم إجمالي بلا تفسير."
+            ]
+          },
+          {
+            "heading": "اكتب اتجاهات اللغات بوضوح",
+            "paragraphs": [
+              "لا تكتف بعبارة «العربية والإنجليزية». وضّح هل سيتحدث المتحدثون باللغتين، وهل يحتاج المشاركون إلى الاستماع بكلتيهما. فالترجمة من العربية إلى الإنجليزية فقط تختلف عن الترجمة في الاتجاهين أثناء العروض والأسئلة.",
+              "عند وجود ثلاث لغات أو أكثر، حدّد قنوات الإخراج المطلوبة، واسأل كيف سيغطيها الفريق. قد تتوافر ترجمة مباشرة لبعض التركيبات، بينما تعتمد تركيبات أخرى على الترجمة المرحّلة، أي استخدام مخرج مترجم مصدرًا لمترجم آخر. ويؤثر ذلك في تكوين الفريق وتجهيز الكابينات والمخاطر الناتجة عن انقطاع حلقة لغوية واحدة.",
+              "ترجمة لغة الإشارة، والترجمة الهمسية، والترجمة الشفوية من الكابينة ليست بنودًا متبادلة ضمن العدد نفسه. صف كل متطلب لإتاحة المشاركة بصورة مستقلة، واطلب له فريقًا مؤهلًا."
+            ],
+            "bullets": [
+              "اللغات التي سيستخدمها المتحدثون.",
+              "اللغات التي يحتاج المشاركون إلى الاستماع إليها.",
+              "ما إذا كانت الأسئلة تحتاج إلى ترجمة في الاتجاهين.",
+              "أي لغة في عرض أو مقطع مرئي أو مداخلة عن بُعد خارج الخطة الرئيسية."
+            ]
+          },
+          {
+            "heading": "احسب القاعات المتزامنة قبل حساب المترجمين",
+            "paragraphs": [
+              "لا يستطيع فريق واحد تغطية جلستين تُعقدان في الوقت نفسه. فإذا استمرت الجلسة الرئيسية بينما بدأت جلسة فرعية مترجمة، احتاجت الجلسة الفرعية إلى تغطية مؤهلة مستقلة ومسار صوتي أو تجهيز ترجمة مناسب.",
+              "أنشئ جدولًا بسيطًا تضع فيه الفترات الزمنية أفقيًا والقاعات عموديًا، ثم اكتب في كل خانة نشطة نمط الترجمة واتجاهاتها. يكشف أعلى عدد من الخانات المترجمة المتزامنة ذروة الاحتياج التشغيلي، وهو غالبًا أنفع من العدد الإجمالي للجلسات.",
+              "راجع الانتقالات أيضًا. لا يُفترض أن ينهي الفريق عمله في قاعة ثم يبدأ فورًا في مبنى آخر أو على قناة عن بُعد من دون وقت للحركة والدخول والفحص الفني."
+            ]
+          },
+          {
+            "heading": "عدّل التقدير وفق المدة وكثافة المحتوى وصعوبته",
+            "paragraphs": [
+              "تتطلب الترجمة الفورية تركيزًا متواصلًا، ولذلك تُنظّم عادة بوصفها عملًا جماعيًا. تبدأ الإرشادات المهنية غالبًا بمترجمين اثنين على الأقل للكابينة أو قناة الإخراج التي تعمل باستمرار، وقد تتطلب المهام الأطول أو الأكثر كثافة وتعقيدًا ترتيبًا مختلفًا. تعامل مع ذلك بوصفه نقطة بدء للتخطيط، لا معادلة آلية للتسعير.",
+              "أرسل الجدول الفعلي، بما يشمل الاستراحات والتجارب الفنية واحتمالات تجاوز الوقت. ونبّه إلى الكلمات المكتوبة التي ستُلقى بسرعة، والمصطلحات المتخصصة، وكثرة الأرقام، والجلسات التي يتكرر فيها الانتقال بين اللغات. قد تؤثر هذه العوامل في مهارات الفريق وحجمه حتى لو لم تتغير القاعة أو اللغات.",
+              "يجب تخطيط الفريق والتجهيزات معًا. يحتاج كل فريق نشط إلى موقع عمل مناسب، ومصدر صوت موثوق، ومسار إخراج صحيح. وقد تتطلب إضافة لغة أو قاعة فرعية في وقت متأخر أكثر من مجرد إضافة اسم إلى الجدول."
+            ]
+          },
+          {
+            "heading": "استخدم حسابًا مختلفًا للترجمة التتابعية",
+            "paragraphs": [
+              "قد تناسب الترجمة التتابعية الاجتماعات الثنائية والمقابلات والفقرات التدريبية القصيرة وبعض الزيارات الميدانية. يستمع المترجم إلى جزء من الحديث ثم ينقله، ولذلك يجب أن يتيح البرنامج وقتًا إضافيًا. وقد لا تلزم كابينة أو منظومة لتوزيع اللغات، لكن ذلك لا يجعل تقدير الفريق تلقائيًا.",
+              "يظل مزود الخدمة بحاجة إلى معرفة المدة واتجاهات اللغات والموضوع والتنقل بين المواقع، وما إذا كانت محادثات منفصلة ستجري بالتزامن. قد يكون مترجم واحد مناسبًا لمهمة محدودة، بينما تحتاج مهمة طويلة أو مكثفة إلى فريق أو إلى نمط ترجمة آخر.",
+              "إذا انتقلت الفعالية بين الترجمة التتابعية والفورية، فوضّح ذلك في الجدول. ولا تفترض أن الأشخاص أنفسهم يستطيعون تغطية النمطين من دون مراجعة التوقيت والمؤهلات وبقية مهامهم."
+            ]
+          },
+          {
+            "heading": "مثال تطبيقي: جلسة رئيسية تتفرع إلى قاعتين",
+            "paragraphs": [
+              "المثال الآتي افتراضي للتوضيح، وليس وصفًا لمشروع نفذته شركة الإبداع اللغوي. يبدأ مؤتمر في عمّان، الأردن، بجلسة رئيسية تستخدم الترجمة الفورية بين العربية والإنجليزية. وبعد الغداء تتوقف الجلسة الرئيسية وينقسم المشاركون إلى قاعتين فرعيتين، وتحتاج كلتاهما إلى الترجمة في الاتجاهين.",
+              "في الصباح يغطي فريق كابينة أو قناة إخراج واحدة الجلسة الرئيسية المستمرة. وفي فترة ما بعد الظهر تعمل قاعتان مترجمتان في الوقت نفسه، فتحتاج الخطة إلى فريقين مؤهلين مستقلين ومسارين فنيين مناسبين. انتقال فريق الصباح إلى إحدى القاعتين لا يغطي القاعة الثانية.",
+              "إذا انضم متحدث عن بُعد باللغة الفرنسية إلى القاعة الأولى فقط، فعلى المنظم تحديد ما إذا كانت الفرنسية مطلوبة إلى العربية أو الإنجليزية أو كلتيهما، وما إذا كانت الترجمة المرحّلة مقبولة. عندئذ يستطيع المزود تحديد التغطية اللغوية والمسار الفني الإضافيين. أما عدّ «ثلاث لغات» من دون تحديد اتجاهاتها فلا ينتج تقديرًا موثوقًا."
+            ]
+          }
+        ],
+        "checklistTitle": "المعلومات اللازمة لتقدير حجم الفريق",
+        "checklist": [
+          "حدّد كل جلسة تحتاج إلى ترجمة، بما في ذلك الأسئلة والمقاطع المرئية.",
+          "اذكر لغات المتحدثين ولغات الإخراج التي يحتاجها المشاركون.",
+          "بيّن كل جلستين مترجمتين تتداخلان زمنيًا.",
+          "ميّز بين الترجمة الفورية والتتابعية والهمسية وترجمة لغة الإشارة.",
+          "أدرج التجارب والاستراحات والتنقل بين القاعات والمتحدثين عن بُعد واحتمالات التأخير.",
+          "نبّه إلى الموضوعات الفنية والكلمات المكتوبة والأرقام والجلسات الغنية بالمصطلحات.",
+          "اطلب من المزود ربط كل فريق ومسار فني مقترحين بجدول الأعمال."
+        ],
+        "faq": [
+          [
+            "هل يحتاج مؤتمر يضم 500 مشارك إلى مترجمين أكثر من مؤتمر يضم 100؟",
+            "ليس بالضرورة. يؤثر عدد المشاركين أساسًا في أجهزة الاستماع والميكروفونات والترتيبات. أما عدد المترجمين فيرتبط بصورة أوضح باللغات وقنوات الإخراج والنمط والمدة وعدد القاعات المترجمة التي تعمل بالتزامن."
+          ],
+          [
+            "هل يكفي مترجم واحد ليوم مؤتمر كامل؟",
+            "لا يكفي عادة للترجمة الفورية المستمرة. فهي تُنفذ بوصفها عملًا جماعيًا، ويبدأ التخطيط غالبًا بمترجمين اثنين على الأقل لكل كابينة أو قناة إخراج نشطة. ويؤكد المزود العدد بعد مراجعة الجدول وخطة اللغات كاملة."
+          ],
+          [
+            "هل تعني كل لغة إضافية مترجمين إضافيين؟",
+            "ليست قاعدة مطلقة. يعتمد العدد على اتجاهات اللغات المطلوبة والتركيبات المباشرة المتاحة والترجمة المرحّلة وتزامن الجلسات ومدتها. حدّد لغات المصدر والإخراج قبل حساب الفريق."
+          ],
+          [
+            "هل يستطيع الفريق نفسه تغطية قاعتين فرعيتين؟",
+            "يمكن ذلك فقط إذا لم تتزامن الجلستان وكان الانتقال ممكنًا من الناحية التشغيلية. أما القاعات المترجمة المتزامنة فتحتاج إلى تغطية مؤهلة مستقلة ومسارات فنية مناسبة."
+          ]
+        ],
+        "relatedHeading": "خطّط للفريق والتجهيزات ضمن نطاق واحد",
+        "related": [
+          "simultaneous-interpretation",
+          "consecutive-interpretation",
+          "conference-technology-av",
+          "event-conference-management"
+        ],
+        "ctaLabel": "أرسل جدول الأعمال لتقدير فريق الترجمة ↗",
+        "quoteService": "simultaneous-interpretation"
+      }
     }
   ]
 }
