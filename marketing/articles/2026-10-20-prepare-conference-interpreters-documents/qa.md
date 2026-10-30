@@ -47,3 +47,17 @@ Then recheck the deployed build, promote only status/evidence metadata, and merg
 - Production article catalog: empty and unchanged.
 - Publication: held; no published URLs verified.
 - Future routine: mandatory dated SEO/AEO/GEO evidence directive added under Ala's instruction, without modifying this approved pair.
+
+
+## Publication verification — 30 October 2026
+
+The private host publisher update was installed on 29 October 2026 with the existing cron preserved. Ala then confirmed that the article had published. A fresh public verification on 30 October established:
+
+- English URL returned HTTP 200 with the exact approved English title and content: https://linguative.net/insights/prepare-conference-interpreters-documents
+- Arabic URL returned HTTP 200 with the exact approved Arabic title and content: https://linguative.net/ar/insights/prepare-conference-interpreters-documents
+- Each page had a self-referencing canonical and the expected EN/AR/x-default hreflang set.
+- Both live Insights indexes linked to the article.
+- The sitemap contained the article slug.
+- The approved content digest remained `1a650d31126f4250eaa58df93c43930e7f5d540d4f30be2a93fb7357eb0676c6`.
+
+The source record status is corrected from `draft` to `approved` as metadata only; the bilingual copy and approval digest are unchanged. The article is **Published**. HTTP 200 and sitemap inclusion do not by themselves establish Google indexing, rankings or conversions.
