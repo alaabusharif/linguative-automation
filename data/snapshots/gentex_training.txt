@@ -56,9 +56,9 @@ Finance, Compliance & Corporate Governance
 Finance, Compliance & Corporate Governance
 Audit & Quality
 Regulatory Compliance
-Banking & Financial Services
 Corporate Ethics & Anti-Fraud
 Financial Risk & Internal Control
+Banking & Financial Services
 Treasury & Budgeting
 Finance & Accounting
 Governance, Risk & Compliance
@@ -74,8 +74,8 @@ Operations & Supply Chain Management
 Project, Process & Performance Management
 Project, Process & Performance Management
 Project Management
-Performance Metrics & KPIs
 Agile Project Management
+Performance Metrics & KPIs
 Business Process Reengineering
 Audit & Quality (Process side)
 Strategic Planning & Execution
@@ -89,11 +89,11 @@ IT Management
 AI & Business Intelligence
 Engineering, Construction & Industrial Operations
 Engineering, Construction & Industrial Operations
-Facilities Management
 Healthcare Management
 Environmental Management
 Industrial Health & Safety (HSE)
 Oil & Gas Engineering
+Facilities Management
 Constructions & Civil Engineering
 Telecommunication Engineering
 Creative Industries, Marketing & Specialized Programs
@@ -122,16 +122,16 @@ Copenhagen - Denmark
 View All ...
 America
 America
-Toronto - Canada
 Winnipeg - Canada
+Toronto - Canada
 New York, New York City - USA
+Florida, Miami - USA
+Florida, Orlando - USA
 Georgia, Atlanta - USA
+Indiana, Indianapolis - USA
 Michigan, Detroit - USA
 Nevada, Las Vegas - USA
-Washington, Seattle - USA
 Ohio, Columbus - USA
-Florida, Orlando - USA
-California, Los Angeles - USA
 View All ...
 Asia
 Asia
@@ -221,26 +221,26 @@ Entertainment & Leisure
 Customized Short Courses
 Conferences
 City
+Georgia, Atlanta - USA
+Arizona, Phoenix - USA
 Texas, Houston - USA
-Oklahoma, Oklahoma City - USA
+Dar es Salaam - Tanzania
+Washington, Seattle - USA
+Ohio, Columbus - USA
 Nevada, Las Vegas - USA
+Michigan, Detroit - USA
+Indiana, Indianapolis - USA
+Beirut - Lebanon
+Florida, Miami - USA
+Florida, Orlando - USA
+Saint Petersburg - Russia
+Oklahoma, Oklahoma City - USA
+Colorado, Denver - USA
+Damascus - Syria
 Marbella - Spain
 Riyadh - Saudi Arabia
 Prague - Czech Republic
-Washington, Seattle - USA
-Ohio, Columbus - USA
-Dar es Salaam - Tanzania
 Pennsylvania, Philadelphia - USA
-Florida, Orlando - USA
-Saint Petersburg - Russia
-Florida, Miami - USA
-Arizona, Phoenix - USA
-Colorado, Denver - USA
-Indiana, Indianapolis - USA
-Beirut - Lebanon
-Georgia, Atlanta - USA
-Damascus - Syria
-Michigan, Detroit - USA
 Amsterdam - Netherlands
 Berlin - Germany
 London - UK
@@ -256,8 +256,8 @@ Milan - Italy
 Brussels - Belgium
 Lisbon - Portugal
 Moscow - Russia
-Oslo - Norway
 Stockholm - Sweden
+Oslo - Norway
 Zurich - Switzerland
 Edinburgh - UK
 Geneva - Switzerland
@@ -292,13 +292,12 @@ Illinois, Chicago - USA
 Washington, DC - USA
 Toronto - Canada
 Papua New Guinea
-Winnipeg - Canada
 Johannesburg
+Winnipeg - Canada
 All Duration
 5 Days
 10 Days
 Month
-September 2026
 October 2026
 November 2026
 December 2026
@@ -310,6 +309,7 @@ May 2027
 June 2027
 July 2027
 August 2027
+September 2027
 Search
 Reset Filters
 Categories
@@ -318,19 +318,19 @@ Subjects
 Explore Gentex Training Center's comprehensive Training Course Categories designed for professionals, executives, engineers, and managers across multiple industries. Our internationally delivered training courses cover management, engineering, finance, technology, leadership, and specialized professional skills. Each category includes expert-led professional training programs developed to enhance knowledge, strengthen competencies, and support career growth through globally recognized training courses and practical learning experiences.
 View All Categories
 Business & Management Excellence
-324 Courses
+1066 Courses
 Finance, Compliance & Corporate Governance
-140 Courses
+926 Courses
 Procurement, Contracts & Supply Chain
-67 Courses
+95 Courses
 Project, Process & Performance Management
-37 Courses
+38 Courses
 Technology, AI & Digital Innovation
-34 Courses
+38 Courses
 Engineering, Construction & Industrial Operations
-106 Courses
+108 Courses
 Creative Industries, Marketing & Specialized Programs
-101 Courses
+106 Courses
 Partners in Learning
 Our Partners in Learning include leading companies and organizations that trust Gentex Training Center for high-quality training courses and professional development programs. Together, we deliver impactful training programs that support skills growth, leadership development, and organizational excellence.
 Cities
@@ -391,22 +391,22 @@ Saint Petersburg - Russia
 Stockholm - Sweden
 Istanbul - Turkey
 Glasgow - Scotland
-Toronto - Canada
 Winnipeg - Canada
+Toronto - Canada
 New York, New York City - USA
+Florida, Miami - USA
+Florida, Orlando - USA
 Georgia, Atlanta - USA
+Indiana, Indianapolis - USA
 Michigan, Detroit - USA
 Nevada, Las Vegas - USA
-Washington, Seattle - USA
 Ohio, Columbus - USA
-Florida, Orlando - USA
+Washington, Seattle - USA
 California, Los Angeles - USA
 Texas, Houston - USA
-Florida, Miami - USA
 Arizona, Phoenix - USA
 Illinois, Chicago - USA
 Pennsylvania, Philadelphia - USA
-Indiana, Indianapolis - USA
 Colorado, Denver - USA
 Oklahoma, Oklahoma City - USA
 Massachusetts, Boston - USA
