@@ -476,10 +476,6 @@ Public Courses
 (12)
 View All Public Courses
 Meet peers worldwide, learn together, and grow through interactive, professionally led training sessions.
-Industrial Health & Safety (HSE)
-COC Renewal
-Dubai - UAE
-01 - 05 Nov 2026
 Operations & Supply Chain Management
 Supply Chain Resilience and Risk Management
 London - UK
@@ -524,6 +520,10 @@ Legal, Contracts, and Procurement
 Mastering Contracts Management – The Oxford MBA
 Kigali - Rwanda
 09 - 13 Aug 2027
+Governance, Risk & Compliance
+Strategic Corporate Governance
+London - UK
+09 - 13 Aug 2027
 Discover Gentex Training Center's professional training courses delivered through International Training Courses, Online Training Programs, and In-House Training solutions. Our expert-led programs support organizations and professionals with flexible, globally recognized training courses designed for real-world skills development.
 International Training Courses
 Internationally recognized training programs designed to create measurable impact and support professional growth worldwide.
@@ -534,6 +534,10 @@ Enhance organizational capability through structured, customized in-house traini
 Articles
 View All Articles
 Explore expert articles, practical insights, industry trends, and professional development tips from Gentex Training Center to support continuous learning.
+02 Nov 2026
+Powering AI at Scale: Energy, Water and Cooling Challenges for Hyperscale Data Centers in the Middle East
+Discover how AI data centers can improve energy efficiency, cooling, water management and sustainability across the Middle East with Gentex Training Center.
+Read more
 28 Oct 2026
 AI Risk Management for Critical Infrastructure: An Executive Implementation GuideAI Risk Management for Critical Infrastructure: An Executive Implementation Guide
 Learn how to manage AI risks in critical infrastructure through governance, cybersecurity controls, human oversight, and operational resilience.
@@ -541,11 +545,6 @@ Read more
 23 Oct 2026
 UAE Central Bank Operational Risk Regulation 2026: A Practical Implementation Guide for Financial Institutions
 Learn how UAE financial institutions can implement the 2026 CBUAE operational risk regulation, strengthen controls, and improve operational resilience.
-Read more
-18 Oct 2026
-AI Cyberattack Tabletop Exercises for Banks: An Executive Readiness Guide
-AI cyberattack tabletop exercises for banks: improve incident response, executive readiness, and cyber resilience with Gentex Training Center.
-Copy English
 Read more
 Frequently Asked Questions
 What is Gentex Training Center?
