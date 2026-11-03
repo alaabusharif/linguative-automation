@@ -224,8 +224,7 @@ function drawJofotaraQr(pdf, doc) {
       // stored, just that it failed to decode.
       console.error('[pdf] JoFotara QR for', doc.number, 'is not a decodable PNG — skipping it on the PDF.',
         'stored length:', doc.jofotara_qr.length, 'decoded length:', buffer.length,
-        'first 24 chars:', JSON.stringify(doc.jofotara_qr.slice(0, 24)),
-        'last 24 chars:', JSON.stringify(doc.jofotara_qr.slice(-24)));
+        'full stored value:', JSON.stringify(doc.jofotara_qr));
       return;
     }
     pdf.moveDown(1);
