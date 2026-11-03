@@ -27,9 +27,17 @@ function xmlEscape(s) {
 // invoices are services on credit terms (due date, bank transfer), so 022.
 const INVOICE_TYPE_NAME = '022';
 
-// Only these rates are accepted for a standard ("S") tax category line —
-// 0% uses category Z (exempt) or O (zero-rated) instead, never S.
+// Only these rates are accepted for a standard ("S") tax category line.
+// Linguative's other two tax_type values are both 0%, but ISTD treats them
+// as different categories — mixing these up is exactly what produced
+// "Unsupported general tax percentage" on every line of an exempt invoice
+// (2026-11-03): we were sending O (zero-rated) for everything non-16%,
+// including exempt invoices, which must use Z instead. Confirmed against
+// balwahidi/jofotara-kit's rules (JOF-LIN-006/007) and its exempt/zero-rated
+// sample fixtures — both of which also always include <cbc:Percent>0.00</cbc:Percent>,
+// never omit it.
 const VAT_RATE = 16;
+const TAX_CATEGORY_BY_TYPE = { 16: 'S', '0': 'O', exempt: 'Z' };
 
 function buildInvoiceXml(doc, items) {
   const company = getCompanySettings();
@@ -37,13 +45,13 @@ function buildInvoiceXml(doc, items) {
   const issueDate = (doc.created_at || new Date().toISOString()).slice(0, 10);
   const uuid = doc.jofotara_uuid || crypto.randomUUID();
   const taxed = doc.tax_type === '16';
+  const taxCategoryId = TAX_CATEGORY_BY_TYPE[doc.tax_type] || 'O';
   const cur = doc.currency;
 
   const lines = items.map((it, idx) => {
     const lineExtension = Number(it.line_total) || 0;
     const taxAmount = taxed ? lineExtension * (VAT_RATE / 100) : 0;
     const roundingAmount = lineExtension + taxAmount;
-    const taxCategoryId = taxed ? 'S' : 'O';
     return `
   <cac:InvoiceLine>
     <cbc:ID>${idx + 1}</cbc:ID>
@@ -56,7 +64,7 @@ function buildInvoiceXml(doc, items) {
         <cbc:TaxAmount currencyID="${cur}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
         <cac:TaxCategory>
           <cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5305">${taxCategoryId}</cbc:ID>
-          ${taxed ? `<cbc:Percent>${VAT_RATE.toFixed(2)}</cbc:Percent>` : ''}
+          <cbc:Percent>${(taxed ? VAT_RATE : 0).toFixed(2)}</cbc:Percent>
           <cac:TaxScheme><cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5153">VAT</cbc:ID></cac:TaxScheme>
         </cac:TaxCategory>
       </cac:TaxSubtotal>
