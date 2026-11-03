@@ -1,0 +1,229 @@
+# Linguative bilingual Insight review — 2 November 2026
+
+**Slug:** `multilingual-event-responsibility-matrix`  
+**Status:** Draft — not approved and not published  
+**Exact content digest:** `8a5aec3fcf74c7f5c742009f1416d0d0d82814ef2a5d1ead7a66af45d3eff729`
+
+## Why this article
+
+The current library answers how to plan a multilingual conference, select interpretation mode, brief equipment, test AV, prepare remote speakers, prepare interpreters, estimate interpreter staffing and compare quotations. It does not show buyers how to assign ownership across the boundaries between organiser, venue, interpreters, AV, platform and chair. This article supplies that missing responsibility matrix without creating a duplicate service or city page.
+
+## Proposed internal links
+
+- Simultaneous Interpretation
+- Conference Technology & AV
+- Hybrid & Virtual Conference Solutions
+- Event & Conference Management
+- One CTA to Request a Quote with Event & Conference Management preselected
+
+## Approval instruction
+
+Please review both complete language versions below and the included previews. If you approve this exact revision, reply: **“I approve multilingual-event-responsibility-matrix digest 8a5aec3fcf74c7f5c742009f1416d0d0d82814ef2a5d1ead7a66af45d3eff729 for publication.”** Any copy change will create a new digest and require renewed approval.
+
+---
+
+# English copy
+
+**Title:** Who Owns What in a Multilingual Event?
+
+**Meta description:** Use this responsibility matrix to coordinate interpretation, AV, venue, hybrid platforms, speakers and event-day decisions without gaps.
+
+**Summary:** A multilingual event works best when every interface has one named owner: language scope, interpreter preparation, audio routing, platform settings, venue access, rehearsal and live changes.
+
+**Direct answer:** The organiser owns the brief and decisions; the venue owns access and room constraints; the language team owns interpreters and terminology; the technical team owns signal flow; and one delivery lead must coordinate the interfaces.
+
+## The short answer: assign the interfaces, not only the tasks
+
+A multilingual conference is not simply an event plus interpreters. The language plan, room audio, interpretation system, hybrid platform, presentations, venue access and running order depend on one another. A task can look assigned while the handoff between two teams remains ownerless.
+
+Start by naming one event owner who can approve scope and changes, then name a responsible lead for language delivery, technical delivery, venue coordination and the hybrid platform where applicable. If one supplier covers several areas, keep the responsibilities visible anyway. Consolidation reduces handoffs; it does not remove the need for clear ownership.
+
+- Event owner: scope, budget and final decisions
+- Language lead: interpreters, languages and preparation
+- Technical lead: microphones, consoles, routing and monitoring
+- Venue lead: access, room rules, power and internet
+- Platform host: remote roles, channels and permissions
+- Chair or show caller: live timing and escalation
+
+## A practical responsibility matrix
+
+Language scope and agenda belong to the organiser: working languages, direction of interpretation, session times, parallel rooms, participant profile and any confidentiality constraints. The language lead converts that brief into interpreter assignments, preparation requirements and a terminology plan.
+
+The venue confirms room access, booth positions, rigging or cable restrictions, power, internet and the timing allowed for installation and testing. The technical lead owns the end-to-end audio path: speaker microphones, interpreter input, consoles, language channels, participant listening and monitoring. The platform host owns account-level settings and participant permissions for remote sessions, while the technical lead verifies how those settings connect to the physical room.
+
+The event owner remains accountable for late changes. Technical and language leads explain the impact; the event owner approves the decision and ensures it reaches speakers, the chair, venue staff and registration or participant-support teams.
+
+- Scope: organiser decides; language lead validates feasibility
+- Interpreter team: language lead assigns and briefs
+- Venue readiness: venue lead confirms; technical lead verifies
+- Signal routing: technical lead designs, tests and monitors
+- Remote channels: platform host configures; technical lead rehearses
+- Live changes: event owner approves; delivery lead distributes
+
+## Where multilingual events usually develop gaps
+
+The most common failures occur between scopes. A revised agenda reaches the moderator but not the interpreters. A presentation contains video with sound, but nobody confirms how that sound will reach the interpretation input. A room move is agreed with the venue, but cable routes, booth sightlines or receiver distribution are not rechecked.
+
+Hybrid delivery adds another boundary. An interpreter may be assigned correctly while the meeting account lacks the required interpretation feature, the remote speaker joins through an untested device, or the recording plan captures only the original floor audio. These are coordination problems, not isolated equipment problems.
+
+Treat every change to languages, rooms, speakers, media playback, platform access or recording as a controlled change. Record who approved it, which teams are affected and when the revised information was confirmed.
+
+## Run one 30-minute coordination meeting before the event
+
+Bring together the organiser, venue contact, language lead, technical lead and platform host. Review the event from the participant's point of view: who speaks, what microphone carries the floor audio, where interpretation is produced, how each language reaches participants and who intervenes if the chain breaks.
+
+A useful agenda is: confirm the latest programme; lock languages and active channels; identify remote speakers and media playback; confirm access, installation and rehearsal times; review recording and confidentiality requirements; agree the event-day contact route; and list unresolved decisions with an owner and deadline.
+
+Illustrative scenario: a two-room conference in Amman, Jordan has Arabic and English interpretation in both rooms and one remote speaker. The organiser owns the final programme; the language lead assigns the interpreters; the venue confirms access and internet; the technical lead maps both room feeds and language channels; the platform host configures the remote session; and one delivery lead circulates every approved change. This is a planning example, not a description of a specific client event.
+
+## Set an event-day chain of command
+
+Testing should finish with named decisions, not only a statement that the equipment is on. Confirm who can ask the chair to pause, who speaks to the interpreters, who troubleshoots the platform, who authorises a room or programme change and who informs participants.
+
+The event-day contact route should work even if the main platform or messaging channel fails. Keep a simple backup contact method between the chair or show caller, the delivery lead, interpreters and technicians. Agree in advance how poor audio, missing visuals or an unavailable language channel will be reported and whether the session should pause while the issue is resolved.
+
+One accountable delivery lead should maintain the current running order and decision log. The goal is not extra administration; it is to prevent different teams from acting on different versions of the event.
+
+## Questions to settle before requesting a final quotation
+
+A supplier can price and plan more accurately when the interfaces are visible. Send the current agenda, language directions, room plan, expected participant numbers, remote-speaker details, media-playback needs, recording requirements, venue restrictions and the contact responsible for approvals.
+
+Ask the proposal to state what is included, what the venue or organiser must provide, who leads installation and testing, how interpretation connects to AV or the hybrid platform, what assumptions affect the quotation and how changes will be handled. This makes competing offers easier to compare and reduces last-minute scope disputes.
+
+Where Linguative supplies interpretation together with conference technology, AV or hybrid support, these responsibilities can be coordinated through one delivery chain while venue and organiser obligations remain explicit.
+
+## Responsibility checklist before event week
+
+- Name the event owner and the person authorised to approve changes.
+- Lock working languages, directions, sessions and parallel rooms.
+- Assign the language lead, technical lead, venue contact and platform host.
+- Share the latest agenda, presentations, speaker notes and terminology material.
+- Confirm venue access, room constraints, power, internet and installation times.
+- Map floor audio, interpretation inputs, language channels and participant listening.
+- Rehearse remote speakers, media playback, recording and backup communication.
+- Issue one event-day contact sheet and one controlled running order.
+
+## FAQ
+
+### Do we still need a responsibility matrix if one supplier covers several services?
+
+Yes. One supplier can reduce handoffs, but the organiser, venue and supplier still need to know who approves changes, provides access, configures platforms and leads testing. The matrix can be shorter, not absent.
+
+### Should the venue or the interpretation provider manage the audio?
+
+It depends on the contracted scope. The venue may provide the house sound system while an interpretation or AV team manages microphones, consoles, routing and language distribution. The proposal should define the boundary and name the lead who tests the complete path.
+
+### Who should approve a late programme or room change?
+
+The organiser's authorised event owner should approve it after the language, technical and venue leads explain the operational impact. One delivery lead should then distribute the confirmed change to every affected team.
+
+### Does this approach apply to a small bilingual meeting?
+
+Yes. A small meeting may need only four named owners: organiser, venue, language lead and technical or platform lead. The principle is the same: every dependency and escalation route has one clear owner.
+
+**CTA:** Send us your event brief to map responsibilities ↗
+
+
+---
+
+# النص العربي
+
+**Title:** من المسؤول عن ماذا في الفعالية متعددة اللغات؟
+
+**Meta description:** مصفوفة مسؤوليات عملية لتنسيق الترجمة الفورية والصوت والصورة والمكان والمنصة الهجينة والقرارات الميدانية دون فجوات.
+
+**Summary:** تنجح الفعالية متعددة اللغات عندما يكون لكل نقطة ربط مسؤول محدد: نطاق اللغات، تجهيز المترجمين، مسار الصوت، إعدادات المنصة، دخول الموقع، الاختبار والتعديلات المباشرة.
+
+**Direct answer:** يتولى المنظّم اعتماد النطاق والقرارات، ويتولى الموقع شروط الدخول والقاعات، ويتولى فريق اللغة المترجمين والمصطلحات، ويتولى الفريق التقني مسار الإشارة، بينما ينسّق قائد تنفيذ واحد جميع نقاط الربط.
+
+## الإجابة المختصرة: حدّدوا مسؤول نقاط الربط، لا مسؤول كل مهمة فقط
+
+ليست الفعالية متعددة اللغات فعالية عادية أضيف إليها مترجمون فوريون. فخطة اللغات وصوت القاعة ونظام الترجمة والمنصة الهجينة والعروض التقديمية والدخول إلى الموقع والبرنامج الزمني عناصر مترابطة. وقد تبدو كل مهمة موزعة، بينما تبقى نقطة التسليم بين فريقين بلا مسؤول واضح.
+
+ابدؤوا بتسمية صاحب قرار واحد يعتمد النطاق والتغييرات، ثم حدّدوا مسؤولًا عن اللغة، ومسؤولًا عن التقنية، ومسؤولًا عن التنسيق مع الموقع، ومسؤولًا عن المنصة الهجينة عند الحاجة. وحتى إذا تولى مزود واحد أكثر من مجال، يجب أن تبقى المسؤوليات مكتوبة وواضحة؛ فتقليل عدد نقاط التسليم لا يلغي الحاجة إلى تحديدها.
+
+- صاحب قرار الفعالية: النطاق والميزانية والاعتماد النهائي
+- مسؤول اللغة: المترجمون واللغات والتحضير
+- المسؤول التقني: الميكروفونات ووحدات التحكم ومسار الإشارة
+- مسؤول الموقع: الدخول وقيود القاعات والطاقة والإنترنت
+- مدير المنصة: الأدوار والقنوات والصلاحيات عن بُعد
+- رئيس الجلسة أو مدير العرض: التوقيت والتصعيد أثناء التنفيذ
+
+## مصفوفة مسؤوليات قابلة للتطبيق
+
+يتولى المنظّم تحديد نطاق اللغة والبرنامج: لغات العمل، واتجاهات الترجمة، ومواعيد الجلسات، والقاعات المتوازية، وطبيعة المشاركين، ومتطلبات السرية. ويحوّل مسؤول اللغة هذه المعطيات إلى توزيع للمترجمين، وخطة تحضير، ومتطلبات للمصطلحات والوثائق.
+
+يؤكد الموقع مواعيد الدخول، ومواقع الكبائن، وقيود التمديدات أو الكوابل، والطاقة، والإنترنت، والوقت المخصص للتركيب والاختبار. ويتولى المسؤول التقني مسار الصوت كاملًا: ميكروفونات المتحدثين، ومدخلات المترجمين، ووحدات التحكم، وقنوات اللغات، واستماع المشاركين، والمراقبة. أما مدير المنصة فيتولى إعدادات الحساب وصلاحيات المشاركين في الجلسات الهجينة، بينما يتحقق المسؤول التقني من اتصال المنصة بالقاعة الفعلية.
+
+يبقى صاحب قرار الفعالية مسؤولًا عن اعتماد التغييرات المتأخرة. يوضح فريقا اللغة والتقنية أثر التغيير، ثم يعتمد صاحب القرار الحل ويضمن وصوله إلى المتحدثين ورئيس الجلسة والموقع وفرق التسجيل أو دعم المشاركين.
+
+- النطاق: يقرره المنظّم ويؤكد مسؤول اللغة قابليته للتنفيذ
+- فريق المترجمين: يوزعه مسؤول اللغة ويجهزه
+- جاهزية الموقع: يؤكدها الموقع ويتحقق منها المسؤول التقني
+- مسار الإشارة: يصممه المسؤول التقني ويختبره ويراقبه
+- القنوات البعيدة: يضبطها مدير المنصة ويختبرها الفريق التقني
+- التغييرات المباشرة: يعتمدها صاحب القرار ويوزعها قائد التنفيذ
+
+## أين تظهر الفجوات غالبًا؟
+
+تظهر معظم المشكلات بين نطاقين مختلفين. قد تصل نسخة معدلة من البرنامج إلى مدير الجلسة ولا تصل إلى المترجمين. وقد يتضمن العرض مقطع فيديو بصوت من دون أن يحدد أحد كيف سيصل ذلك الصوت إلى مدخل الترجمة. وقد يُنقل الاجتماع إلى قاعة أخرى من دون إعادة فحص مسارات الكوابل أو مجال رؤية الكبائن أو توزيع أجهزة الاستماع.
+
+وتضيف الفعاليات الهجينة حدًا فاصلًا آخر. فقد يُعيّن المترجم بالشكل الصحيح، بينما لا يكون خيار الترجمة مفعّلًا في حساب الاجتماع، أو يدخل المتحدث عن بُعد من جهاز لم يُختبر، أو تسجل الجلسة الصوت الأصلي فقط من دون قنوات اللغات. هذه مشكلات تنسيق وليست أعطال معدات منفصلة.
+
+تعاملوا مع أي تغيير في اللغات أو القاعات أو المتحدثين أو تشغيل الوسائط أو الدخول إلى المنصة أو التسجيل بوصفه تغييرًا خاضعًا للضبط. سجّلوا من اعتمده، والفرق المتأثرة، وموعد تأكيد النسخة الجديدة.
+
+## اعقدوا اجتماع تنسيق واحدًا لمدة 30 دقيقة قبل الفعالية
+
+اجمعوا المنظّم ومسؤول الموقع ومسؤول اللغة والمسؤول التقني ومدير المنصة. راجعوا الفعالية من منظور المشارك: من يتحدث؟ أي ميكروفون ينقل صوت القاعة؟ أين تُنتج الترجمة؟ كيف تصل كل لغة إلى المشاركين؟ ومن يتدخل إذا انقطعت إحدى حلقات المسار؟
+
+يمكن أن يتضمن الاجتماع: تثبيت آخر نسخة من البرنامج، واعتماد اللغات والقنوات الفعالة، وتحديد المتحدثين عن بُعد والمواد ذات الصوت، وتأكيد أوقات الدخول والتركيب والتجربة، ومراجعة التسجيل والسرية، والاتفاق على مسار التواصل يوم الفعالية، وتحديد القرارات المفتوحة مع مسؤول وموعد نهائي لكل قرار.
+
+مثال توضيحي: مؤتمر في عمّان، الأردن يستخدم العربية والإنجليزية في قاعتين، ويشارك فيه متحدث واحد عن بُعد. يعتمد المنظّم البرنامج، ويعيّن مسؤول اللغة المترجمين، ويؤكد الموقع الدخول والإنترنت، ويرسم المسؤول التقني مسار الصوت والقنوات في القاعتين، ويضبط مدير المنصة الجلسة البعيدة، ثم يوزع قائد تنفيذ واحد كل تعديل معتمد. هذا مثال تخطيطي وليس وصفًا لفعالية عميل بعينه.
+
+## ضعوا تسلسلًا واضحًا للقرار يوم الفعالية
+
+يجب أن ينتهي الاختبار بأسماء وصلاحيات واضحة، لا بعبارة أن الأجهزة تعمل فقط. حدّدوا من يستطيع أن يطلب من رئيس الجلسة التوقف، ومن يتواصل مع المترجمين، ومن يعالج مشكلة المنصة، ومن يعتمد تغيير القاعة أو البرنامج، ومن يبلغ المشاركين.
+
+يجب أن يبقى مسار التواصل فعالًا حتى عند تعطل المنصة أو قناة الرسائل الأساسية. اعتمدوا وسيلة احتياطية بسيطة بين رئيس الجلسة أو مدير العرض وقائد التنفيذ والمترجمين والفنيين. واتفقوا مسبقًا على كيفية الإبلاغ عن ضعف الصوت أو غياب الصورة أو تعطل قناة لغة، وعلى قرار إيقاف الجلسة مؤقتًا لمعالجة المشكلة.
+
+ويحافظ قائد تنفيذ واحد على نسخة البرنامج الحالية وسجل القرارات. الهدف ليس زيادة الإجراءات، بل منع الفرق المختلفة من العمل وفق نسخ مختلفة من الفعالية.
+
+## أسئلة يجب حسمها قبل طلب العرض النهائي
+
+يصبح التسعير والتخطيط أدق عندما تكون نقاط الربط ظاهرة. أرسلوا البرنامج الحالي، واتجاهات اللغات، ومخطط القاعات، وعدد المشاركين المتوقع، وبيانات المتحدثين عن بُعد، ومتطلبات تشغيل الوسائط والتسجيل، وقيود الموقع، واسم الشخص المخول بالاعتماد.
+
+اطلبوا أن يوضح العرض ما هو مشمول، وما يجب أن يوفره الموقع أو المنظّم، ومن يقود التركيب والاختبار، وكيف تتصل الترجمة بالصوت والصورة أو بالمنصة الهجينة، وما الافتراضات المؤثرة في السعر، وكيف ستُدار التغييرات. بذلك تصبح مقارنة العروض أوضح وتقل الخلافات المتأخرة حول النطاق.
+
+عندما تقدم شركة الإبداع اللغوي الترجمة الفورية إلى جانب تقنيات المؤتمرات أو الصوت والصورة أو الدعم الهجين، يمكن تنسيق هذه المسؤوليات عبر سلسلة تنفيذ واحدة، مع إبقاء التزامات المنظّم والموقع محددة بوضوح.
+
+## قائمة المسؤوليات قبل أسبوع الفعالية
+
+- سمّوا صاحب قرار الفعالية والشخص المخول باعتماد التغييرات.
+- ثبّتوا لغات العمل واتجاهاتها والجلسات والقاعات المتوازية.
+- عيّنوا مسؤول اللغة والمسؤول التقني ومسؤول الموقع ومدير المنصة.
+- شاركوا آخر برنامج والعروض وملاحظات المتحدثين ومواد المصطلحات.
+- أكدوا الدخول إلى الموقع وقيود القاعات والطاقة والإنترنت وأوقات التركيب.
+- ارسموا مسار صوت القاعة ومدخلات الترجمة وقنوات اللغات واستماع المشاركين.
+- اختبروا المتحدثين عن بُعد والوسائط والتسجيل ووسيلة التواصل الاحتياطية.
+- أصدروا قائمة اتصال واحدة ونسخة مضبوطة واحدة من البرنامج التنفيذي.
+
+## FAQ
+
+### هل نحتاج إلى مصفوفة مسؤوليات إذا قدم مزود واحد عدة خدمات؟
+
+نعم. يقلل المزود الواحد نقاط التسليم، لكن المنظّم والموقع والمزود ما زالوا بحاجة إلى معرفة من يعتمد التغييرات، ومن يوفر الدخول، ومن يضبط المنصة، ومن يقود الاختبار. يمكن أن تكون المصفوفة أقصر، لكنها لا تُلغى.
+
+### هل يدير الموقع الصوت أم مزود الترجمة الفورية؟
+
+يعتمد ذلك على النطاق المتعاقد عليه. قد يوفر الموقع نظام الصوت الأساسي، بينما يدير فريق الترجمة أو الصوت والصورة الميكروفونات ووحدات التحكم ومسار الإشارة وتوزيع اللغات. يجب أن يحدد العرض الحد الفاصل ويسمي المسؤول عن اختبار المسار كاملًا.
+
+### من يعتمد تغييرًا متأخرًا في البرنامج أو القاعة؟
+
+يعتمده صاحب قرار الفعالية المخول من المنظّم بعد أن يوضح مسؤولو اللغة والتقنية والموقع أثره التشغيلي. ثم يوزع قائد تنفيذ واحد التغيير المؤكد على جميع الفرق المتأثرة.
+
+### هل تصلح هذه الطريقة لاجتماع ثنائي اللغة صغير؟
+
+نعم. قد يكفي في الاجتماع الصغير أربعة مسؤولين: المنظّم، والموقع، ومسؤول اللغة، والمسؤول التقني أو مدير المنصة. المبدأ واحد: لكل نقطة اعتماد أو تصعيد مسؤول واضح.
+
+**CTA:** أرسلوا موجز الفعالية لتوزيع المسؤوليات ↗
+
