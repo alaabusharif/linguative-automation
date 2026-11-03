@@ -298,7 +298,6 @@ All Duration
 5 Days
 10 Days
 Month
-October 2026
 November 2026
 December 2026
 January 2027
@@ -310,6 +309,7 @@ June 2027
 July 2027
 August 2027
 September 2027
+October 2027
 Search
 Reset Filters
 Categories
@@ -322,11 +322,11 @@ Business & Management Excellence
 Finance, Compliance & Corporate Governance
 926 Courses
 Procurement, Contracts & Supply Chain
-95 Courses
+158 Courses
 Project, Process & Performance Management
 38 Courses
 Technology, AI & Digital Innovation
-38 Courses
+39 Courses
 Engineering, Construction & Industrial Operations
 108 Courses
 Creative Industries, Marketing & Specialized Programs
@@ -476,10 +476,6 @@ Public Courses
 (12)
 View All Public Courses
 Meet peers worldwide, learn together, and grow through interactive, professionally led training sessions.
-Operations & Supply Chain Management
-Supply Chain Resilience and Risk Management
-London - UK
-02 - 06 Nov 2026
 C-Suite
 Board Members & Corporate Directors Certification Program
 Dubai - UAE
@@ -488,6 +484,10 @@ Regulatory Compliance
 Conducting Effective Compliance Investigations
 Singapore - Singapore
 23 - 27 Nov 2026
+Regulatory Compliance
+Fundamentals of Telecommunications Regulation
+Online
+30 - 04 Dec 2026
 Interpersonal Skills & Self-Development
 Professional Skills in University Academic Advising
 Tokyo - Japan
@@ -516,13 +516,13 @@ Banking & Financial Services
 Credit Risk Management in Financial Institutions
 Istanbul - Turkey
 08 - 12 Aug 2027
-Legal, Contracts, and Procurement
-Mastering Contracts Management – The Oxford MBA
-Kigali - Rwanda
-09 - 13 Aug 2027
 Governance, Risk & Compliance
 Strategic Corporate Governance
 London - UK
+09 - 13 Aug 2027
+Legal, Contracts, and Procurement
+Mastering Contracts Management – The Oxford MBA
+Kigali - Rwanda
 09 - 13 Aug 2027
 Discover Gentex Training Center's professional training courses delivered through International Training Courses, Online Training Programs, and In-House Training solutions. Our expert-led programs support organizations and professionals with flexible, globally recognized training courses designed for real-world skills development.
 International Training Courses
