@@ -11,6 +11,7 @@ const PDFDocument = require('pdfkit');
 // requires png-js to do its own PNG work, so resolving relative to pdfkit
 // finds the exact copy it uses, wherever npm actually put it.
 const PNGJS = require(require.resolve('png-js', { paths: [path.dirname(require.resolve('pdfkit'))] }));
+const qrcodeGen = require('qrcode-generator');
 const { drawBidiLine } = require('./bidi');
 const { labelsFor, formatDate, taxLabel } = require('./labels');
 const { getCompanySettings, bankDetailsFor } = require('./settings');
@@ -208,28 +209,47 @@ function isValidPng(buffer) {
   }
 }
 
-// JoFotara (Jordan e-invoicing) prints a QR code it generates and returns
-// on clearance — ISTD's own code, never generated locally. Only appears
-// once an invoice has actually been submitted and accepted (see
-// routes/documents.js's jofotara/submit); everything else about the PDF
-// stays exactly as it was before this was added.
+// JoFotara (Jordan e-invoicing) never sends back a rendered QR image —
+// confirmed 2026-11-03 against a real exempt-invoice submission (INV-2026-006):
+// what it returns (EINV_QR_SOURCE) is TLV-encoded text data (seller, tax
+// number, amount, a signature, etc.) that WE have to turn into a QR code
+// ourselves, same pattern as ZATCA's e-invoicing QR. We draw it as vector
+// rectangles with qrcode-generator (zero dependencies, pure JS — no new
+// binary/image library needed) rather than expecting a PNG.
+//
+// The one case that's still a real image: a QR someone downloaded from the
+// JoFotara portal and uploaded by hand (routes/documents.js's
+// jofotara/qr-file backfill, used once for INV-2026-005 before this was
+// understood) — isValidPng (above) still recognizes and draws that as-is.
+function drawJofotaraQrCode(pdf, qr, top) {
+  const left = 40;
+  const size = 90;
+  const cell = size / qr.getModuleCount();
+  pdf.save();
+  for (let row = 0; row < qr.getModuleCount(); row++) {
+    for (let col = 0; col < qr.getModuleCount(); col++) {
+      if (!qr.isDark(row, col)) continue;
+      pdf.rect(left + col * cell, top + row * cell, cell, cell).fill('#000000');
+    }
+  }
+  pdf.restore();
+}
+
 function drawJofotaraQr(pdf, doc) {
   if (doc.kind !== 'invoice' || !doc.jofotara_qr) return;
   try {
     const base64 = doc.jofotara_qr.includes(',') ? doc.jofotara_qr.split(',').pop() : doc.jofotara_qr;
     const buffer = Buffer.from(base64, 'base64');
-    if (!isValidPng(buffer)) {
-      // Temporary extra detail (remove once the exempt-invoice QR issue is
-      // root-caused) — the one-line message alone doesn't say WHAT was
-      // stored, just that it failed to decode.
-      console.error('[pdf] JoFotara QR for', doc.number, 'is not a decodable PNG — skipping it on the PDF.',
-        'stored length:', doc.jofotara_qr.length, 'decoded length:', buffer.length,
-        'full stored value:', JSON.stringify(doc.jofotara_qr));
-      return;
-    }
     pdf.moveDown(1);
     const top = pdf.y;
-    pdf.image(buffer, 40, top, { width: 90, height: 90 });
+    if (isValidPng(buffer)) {
+      pdf.image(buffer, 40, top, { width: 90, height: 90 });
+    } else {
+      const qr = qrcodeGen(0, 'M');
+      qr.addData(doc.jofotara_qr);
+      qr.make();
+      drawJofotaraQrCode(pdf, qr, top);
+    }
     pdf.fontSize(8).fillColor('#777777').font('Helvetica')
       .text('JoFotara / ISTD e-invoice QR', 140, top + 38, { width: 200 });
     pdf.y = top + 90 + 10; // .image() doesn't move the cursor itself
