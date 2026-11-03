@@ -219,7 +219,13 @@ function drawJofotaraQr(pdf, doc) {
     const base64 = doc.jofotara_qr.includes(',') ? doc.jofotara_qr.split(',').pop() : doc.jofotara_qr;
     const buffer = Buffer.from(base64, 'base64');
     if (!isValidPng(buffer)) {
-      console.error('[pdf] JoFotara QR for', doc.number, 'is not a decodable PNG — skipping it on the PDF');
+      // Temporary extra detail (remove once the exempt-invoice QR issue is
+      // root-caused) — the one-line message alone doesn't say WHAT was
+      // stored, just that it failed to decode.
+      console.error('[pdf] JoFotara QR for', doc.number, 'is not a decodable PNG — skipping it on the PDF.',
+        'stored length:', doc.jofotara_qr.length, 'decoded length:', buffer.length,
+        'first 24 chars:', JSON.stringify(doc.jofotara_qr.slice(0, 24)),
+        'last 24 chars:', JSON.stringify(doc.jofotara_qr.slice(-24)));
       return;
     }
     pdf.moveDown(1);
