@@ -1,6 +1,6 @@
 # Linguative bilingual article — language revision, 4 November 2026
 
-**Status:** Draft for Ala’s review; not approved for publication.
+**Status:** Approved by Ala for publication on 4 November 2026; live publication pending verification.
 
 **Slug:** `multilingual-event-responsibility-matrix`  
 **Exact content digest:** `339b7957fab569aafc6c0e1a1e61d95565ebeb8ba5c4664c68acad25c3f30bed`
@@ -11,7 +11,7 @@ Rewritten following Ala’s feedback that the language sounded awkward. Both ver
 
 ## Review and publication
 
-Review the complete English and Arabic copy below. Approval must refer to this revised pair. The earlier digest and any older preview do not describe this revision. No publication approval has been recorded.
+Ala directly replied “Approved for publishing” in ChatGPT after receiving this review link. This exact EN/AR pair is approved; provenance is transcribed at https://github.com/alaabusharif/linguative-automation/pull/133#issuecomment-6626247381. This is direct ChatGPT approval, not a separate human GitHub review. The earlier digest and older previews do not describe this revision.
 
 ## Editorial purpose and links
 
