@@ -1,3 +1,17 @@
+# Language-revision QA — 4 November 2026
+
+**Current draft digest:** `339b7957fab569aafc6c0e1a1e61d95565ebeb8ba5c4664c68acad25c3f30bed`
+
+Revised at Ala’s request. Both language versions, headings, metadata, summary, short answer, checklist, FAQ and CTA were reviewed for fluency and consistency. Service scope and links are preserved; the example remains explicitly hypothetical. The article and publishing catalog contain the same EN/AR copy and remain draft with no approval metadata. Other catalog entries are unchanged.
+
+SEO: the revised titles retain multilingual-event and responsibility intent; metadata is written naturally. AEO: the opening answers the main question, with clear roles, practical headings, checklist and consistent FAQ answers. GEO: verified company scope and the labelled hypothetical remain, without new equipment, platform or ranking claims. The existing dated research below is historical evidence, not a fresh analysis on 4 November.
+
+Current checks: JSON parsing, actual publisher validation in isolation, exact content digest and equality between article/catalog. Visual rendering has not been repeated for this wording revision. Earlier previews and visual/structural results below apply to the original draft only and do not verify this revision. Publication approval is still required.
+
+---
+
+## Historical record — original 2 November draft
+
 # QA record: multilingual event responsibility matrix
 
 **Draft digest:** `8a5aec3fcf74c7f5c742009f1416d0d0d82814ef2a5d1ead7a66af45d3eff729`
