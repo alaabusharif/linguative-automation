@@ -1,3 +1,11 @@
+## Approval and pre-publication checks — 4 November 2026
+
+Ala approved the exact revised pair directly in ChatGPT: “Approved for publishing”. Provenance: PR #133, comment 6626247381. Approved content digest: `339b7957fab569aafc6c0e1a1e61d95565ebeb8ba5c4664c68acad25c3f30bed`. Article and catalog are identical, with no text changes after approval. Other catalog entries are unchanged. Full approved-catalog validation with the current publisher passed (three approved articles).
+
+Both revised versions rendered successfully using current live EN/AR article templates retrieved on 4 November. Required service labels were taken from the matching language templates. Language/direction, all section headings and exact titles passed structural checks. Browser screenshot capture could not run because the Playwright Chromium executable is not installed. No visual screenshot verification is claimed. Existing design is unchanged. After merge, live publication must be verified separately.
+
+---
+
 # Language-revision QA — 4 November 2026
 
 **Current draft digest:** `339b7957fab569aafc6c0e1a1e61d95565ebeb8ba5c4664c68acad25c3f30bed`
