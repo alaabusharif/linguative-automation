@@ -1,6 +1,6 @@
 {
   "slug": "multilingual-event-responsibility-matrix",
-  "status": "draft",
+  "status": "approved",
   "en": {
     "title": "Who Is Responsible for What at a Multilingual Event?",
     "description": "Clarify who handles interpretation, AV, venue access, hybrid sessions and last-minute changes, with a practical checklist for event organisers.",
@@ -224,5 +224,10 @@
     ],
     "ctaLabel": "ناقش معنا متطلبات فعاليتك ↗",
     "quoteService": "event-conference-management"
+  },
+  "approval": {
+    "by": "Ala",
+    "record": "https://github.com/alaabusharif/linguative-automation/pull/133",
+    "content_sha256": "339b7957fab569aafc6c0e1a1e61d95565ebeb8ba5c4664c68acad25c3f30bed"
   }
 }
