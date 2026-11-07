@@ -32,3 +32,13 @@ REPO PRIVACY: this repo is public. Entries here never name a client, contact, or
 - **HubSpot deal 523071207649** (Sep workshops, Landmark Hotel) — same underlying client/engagement already logged on 2026-09-26 and already covered by existing testimonial/review-ask drafts (HubSpot company 449121718493, a known duplicate record for that client) — no new draft, to avoid asking twice.
 - The three other deals flagged 2026-10-15/24 (International Trade Centre, SAFU/Croatia, Diakonie Katastrophenhilfe) still have no new Gmail confirmation this week or no named on-site contact — still flagged for Ala to verify.
 - IFRC (521592300743) — no new action; Ala continues handling that exchange himself.
+
+## 2026-11-07
+
+- No new HubSpot deals moved to "Closed Won" this window apart from one re-modification (deal 523071207649), which re-checked out as the same already-logged/already-drafted duplicate client engagement from 2026-09-26 — no new draft, to avoid asking twice.
+- The three deals flagged 2026-10-15/24/31 (International Trade Centre, SAFU/Croatia, Diakonie Katastrophenhilfe) are unchanged in HubSpot this week — still flagged for Ala to verify before any draft.
+- **HubSpot deal 521526194406** (the recurring bank client logged 2026-10-31) — Ala sent the drafted after-event email himself on 1 November; no reply yet, no complaint signals.
+- **HubSpot deal 525411755194** (the embassy client logged 2026-10-31) — Ala sent his own after-event thank-you on 3 November, and the contact replied on 5 November that the support was "greatly appreciated" — a strong, explicit satisfaction signal with no complaints. No further action needed.
+- **HubSpot deal 521589866696** (an AI-forum event, interpretation & equipment, delivered 1 November) — Ala sent a thank-you directly to the client on 5 November thanking them for "entrusting us with your language interpretation needs," with no complaint signals. However this deal is still not marked "Closed Won" in HubSpot despite the job being delivered and already thanked for — flagged for Ala as a CRM data-quality issue (stage not updated after a completed, happy job).
+- A review-ask email ("Victim Assistance Strategic Workshop") was sent directly by Ala on 5 November to a contact with no matching HubSpot contact or deal record found — flagged for Ala to confirm this engagement is logged in HubSpot so future runs can track it.
+- No case studies drafted this week — no client newly added to the approved-to-name-publicly list.
