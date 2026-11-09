@@ -476,10 +476,6 @@ Public Courses
 (12)
 View All Public Courses
 Meet peers worldwide, learn together, and grow through interactive, professionally led training sessions.
-C-Suite
-Board Members & Corporate Directors Certification Program
-Dubai - UAE
-08 - 12 Nov 2026
 Regulatory Compliance
 Conducting Effective Compliance Investigations
 Singapore - Singapore
@@ -524,6 +520,10 @@ Legal, Contracts, and Procurement
 Mastering Contracts Management – The Oxford MBA
 Kigali - Rwanda
 09 - 13 Aug 2027
+Banking & Financial Services
+Credit Risk Management in Financial Institutions
+Rome - Italy
+16 - 20 Aug 2027
 Discover Gentex Training Center's professional training courses delivered through International Training Courses, Online Training Programs, and In-House Training solutions. Our expert-led programs support organizations and professionals with flexible, globally recognized training courses designed for real-world skills development.
 International Training Courses
 Internationally recognized training programs designed to create measurable impact and support professional growth worldwide.
@@ -534,6 +534,10 @@ Enhance organizational capability through structured, customized in-house traini
 Articles
 View All Articles
 Explore expert articles, practical insights, industry trends, and professional development tips from Gentex Training Center to support continuous learning.
+08 Nov 2026
+ISO/IEC 27090:2026 Explained: A Practical Guide to Securing AI Systems
+Learn how ISO/IEC 27090:2026 helps organizations identify AI security threats, protect models and data, and strengthen cybersecurity risk management.
+Read more
 02 Nov 2026
 Powering AI at Scale: Energy, Water and Cooling Challenges for Hyperscale Data Centers in the Middle East
 Discover how AI data centers can improve energy efficiency, cooling, water management and sustainability across the Middle East with Gentex Training Center.
@@ -541,10 +545,6 @@ Read more
 28 Oct 2026
 AI Risk Management for Critical Infrastructure: An Executive Implementation GuideAI Risk Management for Critical Infrastructure: An Executive Implementation Guide
 Learn how to manage AI risks in critical infrastructure through governance, cybersecurity controls, human oversight, and operational resilience.
-Read more
-23 Oct 2026
-UAE Central Bank Operational Risk Regulation 2026: A Practical Implementation Guide for Financial Institutions
-Learn how UAE financial institutions can implement the 2026 CBUAE operational risk regulation, strengthen controls, and improve operational resilience.
 Read more
 Frequently Asked Questions
 What is Gentex Training Center?
