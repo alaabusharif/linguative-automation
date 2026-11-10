@@ -1,7 +1,6 @@
 Go directly to content
 Events
 City
-Online (0)
 Date
 Today
 Weekend
@@ -58,19 +57,9 @@ Sat
 12
 Reset date
 Theme
-Language (1)
 Online events only
 Remove all
 A system error occurred. Please try again later.
-09.11.2026
-|
-6:00 PM
-Language Café
-Language Café
-|
-Practice German, meet people, and have relaxed conversations.
-Info-Zentrum Vorintegration
-Details
 - No events fit your search criteria -
 Show more
 |
