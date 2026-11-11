@@ -18,6 +18,25 @@ Standing rule:
 
 ## Strategy changes
 
+### 2026-11-08 — Revenue diversification + organic buyer targeting (Ala-approved direction; proposed implementation)
+
+**Decision:** Stop treating every post as an interpretation/event-technology campaign. Build independent demand across Linguative's verified service lines and customer groups. This supersedes event-heavy *content allocation* in older calendars; it does not remove the one-accountable-partner positioning for integrated multilingual events.
+
+**Seven content/revenue pillars:** (1) translation, (2) transcription and other language/content offerings (do not imply an unproven delivery track record for localization, dubbing, proofreading or subtitling), (3) interpretation, (4) conference technology and AV **as standalone rental/support**, (5) event management/production, (6) photography/videography/video production, (7) event/corporate visibility and branding. Avoid treating conference equipment and interpretation as synonymous.
+
+**Content allocation:** no approved fixed percentage. Across a rolling **14 master concepts** aim for at least one distinct post per pillar, no pillar more than three posts, no same pillar in adjacent posts, and at least half of masters on **non-interpretation/non-conference-technology** services. Use actual lead, quotation, margin and repeat-purchase data to refine; do not present an arbitrary 15/15/... split as a locked policy. Keep the existing rolling 10-master **7 English / 3 Arabic** and **6 static / 4 video** targets until Ala changes them.
+
+**Buyer targeting, not generic industry reach:** Each brief must include: service; specific buyer organization type; likely purchasing function/title; observable demand trigger; direct buyer versus intermediary versus referral partner; geographic serviceability; core business problem; evidence/proof permitted; one CTA to an existing appropriate webpage or verified contact method; organic distribution plan; and CRM/measurement hypothesis. Target real needs within an account, not all employees in an industry. Do not assume free LinkedIn/Facebook posts reach an industry or unconnected users by default. For regional/international remote work, check delivery feasibility before claims; physical AV/event delivery is location-constrained.
+
+**Organic distribution:** Use first-party channels, appropriate professional communities (only where rules permit), substantive manual company-page participation, voluntary staff sharing, organic search themes and SEO-aligned service pages. Only use LinkedIn Page audience filters where eligibility and reach are verified. No scraping, automated social engagement, bulk direct messaging, misleading claims, private-client disclosures, or unsolicited spam. Sales/BD owns prospect research, individualized outreach and CRM follow-ups; Marketing provides content, intent signals, segment briefs and analytics. All external sending/publishing/scheduling remains Ala-approval-gated.
+
+**Measurement:** record service pillar, segment, buyer function, trigger, geographic market, direct/intermediary/referral type, source/content ID, UTM landing page (if configured), qualified enquiry, quotation, won/lost revenue, repeat business where available. Avoid asserting attribution when signals are missing. Weekly review prioritizes qualified leads and won revenue over impressions; quarterly rebalance based on evidence, preserving minimum diverse exposure.
+
+**Next creative:** Prior conference-room/interpretation post LNG-SOC-2026-018 is **REJECTED / NOT APPROVED** due to repetitive concept, not scheduled or published; do not reuse it as next post. First replacement concept should be independent **professional document translation**, with real or nonconfidential document-based editorial design, not another event or booth. Continue after it with a genuinely different service and buyer group.
+
+**Downstream:** content production, design, social-posting, weekly reviews, marketing systems check, Sales & BD scouting should read this entry and `marketing/targeting-organic-2026-11.md`. No client-facing system edits authorized.
+
+
 ### 2026-10-14 — Embassies & diplomatic missions become a formal account-based outreach segment
 
 **Decision:** Add embassies, diplomatic missions and the EU Delegation in Jordan as a formal priority B2B audience. Treat this as account-based institutional outreach, not a bulk email campaign.
