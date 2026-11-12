@@ -1,3 +1,11 @@
+## Approval and pre-publication checks — 12 November 2026
+
+Ala directly approved the exact bilingual article in ChatGPT by writing “Approved for publication” in response to the article report. Provenance is transcribed in PR #137 comment 6819588676: https://github.com/alaabusharif/linguative-automation/pull/137#issuecomment-6819588676. This is direct ChatGPT approval, not a separate human GitHub review.
+
+Approved content digest: `fc7e819879f85463e52d27859eda42129507da971933133cdcd67988182c5132`. The article and catalog EN/AR content are identical, and the publisher canonical hash over `{slug,en,ar}` recomputes to that digest. No article text changed after approval. The only publication changes are status and approval/evidence metadata. Live publication must be verified separately after merge.
+
+---
+
 # QA and evidence — institutional report translation brief
 
 ## Publication state
