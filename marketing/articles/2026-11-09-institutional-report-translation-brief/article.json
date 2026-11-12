@@ -1,6 +1,6 @@
 {
   "slug": "institutional-report-translation-brief",
-  "status": "draft",
+  "status": "approved",
   "en": {
     "title": "How to Brief a Translation Provider for an Institutional Report",
     "description": "A practical brief for translating institutional reports: define audiences, files, terminology, review roles, confidentiality, formats and sign-off.",
@@ -216,5 +216,10 @@
     ],
     "ctaLabel": "ناقش معنا طلب الترجمة ↗",
     "quoteService": "translation"
+  },
+  "approval": {
+    "by": "Ala",
+    "record": "https://github.com/alaabusharif/linguative-automation/pull/137",
+    "content_sha256": "fc7e819879f85463e52d27859eda42129507da971933133cdcd67988182c5132"
   }
 }
