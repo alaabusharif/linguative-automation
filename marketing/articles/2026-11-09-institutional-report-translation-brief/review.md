@@ -1,8 +1,9 @@
 # Review — Institutional report translation brief
 
 - **Slug:** `institutional-report-translation-brief`
-- **Status:** draft — not approved for publication
+- **Status:** approved by Ala for publication on 12 November 2026; live publication pending verification
 - **Content SHA-256:** `fc7e819879f85463e52d27859eda42129507da971933133cdcd67988182c5132`
+- **Approval provenance:** Ala directly wrote “Approved for publication” in ChatGPT; assistant transcript: https://github.com/alaabusharif/linguative-automation/pull/137#issuecomment-6819588676. This is not a separate human GitHub review.
 - **Exact approval required:** both English and Arabic copy at this digest
 
 ## Why this article
