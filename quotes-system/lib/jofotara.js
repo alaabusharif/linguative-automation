@@ -52,10 +52,18 @@ function buildInvoiceXml(doc, items) {
     const lineExtension = Number(it.line_total) || 0;
     const taxAmount = taxed ? lineExtension * (VAT_RATE / 100) : 0;
     const roundingAmount = lineExtension + taxAmount;
+    // ISTD independently recomputes LineExtensionAmount as
+    // InvoicedQuantity × PriceAmount and rejects the invoice if it
+    // doesn't match ("Total amount excluding taxes is incorrect" / "Error
+    // in general invoice amount after discount calculation" — hit
+    // 2026-11-12 on a 2-day, Qty-2 line). Our "Days" column multiplies
+    // into the line total but JoFotara has no concept of Days, so fold
+    // it into the quantity we declare instead of leaving it implicit.
+    const jofotaraQty = (Number(it.days) || 1) * (Number(it.qty) || 1);
     return `
   <cac:InvoiceLine>
     <cbc:ID>${idx + 1}</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="PCE">${(Number(it.qty) || 1).toFixed(2)}</cbc:InvoicedQuantity>
+    <cbc:InvoicedQuantity unitCode="PCE">${jofotaraQty.toFixed(2)}</cbc:InvoicedQuantity>
     <cbc:LineExtensionAmount currencyID="${cur}">${lineExtension.toFixed(2)}</cbc:LineExtensionAmount>
     <cac:TaxTotal>
       <cbc:TaxAmount currencyID="${cur}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
