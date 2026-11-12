@@ -26,10 +26,10 @@ Approved content digest: `fc7e819879f85463e52d27859eda42129507da971933133cdcd679
 
 ## Publication state
 
-- Draft only; no approval has been recorded or inferred.
+- Published and positively verified live on 12 November 2026 after Ala’s exact-copy approval and merge of PR #142.
 - Slug: `institutional-report-translation-brief`
 - Canonical content SHA-256 over publisher JSON `{slug,en,ar}`: `fc7e819879f85463e52d27859eda42129507da971933133cdcd67988182c5132`
-- Publication must remain on hold until Ala explicitly approves this exact bilingual digest and the approved metadata-only catalog change passes the final checks.
+- The exact bilingual digest was approved by Ala, the metadata-only publication change passed final checks, and the live outcome is recorded above.
 
 ## Editorial rationale and distinctness
 
@@ -94,7 +94,7 @@ No client names, testimonials, equipment, certifications, rates, staff counts, r
 - The EN/AR hypothetical uses the same 60-page, three-table and six-chart facts and is labelled hypothetical in both languages.
 - The ISO reference is carefully scoped and disclaims any inference of Linguative certification.
 - Related slugs and quote service are inside the publisher allowlist: `translation`, `transcription`.
-- Status is `draft`; there is no approval object.
+- Status is `approved`; the approval object records Ala, PR #137 and the verified canonical content digest.
 
 ## Technical QA completed 9 November 2026
 
