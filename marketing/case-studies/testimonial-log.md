@@ -42,3 +42,10 @@ REPO PRIVACY: this repo is public. Entries here never name a client, contact, or
 - **HubSpot deal 521589866696** (an AI-forum event, interpretation & equipment, delivered 1 November) — Ala sent a thank-you directly to the client on 5 November thanking them for "entrusting us with your language interpretation needs," with no complaint signals. However this deal is still not marked "Closed Won" in HubSpot despite the job being delivered and already thanked for — flagged for Ala as a CRM data-quality issue (stage not updated after a completed, happy job).
 - A review-ask email ("Victim Assistance Strategic Workshop") was sent directly by Ala on 5 November to a contact with no matching HubSpot contact or deal record found — flagged for Ala to confirm this engagement is logged in HubSpot so future runs can track it.
 - No case studies drafted this week — no client newly added to the approved-to-name-publicly list.
+
+## 2026-11-14
+
+- **HubSpot deal 521589866696** (the AI-forum event logged 2026-11-07) — the client sent Ala an unsolicited, explicit written thank-you on 8 November praising the team's "professionalism and attention to detail," which Ala replied to himself on 11 November. Drafted a short follow-up (Gmail draft, not sent, threaded onto that same exchange) asking only for the Google review, since the thank-you/feedback exchange had already happened. This deal is still stuck at the "Proposal Drafted" pipeline stage despite the job being delivered and warmly thanked for — flagged again for Ala as a CRM data-quality issue, now with a stronger case given the explicit written praise; worth considering as a case-study candidate once Ala decides whether this client may be named publicly.
+- The three deals flagged 2026-10-15/24/31/11-07 (International Trade Centre, SAFU/Croatia, Diakonie Katastrophenhilfe) are unchanged in HubSpot this week — still flagged for Ala to verify before any draft.
+- The review-ask job flagged 2026-11-07 with no matching HubSpot record is still untracked in HubSpot — still flagged for Ala to confirm it's logged.
+- No case studies drafted this week — no client newly added to the approved-to-name-publicly list.
