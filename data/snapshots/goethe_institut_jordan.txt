@@ -1,6 +1,7 @@
 Go directly to content
 Events
 City
+Online (1)
 Date
 Today
 Weekend
@@ -57,9 +58,29 @@ Sat
 12
 Reset date
 Theme
+Language (1)
+Libraries (1)
 Online events only
 Remove all
 A system error occurred. Please try again later.
+23.11.2026
+|
+6:00 PM
+Language Café
+Language Café
+|
+Practice German, meet people, and have relaxed conversations.
+Info-Zentrum Vorintegration
+Details
+12.12.2026
+|
+6:00 PM
+Goethe Reading Circle
+Online reading circle / book discussion
+|
+Franz Kafka – The Trial
+Online
+Details
 - No events fit your search criteria -
 Show more
 |
