@@ -130,19 +130,29 @@ function renderDocumentPdf(doc, items, res) {
   const colX = EN_LAYOUT[format] || EN_LAYOUT.event;
   const cols = columnsFor(format, 'en');
   const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
+  // Solid navy header band with white text, matching the reference quote
+  // design's color palette (Ala, 2026-11-18) — previously this row was just
+  // navy text on white, which read as inconsistent with the rest of the
+  // brand's navy/gold/white usage.
   const tableHeaderY = pdf.y;
-  pdf.fillColor(BRAND.navy).fontSize(10).font('Helvetica-Bold');
+  pdf.rect(40, tableHeaderY - 4, 515, 20).fill(BRAND.navy);
+  pdf.fillColor('#FFFFFF').fontSize(10).font('Helvetica-Bold');
   pdf.text('Description', colX.desc, tableHeaderY);
   for (const { key, label } of cols) pdf.text(label, colX[key], tableHeaderY);
   pdf.text('Total', colX.total, tableHeaderY);
-  pdf.y = tableHeaderY + pdf.currentLineHeight();
-  pdf.moveDown(0.5);
-  pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.charcoal).lineWidth(0.5).stroke();
+  pdf.y = tableHeaderY + 20;
   pdf.moveDown(0.3);
 
   pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10.5);
-  for (const it of items) {
+  items.forEach((it, idx) => {
     const y = pdf.y;
+    const rowHeight = Math.max(pdf.heightOfString(it.description, { width: colX.descW }), 15);
+    // Zebra striping with the brand's ivory, matching the reference quote
+    // design's color palette (Ala, 2026-11-18) — alternate rows only.
+    if (idx % 2 === 1) {
+      pdf.rect(40, y - 2, 515, rowHeight + 4).fill(BRAND.ivory);
+      pdf.fillColor(BRAND.charcoal);
+    }
     pdf.text(it.description, colX.desc, y, { width: colX.descW });
     const afterDescY = pdf.y;
     for (const { key } of cols) {
@@ -152,7 +162,7 @@ function renderDocumentPdf(doc, items, res) {
     }
     pdf.text(fmtMoney(it.line_total, doc.currency), colX.total, y);
     pdf.y = Math.max(afterDescY, y + 15);
-  }
+  });
 
   pdf.moveDown(1);
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
@@ -365,18 +375,27 @@ function renderDocumentPdfAr(doc, items, res) {
   const colX = AR_LAYOUT[format] || AR_LAYOUT.event;
   const cols = columnsFor(format, 'ar');
   const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
-  pdf.fillColor(BRAND.navy).fontSize(10);
+  // Solid navy header band with white text, matching the reference quote
+  // design's color palette (Ala, 2026-11-18) — see the English render for
+  // the same change.
   const headerY = pdf.y;
+  pdf.rect(40, headerY - 4, 515, 20).fill(BRAND.navy);
+  pdf.fillColor('#FFFFFF').fontSize(10);
   drawBidiLine(pdf, L.col.total, colX.total, headerY, colX.totalW);
   for (const { key, label } of cols) drawBidiLine(pdf, label, colX[key], headerY, colX[`${key}W`]);
   drawBidiLine(pdf, L.col.item, colX.desc, headerY, colX.descW);
-  pdf.y = headerY + 14;
-  pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.charcoal).lineWidth(0.5).stroke();
+  pdf.y = headerY + 20;
   pdf.moveDown(0.3);
 
   pdf.fillColor(BRAND.charcoal).fontSize(10.5);
-  for (const it of items) {
+  items.forEach((it, idx) => {
     const y = pdf.y;
+    // Zebra striping with the brand's ivory, matching the reference quote
+    // design's color palette (Ala, 2026-11-18) — alternate rows only.
+    if (idx % 2 === 1) {
+      pdf.rect(40, y - 2, 515, 19).fill(BRAND.ivory);
+      pdf.fillColor(BRAND.charcoal);
+    }
     drawBidiLine(pdf, fmtMoney(it.line_total, doc.currency), colX.total, y, colX.totalW);
     for (const { key } of cols) {
       const field = fieldFor(key);
@@ -385,7 +404,7 @@ function renderDocumentPdfAr(doc, items, res) {
     }
     drawBidiLine(pdf, it.description, colX.desc, y, colX.descW);
     pdf.y = Math.max(pdf.y, y + 15);
-  }
+  });
 
   pdf.moveDown(1);
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();

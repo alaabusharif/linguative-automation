@@ -58,6 +58,7 @@ router.get('/', requireLogin, (req, res) => {
   const rows = db.prepare(`
     SELECT d.* FROM documents d
     WHERE d.kind = ?
+      AND d.status != 'cancelled'
       AND d.id NOT IN (
         SELECT parent_id FROM documents WHERE parent_id IS NOT NULL
       )

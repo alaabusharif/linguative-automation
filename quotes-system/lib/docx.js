@@ -106,18 +106,23 @@ async function buildDocumentDocx(doc, items) {
     children: [L.col.no, L.col.item, ...formatCols.map((c) => c.label), L.col.total].map(h =>
       cell(h, { bold: true, color: 'FFFFFF', shade: NAVY, size: 22, rtl })),
   });
-  const itemRows = items.map((it, idx) => new TableRow({
-    children: [
-      cell(String(idx + 1), { size: 22, rtl }),
-      cell(it.description, { size: 22, rtl }),
-      ...formatCols.map(({ key }) => {
-        const field = fieldFor(key);
-        const value = field === 'unit_price' ? fmtMoney(it.unit_price, doc.currency) : String(it[field]);
-        return cell(value, { size: 22, rtl });
-      }),
-      cell(fmtMoney(it.line_total, doc.currency), { size: 22, rtl }),
-    ],
-  }));
+  // Zebra striping with the brand's ivory, matching the reference quote
+  // design's color palette (Ala, 2026-11-18) — alternate rows only.
+  const itemRows = items.map((it, idx) => {
+    const shade = idx % 2 === 1 ? IVORY : undefined;
+    return new TableRow({
+      children: [
+        cell(String(idx + 1), { size: 22, rtl, shade }),
+        cell(it.description, { size: 22, rtl, shade }),
+        ...formatCols.map(({ key }) => {
+          const field = fieldFor(key);
+          const value = field === 'unit_price' ? fmtMoney(it.unit_price, doc.currency) : String(it[field]);
+          return cell(value, { size: 22, rtl, shade });
+        }),
+        cell(fmtMoney(it.line_total, doc.currency), { size: 22, rtl, shade }),
+      ],
+    });
+  });
   const itemsTable = new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [itemHeader, ...itemRows] });
 
   const summaryRows = [
