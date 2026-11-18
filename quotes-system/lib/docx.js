@@ -10,6 +10,7 @@ const {
   WidthType, AlignmentType, BorderStyle, ImageRun, ShadingType,
 } = require('docx');
 const { labelsFor, formatDate, taxLabel } = require('./labels');
+const { columnsFor } = require('./itemFormats');
 
 const NAVY = '071A2E';
 const GOLD = 'C9A46A';
@@ -94,18 +95,26 @@ async function buildDocumentDocx(doc, items) {
     ],
   });
 
+  // Which columns appear (Days/Qty/Unit/Price for an event, or Language
+  // Pair/Word Count/Rate for a translation, etc.) comes from the
+  // document's item_format — see lib/itemFormats.js.
+  const itemFormat = doc.item_format || 'event';
+  const formatCols = columnsFor(itemFormat, language);
+  const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
+
   const itemHeader = new TableRow({
-    children: [L.col.no, L.col.item, L.col.days, L.col.qty, L.col.unit, L.col.unitPrice, L.col.total].map(h =>
+    children: [L.col.no, L.col.item, ...formatCols.map((c) => c.label), L.col.total].map(h =>
       cell(h, { bold: true, color: 'FFFFFF', shade: NAVY, size: 22, rtl })),
   });
   const itemRows = items.map((it, idx) => new TableRow({
     children: [
       cell(String(idx + 1), { size: 22, rtl }),
       cell(it.description, { size: 22, rtl }),
-      cell(String(it.days), { size: 22, rtl }),
-      cell(String(it.qty), { size: 22, rtl }),
-      cell(it.unit, { size: 22, rtl }),
-      cell(fmtMoney(it.unit_price, doc.currency), { size: 22, rtl }),
+      ...formatCols.map(({ key }) => {
+        const field = fieldFor(key);
+        const value = field === 'unit_price' ? fmtMoney(it.unit_price, doc.currency) : String(it[field]);
+        return cell(value, { size: 22, rtl });
+      }),
       cell(fmtMoney(it.line_total, doc.currency), { size: 22, rtl }),
     ],
   }));

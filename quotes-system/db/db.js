@@ -128,6 +128,8 @@ for (const [table, column, ddl] of [
   // see routes/documents.js's :id/po-file routes.
   ['documents', 'po_file_path', 'ALTER TABLE documents ADD COLUMN po_file_path TEXT'],
   ['documents', 'po_file_name', 'ALTER TABLE documents ADD COLUMN po_file_name TEXT'],
+  // Which line-item table layout this document uses — see lib/itemFormats.js.
+  ['documents', 'item_format', "ALTER TABLE documents ADD COLUMN item_format TEXT NOT NULL DEFAULT 'event'"],
 ]) {
   const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
   if (!cols.includes(column)) db.exec(ddl);

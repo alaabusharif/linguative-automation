@@ -98,6 +98,7 @@ function buildDocFromInput(kind, body, createdBy) {
     valid_until: body.valid_until || null,
     service_dates: body.service_dates || null,
     currency: body.currency || 'JOD',
+    item_format: ['event', 'translation', 'hourly'].includes(body.item_format) ? body.item_format : 'event',
     discount_type: body.discount_type === 'percent' ? 'percent' : 'flat',
     discount_value: Number(body.discount_value) || 0,
     tax_type: ['16', '0', 'exempt'].includes(body.tax_type) ? body.tax_type : '16',
@@ -124,11 +125,11 @@ function upsertClient(name, contactPerson) {
 function insertDocument(doc) {
   const info = db.prepare(`
     INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date, language,
-      client_name, contact_person, project_title, venue, po_number, valid_until, service_dates, currency,
+      client_name, contact_person, project_title, venue, po_number, valid_until, service_dates, currency, item_format,
       discount_type, discount_value, tax_type, subtotal, discount_amount, tax_amount, grand_total,
       quote_ref_id, notes, created_by)
     VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date, @language,
-      @client_name, @contact_person, @project_title, @venue, @po_number, @valid_until, @service_dates, @currency,
+      @client_name, @contact_person, @project_title, @venue, @po_number, @valid_until, @service_dates, @currency, @item_format,
       @discount_type, @discount_value, @tax_type, @subtotal, @discount_amount, @tax_amount, @grand_total,
       @quote_ref_id, @notes, @created_by)
   `).run({ root_id: null, parent_id: null, ...doc });
@@ -159,6 +160,7 @@ router.post('/from-quote/:quoteId', requireLogin, (req, res) => {
     po_number: quote.po_number,
     service_dates: quote.service_dates,
     currency: quote.currency,
+    item_format: quote.item_format,
     discount_type: quote.discount_type,
     discount_value: quote.discount_value,
     tax_type: quote.tax_type,
@@ -183,7 +185,7 @@ router.put('/:id', requireLogin, (req, res) => {
 
   db.prepare(`UPDATE documents SET
     client_name=@client_name, contact_person=@contact_person, project_title=@project_title, venue=@venue,
-    po_number=@po_number, valid_until=@valid_until, service_dates=@service_dates, currency=@currency, discount_type=@discount_type, discount_value=@discount_value,
+    po_number=@po_number, valid_until=@valid_until, service_dates=@service_dates, currency=@currency, item_format=@item_format, discount_type=@discount_type, discount_value=@discount_value,
     tax_type=@tax_type, language=@language, subtotal=@subtotal, discount_amount=@discount_amount, tax_amount=@tax_amount,
     grand_total=@grand_total, due_date=@due_date, notes=@notes, updated_at=datetime('now')
     WHERE id=@id`).run({
@@ -197,6 +199,7 @@ router.put('/:id', requireLogin, (req, res) => {
     valid_until: req.body.valid_until ?? doc.valid_until,
     service_dates: req.body.service_dates ?? doc.service_dates,
     currency: req.body.currency ?? doc.currency,
+    item_format: ['event', 'translation', 'hourly'].includes(req.body.item_format) ? req.body.item_format : doc.item_format,
     discount_type: req.body.discount_type ?? doc.discount_type,
     discount_value: totals ? (req.body.discount_value ?? doc.discount_value) : doc.discount_value,
     tax_type: req.body.tax_type ?? doc.tax_type,
@@ -249,7 +252,7 @@ router.post('/:id/amend', requireLogin, (req, res) => {
     kind: doc.kind, number: doc.number, version: maxVersion + 1, root_id: rootId, parent_id: doc.id,
     status: 'draft', payment_status: doc.kind === 'invoice' ? 'unpaid' : null, due_date: doc.due_date, language: doc.language,
     client_name: doc.client_name, contact_person: doc.contact_person, project_title: doc.project_title, venue: doc.venue,
-    po_number: doc.po_number, valid_until: doc.valid_until, service_dates: doc.service_dates, currency: doc.currency, discount_type: doc.discount_type, discount_value: doc.discount_value,
+    po_number: doc.po_number, valid_until: doc.valid_until, service_dates: doc.service_dates, currency: doc.currency, item_format: doc.item_format, discount_type: doc.discount_type, discount_value: doc.discount_value,
     tax_type: doc.tax_type, subtotal: doc.subtotal, discount_amount: doc.discount_amount, tax_amount: doc.tax_amount,
     grand_total: doc.grand_total, quote_ref_id: doc.quote_ref_id, notes: doc.notes, created_by: req.session.user.id,
   };
@@ -258,11 +261,11 @@ router.post('/:id/amend', requireLogin, (req, res) => {
     db.prepare("UPDATE documents SET status='amended', updated_at=datetime('now') WHERE id=?").run(doc.id);
     const info = db.prepare(`
       INSERT INTO documents (kind, number, version, root_id, parent_id, status, payment_status, due_date, language,
-        client_name, contact_person, project_title, venue, po_number, valid_until, service_dates, currency,
+        client_name, contact_person, project_title, venue, po_number, valid_until, service_dates, currency, item_format,
         discount_type, discount_value, tax_type, subtotal, discount_amount, tax_amount, grand_total,
         quote_ref_id, notes, created_by)
       VALUES (@kind, @number, @version, @root_id, @parent_id, @status, @payment_status, @due_date, @language,
-        @client_name, @contact_person, @project_title, @venue, @po_number, @valid_until, @service_dates, @currency,
+        @client_name, @contact_person, @project_title, @venue, @po_number, @valid_until, @service_dates, @currency, @item_format,
         @discount_type, @discount_value, @tax_type, @subtotal, @discount_amount, @tax_amount, @grand_total,
         @quote_ref_id, @notes, @created_by)
     `).run(newDoc);

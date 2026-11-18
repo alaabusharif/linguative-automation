@@ -15,6 +15,23 @@ const qrcodeGen = require('qrcode-generator');
 const { drawBidiLine } = require('./bidi');
 const { labelsFor, formatDate, taxLabel } = require('./labels');
 const { getCompanySettings, bankDetailsFor } = require('./settings');
+const { columnsFor } = require('./itemFormats');
+
+// Fixed pixel layout per line-item format (see lib/itemFormats.js for what
+// each format's columns mean) — kept as explicit tables rather than one
+// generic formula so the existing Event/Interpretation layout never shifts
+// a pixel from what Ala already knows, while Translation/Hourly (new
+// 2026-11-18) get their own column count and spacing.
+const EN_LAYOUT = {
+  event: { desc: 40, descW: 210, days: 260, qty: 290, unit: 320, unitPrice: 365, total: 465 },
+  translation: { desc: 40, descW: 165, unit: 210, qty: 300, unitPrice: 370, total: 465 },
+  hourly: { desc: 40, descW: 270, qty: 320, unitPrice: 365, total: 465 },
+};
+const AR_LAYOUT = {
+  event: { total: 40, totalW: 85, unitPrice: 130, unitPriceW: 80, unit: 215, unitW: 45, qty: 265, qtyW: 35, days: 305, daysW: 35, desc: 345, descW: 210 },
+  translation: { total: 40, totalW: 85, unitPrice: 130, unitPriceW: 75, qty: 210, qtyW: 55, unit: 270, unitW: 75, desc: 355, descW: 200 },
+  hourly: { total: 40, totalW: 85, unitPrice: 130, unitPriceW: 80, qty: 215, qtyW: 45, desc: 265, descW: 290 },
+};
 
 const BRAND = {
   navy: '#071A2E',
@@ -101,20 +118,22 @@ function renderDocumentPdf(doc, items, res) {
   }
   pdf.moveDown(1.2);
 
-  // Items table — all six header cells share one explicit y so they can
-  // never drift apart, instead of each one re-deriving it from pdf.y after
-  // the previous cell's own .text() call already advanced it. Price/Total
-  // get a wider column than Days/Qty/Unit — a 4-digit amount like
+  // Items table — all header cells share one explicit y so they can never
+  // drift apart, instead of each one re-deriving it from pdf.y after the
+  // previous cell's own .text() call already advanced it. Price/Total get a
+  // wider column than the format's own columns — a 4-digit amount like
   // "JOD 1,000.00" doesn't fit in a narrow column and runs into its
-  // neighbor otherwise.
-  const colX = { desc: 40, days: 260, qty: 290, unit: 320, price: 365, total: 465 };
+  // neighbor otherwise. Which columns appear (Days/Qty/Unit/Price for an
+  // event, or Language Pair/Word Count/Rate for a translation, etc.) comes
+  // from the document's item_format — see lib/itemFormats.js.
+  const format = doc.item_format || 'event';
+  const colX = EN_LAYOUT[format] || EN_LAYOUT.event;
+  const cols = columnsFor(format, 'en');
+  const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
   const tableHeaderY = pdf.y;
   pdf.fillColor(BRAND.navy).fontSize(10).font('Helvetica-Bold');
   pdf.text('Description', colX.desc, tableHeaderY);
-  pdf.text('Days', colX.days, tableHeaderY);
-  pdf.text('Qty', colX.qty, tableHeaderY);
-  pdf.text('Unit', colX.unit, tableHeaderY);
-  pdf.text('Price', colX.price, tableHeaderY);
+  for (const { key, label } of cols) pdf.text(label, colX[key], tableHeaderY);
   pdf.text('Total', colX.total, tableHeaderY);
   pdf.y = tableHeaderY + pdf.currentLineHeight();
   pdf.moveDown(0.5);
@@ -124,12 +143,13 @@ function renderDocumentPdf(doc, items, res) {
   pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10.5);
   for (const it of items) {
     const y = pdf.y;
-    pdf.text(it.description, colX.desc, y, { width: 210 });
+    pdf.text(it.description, colX.desc, y, { width: colX.descW });
     const afterDescY = pdf.y;
-    pdf.text(String(it.days), colX.days, y);
-    pdf.text(String(it.qty), colX.qty, y);
-    pdf.text(it.unit, colX.unit, y);
-    pdf.text(fmtMoney(it.unit_price, doc.currency), colX.price, y);
+    for (const { key } of cols) {
+      const field = fieldFor(key);
+      const value = field === 'unit_price' ? fmtMoney(it.unit_price, doc.currency) : String(it[field]);
+      pdf.text(value, colX[key], y);
+    }
     pdf.text(fmtMoney(it.line_total, doc.currency), colX.total, y);
     pdf.y = Math.max(afterDescY, y + 15);
   }
@@ -329,16 +349,15 @@ function renderDocumentPdfAr(doc, items, res) {
   // Price get wider columns than Unit/Qty/Days — a 4-digit amount wraps
   // onto a second line in a too-narrow column and throws the row out of
   // alignment with its neighbors otherwise.
-  const colX = { total: 40, price: 130, unit: 215, qty: 265, days: 305, desc: 345 };
-  const colW = { total: 85, price: 80, unit: 45, qty: 35, days: 35, desc: 210 };
+  const format = doc.item_format || 'event';
+  const colX = AR_LAYOUT[format] || AR_LAYOUT.event;
+  const cols = columnsFor(format, 'ar');
+  const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
   pdf.fillColor(BRAND.navy).fontSize(10);
   const headerY = pdf.y;
-  drawBidiLine(pdf, L.col.total, colX.total, headerY, colW.total);
-  drawBidiLine(pdf, L.col.unitPrice, colX.price, headerY, colW.price);
-  drawBidiLine(pdf, L.col.unit, colX.unit, headerY, colW.unit);
-  drawBidiLine(pdf, L.col.qty, colX.qty, headerY, colW.qty);
-  drawBidiLine(pdf, L.col.days, colX.days, headerY, colW.days);
-  drawBidiLine(pdf, L.col.item, colX.desc, headerY, colW.desc);
+  drawBidiLine(pdf, L.col.total, colX.total, headerY, colX.totalW);
+  for (const { key, label } of cols) drawBidiLine(pdf, label, colX[key], headerY, colX[`${key}W`]);
+  drawBidiLine(pdf, L.col.item, colX.desc, headerY, colX.descW);
   pdf.y = headerY + 14;
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.charcoal).lineWidth(0.5).stroke();
   pdf.moveDown(0.3);
@@ -346,12 +365,13 @@ function renderDocumentPdfAr(doc, items, res) {
   pdf.fillColor(BRAND.charcoal).fontSize(10.5);
   for (const it of items) {
     const y = pdf.y;
-    drawBidiLine(pdf, fmtMoney(it.line_total, doc.currency), colX.total, y, colW.total);
-    drawBidiLine(pdf, fmtMoney(it.unit_price, doc.currency), colX.price, y, colW.price);
-    drawBidiLine(pdf, it.unit, colX.unit, y, colW.unit);
-    drawBidiLine(pdf, String(it.qty), colX.qty, y, colW.qty);
-    drawBidiLine(pdf, String(it.days), colX.days, y, colW.days);
-    drawBidiLine(pdf, it.description, colX.desc, y, colW.desc);
+    drawBidiLine(pdf, fmtMoney(it.line_total, doc.currency), colX.total, y, colX.totalW);
+    for (const { key } of cols) {
+      const field = fieldFor(key);
+      const value = field === 'unit_price' ? fmtMoney(it.unit_price, doc.currency) : String(it[field]);
+      drawBidiLine(pdf, value, colX[key], y, colX[`${key}W`]);
+    }
+    drawBidiLine(pdf, it.description, colX.desc, y, colX.descW);
     pdf.y = Math.max(pdf.y, y + 15);
   }
 

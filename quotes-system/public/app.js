@@ -15,6 +15,41 @@ function money(n, currency) {
   return `${currency} ${Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 }
 
+// Line-item table layouts (2026-11-18) — which columns show for a document
+// depends on its item_format. All three reuse the same underlying
+// days/qty/unit/unit_price fields and the same line_total = days × qty ×
+// unit_price formula (see lineTotal() below and lib/calc.js server-side);
+// only the labels/visible columns change. "days" stays fixed at 1 and
+// hidden for any format that doesn't use it, so the math never changes.
+// Mirrors quotes-system/lib/itemFormats.js — keep both in sync.
+const FORMAT_COLUMNS = {
+  event: [
+    { field: 'days', label: 'Days', type: 'number', step: '0.5' },
+    { field: 'qty', label: 'Qty', type: 'number', step: '1' },
+    { field: 'unit', label: 'Unit', type: 'text' },
+    { field: 'unit_price', label: 'Unit Price', type: 'number', step: '0.01' },
+  ],
+  translation: [
+    { field: 'unit', label: 'Language Pair', type: 'text', placeholder: 'e.g. Arabic → English' },
+    { field: 'qty', label: 'Word Count', type: 'number', step: '1' },
+    { field: 'unit_price', label: 'Rate / Word', type: 'number', step: '0.001' },
+  ],
+  hourly: [
+    { field: 'qty', label: 'Hours', type: 'number', step: '0.25' },
+    { field: 'unit_price', label: 'Hourly Rate', type: 'number', step: '0.01' },
+  ],
+};
+const FORMAT_LABELS = { event: 'Event / Interpretation', translation: 'Translation & Similar', hourly: 'Hourly' };
+
+function currentFormat() {
+  const el = document.getElementById('f-item-format');
+  return (el && el.value) || 'event';
+}
+
+function defaultItem(format) {
+  return { description: '', days: 1, qty: 1, unit: format === 'event' ? 'Each' : '', unit_price: 0 };
+}
+
 function statusBadge(status) {
   const label = status.replace('_', ' ');
   return `<span class="status status-${status}">${label}</span>`;
@@ -118,7 +153,7 @@ async function renderList(kind) {
 
 window.newDoc = (kind) => {
   state.view = 'edit';
-  state.currentDoc = { kind, items: [{ description: '', days: 1, qty: 1, unit: 'Each', unit_price: 0 }] };
+  state.currentDoc = { kind, item_format: 'event', items: [defaultItem('event')] };
   renderTab();
 };
 
@@ -179,11 +214,16 @@ function renderEditor(kind, doc) {
     </div>
 
     <div class="card">
-      <div class="grid grid-3">
+      <div class="grid grid-4">
         <div class="field"><label>Document Language</label>
           <select id="f-language" ${!editable ? 'disabled' : ''}>
             <option value="en" ${(doc.language || 'en') === 'en' ? 'selected' : ''}>English</option>
             <option value="ar" ${doc.language === 'ar' ? 'selected' : ''}>العربية (Arabic)</option>
+          </select>
+        </div>
+        <div class="field"><label>Format</label>
+          <select id="f-item-format" ${!editable ? 'disabled' : ''}>
+            ${Object.keys(FORMAT_COLUMNS).map(f => `<option value="${f}" ${(doc.item_format || 'event') === f ? 'selected' : ''}>${FORMAT_LABELS[f]}</option>`).join('')}
           </select>
         </div>
         <div class="field"><label>Currency</label>
@@ -210,7 +250,7 @@ function renderEditor(kind, doc) {
       </div>
 
       <table id="items-table">
-        <thead><tr><th>Description</th><th style="width:70px;">Days</th><th style="width:70px;">Qty</th><th style="width:90px;">Unit</th><th style="width:100px;">Unit Price</th><th style="width:100px;">Total</th><th></th></tr></thead>
+        <thead id="items-head"></thead>
         <tbody id="items-body"></tbody>
       </table>
       ${editable ? `<button class="plain" id="add-row-btn" type="button" style="margin-top:8px;">+ Add line</button>` : ''}
@@ -228,13 +268,26 @@ function renderEditor(kind, doc) {
     <div class="card" id="actions-card"></div>
   `;
 
-  window.__items = (doc.items && doc.items.length ? doc.items : [{ description: '', days: 1, qty: 1, unit: 'Each', unit_price: 0 }]).map(i => ({ ...i }));
+  window.__items = (doc.items && doc.items.length ? doc.items : [defaultItem(doc.item_format || 'event')]).map(i => ({ ...i }));
+  renderItemsHead();
   renderItemsBody(editable);
   recalcTotals();
 
   if (editable) document.getElementById('add-row-btn').addEventListener('click', () => {
-    window.__items.push({ description: '', days: 1, qty: 1, unit: 'Each', unit_price: 0 });
+    window.__items.push(defaultItem(currentFormat()));
     renderItemsBody(true);
+  });
+
+  const formatEl = document.getElementById('f-item-format');
+  if (formatEl) formatEl.addEventListener('change', () => {
+    const fmt = formatEl.value;
+    // "days" is hidden for non-event formats — force it to 1 so the
+    // line_total = days × qty × unit_price formula never silently changes
+    // when the column just isn't shown anymore.
+    if (fmt !== 'event') window.__items.forEach((it) => { it.days = 1; });
+    renderItemsHead();
+    renderItemsBody(editable);
+    recalcTotals();
   });
 
   const poScanBtn = document.getElementById('po-scan-btn');
@@ -259,19 +312,24 @@ function currentLanguage() {
   return el ? el.value : 'en';
 }
 
+function renderItemsHead() {
+  const head = document.getElementById('items-head');
+  if (!head) return;
+  const cols = FORMAT_COLUMNS[currentFormat()] || FORMAT_COLUMNS.event;
+  head.innerHTML = `<tr><th>Description</th>${cols.map(c => `<th style="width:${c.field === 'unit' ? 90 : 90}px;">${c.label}</th>`).join('')}<th style="width:100px;">Total</th><th></th></tr>`;
+}
+
 function renderItemsBody(editable) {
   const body = document.getElementById('items-body');
   const rtl = currentLanguage() === 'ar';
+  const cols = FORMAT_COLUMNS[currentFormat()] || FORMAT_COLUMNS.event;
   body.innerHTML = window.__items.map((it, idx) => `
     <tr>
       <td class="autocomplete">
         <input data-idx="${idx}" class="item-desc" value="${it.description || ''}" ${!editable ? 'disabled' : ''} autocomplete="off" ${rtl ? 'dir="rtl" style="text-align:right;"' : ''}>
         <div class="options" id="opts-${idx}" hidden></div>
       </td>
-      <td><input type="number" step="0.5" data-idx="${idx}" class="item-days" value="${it.days ?? 1}" ${!editable ? 'disabled' : ''}></td>
-      <td><input type="number" step="1" data-idx="${idx}" class="item-qty" value="${it.qty ?? 1}" ${!editable ? 'disabled' : ''}></td>
-      <td><input data-idx="${idx}" class="item-unit" value="${it.unit || 'Each'}" ${!editable ? 'disabled' : ''}></td>
-      <td><input type="number" step="0.01" data-idx="${idx}" class="item-price" value="${it.unit_price ?? 0}" ${!editable ? 'disabled' : ''}></td>
+      ${cols.map(c => `<td><input type="${c.type}" ${c.step ? `step="${c.step}"` : ''} data-idx="${idx}" data-field="${c.field}" class="item-field" placeholder="${c.placeholder || ''}" value="${it[c.field] ?? (c.type === 'number' ? 0 : '')}" ${!editable ? 'disabled' : ''}></td>`).join('')}
       <td class="row-total">${money(lineTotal(it), '')}</td>
       <td>${editable ? `<button class="plain" onclick="removeRow(${idx})" type="button">✕</button>` : ''}</td>
     </tr>
@@ -282,7 +340,7 @@ function renderItemsBody(editable) {
       inp.addEventListener('input', onDescInput);
       inp.addEventListener('blur', () => setTimeout(() => hideOptions(inp.dataset.idx), 150));
     });
-    body.querySelectorAll('.item-days, .item-qty, .item-unit, .item-price').forEach(inp => {
+    body.querySelectorAll('.item-field').forEach(inp => {
       inp.addEventListener('input', onFieldChange);
     });
   }
@@ -294,11 +352,9 @@ function lineTotal(it) {
 
 function onFieldChange(e) {
   const idx = Number(e.target.dataset.idx);
+  const field = e.target.dataset.field;
   const it = window.__items[idx];
-  if (e.target.classList.contains('item-days')) it.days = Number(e.target.value);
-  if (e.target.classList.contains('item-qty')) it.qty = Number(e.target.value);
-  if (e.target.classList.contains('item-unit')) it.unit = e.target.value;
-  if (e.target.classList.contains('item-price')) it.unit_price = Number(e.target.value);
+  it[field] = e.target.type === 'number' ? Number(e.target.value) : e.target.value;
   const row = e.target.closest('tr');
   row.querySelector('.row-total').textContent = money(lineTotal(it), '');
   recalcTotals();
@@ -376,7 +432,7 @@ function hideClientOptions() {
 
 window.removeRow = (idx) => {
   window.__items.splice(idx, 1);
-  if (!window.__items.length) window.__items.push({ description: '', days: 1, qty: 1, unit: 'Each', unit_price: 0 });
+  if (!window.__items.length) window.__items.push(defaultItem(currentFormat()));
   renderItemsBody(true);
   recalcTotals();
 };
@@ -393,6 +449,7 @@ function currentFormValues() {
     valid_until: val('f-valid-until') || null,
     service_dates: val('f-service-dates') || null,
     currency: val('f-currency'),
+    item_format: val('f-item-format'),
     tax_type: val('f-tax'),
     discount_type: val('f-discount-type'),
     discount_value: Number(val('f-discount-value') || 0),
