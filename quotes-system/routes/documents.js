@@ -80,7 +80,7 @@ router.get('/:id', requireLogin, (req, res) => {
 
 function buildDocFromInput(kind, body, createdBy) {
   const items = Array.isArray(body.items) ? body.items : [];
-  const totals = calcTotals({ items, discountType: body.discount_type, discountValue: body.discount_value, taxType: body.tax_type });
+  const totals = calcTotals({ items, discountType: body.discount_type, discountValue: body.discount_value, taxType: body.tax_type, currency: body.currency || 'JOD' });
   const number = body.number || nextNumber(kind);
 
   return {
@@ -182,7 +182,7 @@ router.put('/:id', requireLogin, (req, res) => {
   if (doc.status !== 'draft') return res.status(400).json({ error: 'Only draft documents can be edited directly — use Amend for a sent document.' });
 
   const items = Array.isArray(req.body.items) ? req.body.items : getItems(doc.id);
-  const totals = calcTotals({ items, discountType: req.body.discount_type ?? doc.discount_type, discountValue: req.body.discount_value ?? doc.discount_value, taxType: req.body.tax_type ?? doc.tax_type });
+  const totals = calcTotals({ items, discountType: req.body.discount_type ?? doc.discount_type, discountValue: req.body.discount_value ?? doc.discount_value, taxType: req.body.tax_type ?? doc.tax_type, currency: req.body.currency ?? doc.currency });
 
   db.prepare(`UPDATE documents SET
     client_name=@client_name, contact_person=@contact_person, project_title=@project_title, venue=@venue,

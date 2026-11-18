@@ -11,8 +11,11 @@ async function api(path, opts = {}) {
   return data;
 }
 
+// JOD is conventionally quoted to 3 decimals (fils); other currencies to 2.
+// Keep in sync with lib/calc.js's decimalsFor().
 function money(n, currency) {
-  return `${currency} ${Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  const decimals = currency === 'JOD' ? 3 : 2;
+  return `${currency} ${Number(n).toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 }
 
 // Line-item table layouts (2026-11-18) — which columns show for a document

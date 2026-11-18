@@ -47,11 +47,28 @@ function buildInvoiceXml(doc, items) {
   const taxed = doc.tax_type === '16';
   const taxCategoryId = TAX_CATEGORY_BY_TYPE[doc.tax_type] || 'O';
   const cur = doc.currency;
+  // JOD is quoted to 3 decimals (fils) by convention; other currencies to 2.
+  // ISTD's own tax-calculation check recomputes tax from LineExtensionAmount
+  // and rejects the invoice if our declared amount is off by more than a
+  // fils or two — a 2-decimal-rounded tax on a large-quantity/small-price
+  // line (e.g. per-word translation pricing) can drift that far. Keep in
+  // sync with lib/calc.js's decimalsFor().
+  const decimals = cur === 'JOD' ? 3 : 2;
+  const fmt = (n) => Number(n).toFixed(decimals);
 
+  // Recompute every amount fresh from the line items at full precision,
+  // rather than trusting the document's stored (possibly 2-decimal-rounded)
+  // totals — so the declared figures are internally consistent with each
+  // other and with what ISTD recomputes on its end, independent of how the
+  // document was originally saved.
+  let subtotalSum = 0;
+  let taxSum = 0;
   const lines = items.map((it, idx) => {
     const lineExtension = Number(it.line_total) || 0;
     const taxAmount = taxed ? lineExtension * (VAT_RATE / 100) : 0;
     const roundingAmount = lineExtension + taxAmount;
+    subtotalSum += lineExtension;
+    taxSum += taxAmount;
     // ISTD independently recomputes LineExtensionAmount as
     // InvoicedQuantity × PriceAmount and rejects the invoice if it
     // doesn't match ("Total amount excluding taxes is incorrect" / "Error
@@ -64,12 +81,12 @@ function buildInvoiceXml(doc, items) {
   <cac:InvoiceLine>
     <cbc:ID>${idx + 1}</cbc:ID>
     <cbc:InvoicedQuantity unitCode="PCE">${jofotaraQty.toFixed(2)}</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="${cur}">${lineExtension.toFixed(2)}</cbc:LineExtensionAmount>
+    <cbc:LineExtensionAmount currencyID="${cur}">${fmt(lineExtension)}</cbc:LineExtensionAmount>
     <cac:TaxTotal>
-      <cbc:TaxAmount currencyID="${cur}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
-      <cbc:RoundingAmount currencyID="${cur}">${roundingAmount.toFixed(2)}</cbc:RoundingAmount>
+      <cbc:TaxAmount currencyID="${cur}">${fmt(taxAmount)}</cbc:TaxAmount>
+      <cbc:RoundingAmount currencyID="${cur}">${fmt(roundingAmount)}</cbc:RoundingAmount>
       <cac:TaxSubtotal>
-        <cbc:TaxAmount currencyID="${cur}">${taxAmount.toFixed(2)}</cbc:TaxAmount>
+        <cbc:TaxAmount currencyID="${cur}">${fmt(taxAmount)}</cbc:TaxAmount>
         <cac:TaxCategory>
           <cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5305">${taxCategoryId}</cbc:ID>
           <cbc:Percent>${(taxed ? VAT_RATE : 0).toFixed(2)}</cbc:Percent>
@@ -81,15 +98,22 @@ function buildInvoiceXml(doc, items) {
       <cbc:Name>${xmlEscape(it.description)}</cbc:Name>
     </cac:Item>
     <cac:Price>
-      <cbc:PriceAmount currencyID="${cur}">${Number(it.unit_price).toFixed(2)}</cbc:PriceAmount>
+      <cbc:PriceAmount currencyID="${cur}">${fmt(it.unit_price)}</cbc:PriceAmount>
       <cac:AllowanceCharge>
         <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
         <cbc:AllowanceChargeReason>DISCOUNT</cbc:AllowanceChargeReason>
-        <cbc:Amount currencyID="${cur}">0.00</cbc:Amount>
+        <cbc:Amount currencyID="${cur}">${fmt(0)}</cbc:Amount>
       </cac:AllowanceCharge>
     </cac:Price>
   </cac:InvoiceLine>`;
   }).join('');
+
+  // Discount is still applied at the document level only (no per-line
+  // distribution yet — see the known gap noted in routes/documents.js),
+  // so pull it from the stored total but round it to the same precision.
+  const discountAmount = Number(doc.discount_amount || 0);
+  const taxExclusive = subtotalSum - discountAmount;
+  const taxInclusive = taxExclusive + taxSum;
 
   // JoFotara's own invoice counter — see the comment on submitInvoice's
   // caller; we reuse the document's own (monotonic, unique) row id since
@@ -138,16 +162,16 @@ function buildInvoiceXml(doc, items) {
   <cac:AllowanceCharge>
     <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
     <cbc:AllowanceChargeReason>discount</cbc:AllowanceChargeReason>
-    <cbc:Amount currencyID="${cur}">${Number(doc.discount_amount || 0).toFixed(2)}</cbc:Amount>
+    <cbc:Amount currencyID="${cur}">${fmt(discountAmount)}</cbc:Amount>
   </cac:AllowanceCharge>
   <cac:TaxTotal>
-    <cbc:TaxAmount currencyID="${cur}">${Number(doc.tax_amount).toFixed(2)}</cbc:TaxAmount>
+    <cbc:TaxAmount currencyID="${cur}">${fmt(taxSum)}</cbc:TaxAmount>
   </cac:TaxTotal>
   <cac:LegalMonetaryTotal>
-    <cbc:TaxExclusiveAmount currencyID="${cur}">${Number(doc.subtotal).toFixed(2)}</cbc:TaxExclusiveAmount>
-    <cbc:TaxInclusiveAmount currencyID="${cur}">${Number(doc.grand_total).toFixed(2)}</cbc:TaxInclusiveAmount>
-    <cbc:AllowanceTotalAmount currencyID="${cur}">${Number(doc.discount_amount || 0).toFixed(2)}</cbc:AllowanceTotalAmount>
-    <cbc:PayableAmount currencyID="${cur}">${Number(doc.grand_total).toFixed(2)}</cbc:PayableAmount>
+    <cbc:TaxExclusiveAmount currencyID="${cur}">${fmt(taxExclusive)}</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="${cur}">${fmt(taxInclusive)}</cbc:TaxInclusiveAmount>
+    <cbc:AllowanceTotalAmount currencyID="${cur}">${fmt(discountAmount)}</cbc:AllowanceTotalAmount>
+    <cbc:PayableAmount currencyID="${cur}">${fmt(taxInclusive)}</cbc:PayableAmount>
   </cac:LegalMonetaryTotal>${lines}
 </Invoice>`;
 }

@@ -19,8 +19,11 @@ const IVORY = 'F8F5F0';
 
 const LOGO_PATH = path.join(__dirname, '..', '..', 'marketing', 'brand', 'logos', 'logo-navy-gold-light-bg.png');
 
+// JOD is conventionally quoted to 3 decimals (fils); other currencies to 2.
+// Keep in sync with lib/calc.js's decimalsFor().
 function fmtMoney(n, currency) {
-  return `${currency} ${Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  const decimals = currency === 'JOD' ? 3 : 2;
+  return `${currency} ${Number(n).toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 }
 
 // `rtl` marks the paragraph bidirectional so Word applies its own (correct)
