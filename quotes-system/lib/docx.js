@@ -155,6 +155,20 @@ async function buildDocumentDocx(doc, items) {
   if (doc.notes) {
     children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: doc.notes, size: 22, color: CHARCOAL, rightToLeft: rtl })], alignment: align, bidirectional: rtl }));
   }
+
+  // Standard cancellation policy — event/interpretation quotes only, shown
+  // automatically rather than requiring it be typed into Notes each time.
+  if (doc.kind === 'quote' && itemFormat === 'event') {
+    children.push(
+      new Paragraph({ text: '' }),
+      new Paragraph({ children: [new TextRun({ text: L.cancellationHeading, bold: true, size: 24, color: NAVY, rightToLeft: rtl })], alignment: align, bidirectional: rtl }),
+      ...L.cancellationLines.map((line) => new Paragraph({
+        children: [new TextRun({ text: `•  ${line}`, size: 20, color: CHARCOAL, rightToLeft: rtl })],
+        alignment: align,
+        bidirectional: rtl,
+      })),
+    );
+  }
   // Tagline stays in English exactly as locked in the brand guide, regardless of document language.
   children.push(new Paragraph({ text: '' }), new Paragraph({ children: [new TextRun({ text: 'COMMUNICATION BEYOND LANGUAGE.', bold: true, size: 20, color: GOLD })] }));
   // Master template's footer line.

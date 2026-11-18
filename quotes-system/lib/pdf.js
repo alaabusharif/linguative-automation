@@ -174,6 +174,18 @@ function renderDocumentPdf(doc, items, res) {
     pdf.moveDown(2).font('Helvetica').fontSize(10.5).fillColor(BRAND.charcoal).text(doc.notes, 40, pdf.y, { width: 515 });
   }
 
+  // Standard cancellation policy — event/interpretation quotes only, shown
+  // automatically rather than requiring it be typed into Notes each time.
+  if (doc.kind === 'quote' && format === 'event') {
+    const L = labelsFor('en');
+    pdf.moveDown(1.5).font('Helvetica-Bold').fontSize(11).fillColor(BRAND.navy).text(L.cancellationHeading, 40, pdf.y, { width: 515 });
+    pdf.moveDown(0.3).font('Helvetica').fontSize(9.5).fillColor(BRAND.charcoal);
+    for (const line of L.cancellationLines) {
+      pdf.text(`•  ${line}`, 40, pdf.y, { width: 515 });
+      pdf.moveDown(0.15);
+    }
+  }
+
   // Payment Details — invoices only, and only once the server's .env has
   // a bank account saved for that currency in the Settings screen (see lib/settings.js).
   if (doc.kind === 'invoice') {
@@ -399,6 +411,18 @@ function renderDocumentPdfAr(doc, items, res) {
       drawBidiLine(pdf, line, LEFT, pdf.y, FULL);
       pdf.moveDown(0.5);
     });
+  }
+
+  // Standard cancellation policy — event/interpretation quotes only, shown
+  // automatically rather than requiring it be typed into Notes each time.
+  if (doc.kind === 'quote' && format === 'event') {
+    pdf.moveDown(1.5).fillColor(BRAND.navy).fontSize(11);
+    drawBidiLine(pdf, L.cancellationHeading, LEFT, pdf.y, FULL);
+    pdf.moveDown(1).fillColor(BRAND.charcoal).fontSize(9.5);
+    for (const line of L.cancellationLines) {
+      drawBidiLine(pdf, `•  ${line}`, LEFT, pdf.y, FULL);
+      pdf.moveDown(1);
+    }
   }
 
   // Payment Details — invoices only, and only once the server's .env has

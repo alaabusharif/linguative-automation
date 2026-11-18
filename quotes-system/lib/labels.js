@@ -37,6 +37,15 @@ const EN = {
   taxExempt: 'Exempt',
   notFilled: 'N/A',
   months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  cancellationHeading: 'CANCELLATION POLICY',
+  cancellationLines: [
+    'More than 72 hours (3 working days) before the event: no charge.',
+    '24 to 72 hours before the event: 50% of quoted fees.',
+    'Less than 24 hours’ notice, or no-show: 100% of quoted fees.',
+    'Costs already incurred for equipment, transport or setup are billed at cost regardless of when cancelled.',
+    'Rescheduling with at least 48 hours’ notice is free of charge, subject to interpreter availability.',
+    'All cancellations must be submitted in writing by email.',
+  ],
 };
 
 const AR = {
@@ -76,6 +85,15 @@ const AR = {
   // Standard international Arabic month names (not the Levantine Aramaic-origin
   // set), matching the formal/official register Linguative's clients expect.
   months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+  cancellationHeading: 'سياسة الإلغاء',
+  cancellationLines: [
+    'الإلغاء قبل الفعالية بأكثر من 72 ساعة (3 أيام عمل): دون أي رسوم.',
+    'الإلغاء قبل الفعالية بـ 24 إلى 72 ساعة: تُستحق 50% من الرسوم المتفق عليها.',
+    'الإلغاء بإشعار أقل من 24 ساعة، أو عدم الحضور: تُستحق 100% من الرسوم المتفق عليها.',
+    'التكاليف المتحملة فعليًا للمعدات أو النقل أو التجهيز تُحتسب بالكامل بغض النظر عن وقت الإلغاء.',
+    'يمكن تأجيل الموعد دون أي رسوم بإشعار مسبق لا يقل عن 48 ساعة، وذلك حسب توافر المترجمين.',
+    'يجب تقديم أي طلب إلغاء كتابيًا عبر البريد الإلكتروني.',
+  ],
 };
 
 function labelsFor(language) {
