@@ -30,7 +30,7 @@ const FORMAT_COLUMNS = {
     { field: 'days', label: 'Days', type: 'number', step: '0.5' },
     { field: 'qty', label: 'Qty', type: 'number', step: '1' },
     { field: 'unit', label: 'Unit', type: 'text' },
-    { field: 'unit_price', label: 'Unit Price', type: 'number', step: '0.01' },
+    { field: 'unit_price', label: 'Price', type: 'number', step: '0.01' },
   ],
   translation: [
     { field: 'unit', label: 'Language Pair', type: 'text', placeholder: 'e.g. Arabic → English' },
@@ -43,6 +43,36 @@ const FORMAT_COLUMNS = {
   ],
 };
 const FORMAT_LABELS = { event: 'Event / Interpretation', translation: 'Translation & Similar', hourly: 'Hourly' };
+
+// Per-document column customization (2026-11-18) — lets a user show/hide
+// and relabel these 4 underlying fields instead of being stuck with one of
+// the 3 fixed Format presets above. `key` here is the camelCase field name
+// column_config/lib/itemFormats.js use server-side; `dataField` is the
+// actual document_items column it reads/writes.
+const ALL_FIELDS = ['days', 'qty', 'unit', 'unitPrice'];
+const FIELD_META = {
+  days: { dataField: 'days', type: 'number', step: '0.5' },
+  qty: { dataField: 'qty', type: 'number', step: '1' },
+  unit: { dataField: 'unit', type: 'text' },
+  unitPrice: { dataField: 'unit_price', type: 'number', step: '0.01' },
+};
+
+// The current format's preset, translated into the same { key, label } shape
+// column_config uses, so presetColumns() and a customized window.__columnConfig
+// can be handled identically everywhere else.
+function presetColumns(format) {
+  return (FORMAT_COLUMNS[format] || FORMAT_COLUMNS.event).map((c) => ({
+    key: c.field === 'unit_price' ? 'unitPrice' : c.field,
+    label: c.label,
+  }));
+}
+
+// The columns actually shown right now: the user's customization if one is
+// set, otherwise the current format's own preset.
+function currentColumns() {
+  if (Array.isArray(window.__columnConfig) && window.__columnConfig.length) return window.__columnConfig;
+  return presetColumns(currentFormat());
+}
 
 function currentFormat() {
   const el = document.getElementById('f-item-format');
@@ -208,6 +238,12 @@ function renderEditor(kind, doc) {
         </div>
         <div class="field"><label>Service Dates</label><input id="f-service-dates" placeholder="e.g. 12-13 Nov 2026" value="${doc.service_dates || ''}" ${!editable ? 'disabled' : ''}></div>
         ${!isInvoice ? `<div class="field"><label>Valid Until</label><input id="f-valid-until" type="date" value="${doc.valid_until ? doc.valid_until.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>` : `<div class="field"><label>Due Date</label><input id="f-due" type="date" value="${doc.due_date ? doc.due_date.slice(0,10) : ''}" ${!editable ? 'disabled' : ''}></div>`}
+        ${isInvoice ? `<div class="field"><label>Invoice Type</label>
+          <select id="f-payment-type" ${!editable ? 'disabled' : ''}>
+            <option value="payable" ${(doc.payment_type || 'payable') === 'payable' ? 'selected' : ''}>Payable (credit/on account)</option>
+            <option value="cash" ${doc.payment_type === 'cash' ? 'selected' : ''}>Cash</option>
+          </select>
+        </div>` : ''}
       </div>
       ${editable ? `<button class="plain" id="po-scan-btn" type="button">📷 Scan PO (OCR)</button><div id="po-scan-result"></div>` : ''}
       <div id="po-file-box" style="margin-top:10px;">
@@ -252,6 +288,8 @@ function renderEditor(kind, doc) {
         </div>
       </div>
 
+      ${editable ? `<div class="field" style="margin-bottom:8px;"><button class="plain" id="toggle-columns-btn" type="button">⚙ Customize columns</button><div id="columns-customizer" hidden></div></div>` : ''}
+
       <table id="items-table">
         <thead id="items-head"></thead>
         <tbody id="items-body"></tbody>
@@ -272,13 +310,21 @@ function renderEditor(kind, doc) {
   `;
 
   window.__items = (doc.items && doc.items.length ? doc.items : [defaultItem(doc.item_format || 'event')]).map(i => ({ ...i }));
+  window.__columnConfig = doc.column_config ? JSON.parse(doc.column_config) : null;
   renderItemsHead();
   renderItemsBody(editable);
+  renderColumnsCustomizer();
   recalcTotals();
 
   if (editable) document.getElementById('add-row-btn').addEventListener('click', () => {
     window.__items.push(defaultItem(currentFormat()));
     renderItemsBody(true);
+  });
+
+  const toggleColumnsBtn = document.getElementById('toggle-columns-btn');
+  if (toggleColumnsBtn) toggleColumnsBtn.addEventListener('click', () => {
+    const panel = document.getElementById('columns-customizer');
+    panel.hidden = !panel.hidden;
   });
 
   const formatEl = document.getElementById('f-item-format');
@@ -288,8 +334,12 @@ function renderEditor(kind, doc) {
     // line_total = days × qty × unit_price formula never silently changes
     // when the column just isn't shown anymore.
     if (fmt !== 'event') window.__items.forEach((it) => { it.days = 1; });
+    // Switching format starts fresh from that format's own preset rather
+    // than carrying over a customization that may no longer make sense.
+    window.__columnConfig = null;
     renderItemsHead();
     renderItemsBody(editable);
+    renderColumnsCustomizer();
     recalcTotals();
   });
 
@@ -318,21 +368,24 @@ function currentLanguage() {
 function renderItemsHead() {
   const head = document.getElementById('items-head');
   if (!head) return;
-  const cols = FORMAT_COLUMNS[currentFormat()] || FORMAT_COLUMNS.event;
-  head.innerHTML = `<tr><th>Description</th>${cols.map(c => `<th style="width:${c.field === 'unit' ? 90 : 90}px;">${c.label}</th>`).join('')}<th style="width:100px;">Total</th><th></th></tr>`;
+  const cols = currentColumns();
+  head.innerHTML = `<tr><th>Description</th>${cols.map(c => `<th style="width:90px;">${c.label}</th>`).join('')}<th style="width:100px;">Total</th><th></th></tr>`;
 }
 
 function renderItemsBody(editable) {
   const body = document.getElementById('items-body');
   const rtl = currentLanguage() === 'ar';
-  const cols = FORMAT_COLUMNS[currentFormat()] || FORMAT_COLUMNS.event;
+  const cols = currentColumns();
   body.innerHTML = window.__items.map((it, idx) => `
     <tr>
       <td class="autocomplete">
         <input data-idx="${idx}" class="item-desc" value="${it.description || ''}" ${!editable ? 'disabled' : ''} autocomplete="off" ${rtl ? 'dir="rtl" style="text-align:right;"' : ''}>
         <div class="options" id="opts-${idx}" hidden></div>
       </td>
-      ${cols.map(c => `<td><input type="${c.type}" ${c.step ? `step="${c.step}"` : ''} data-idx="${idx}" data-field="${c.field}" class="item-field" placeholder="${c.placeholder || ''}" value="${it[c.field] ?? (c.type === 'number' ? 0 : '')}" ${!editable ? 'disabled' : ''}></td>`).join('')}
+      ${cols.map(c => {
+        const meta = FIELD_META[c.key] || FIELD_META.unit;
+        return `<td><input type="${meta.type}" ${meta.step ? `step="${meta.step}"` : ''} data-idx="${idx}" data-field="${meta.dataField}" class="item-field" value="${it[meta.dataField] ?? (meta.type === 'number' ? 0 : '')}" ${!editable ? 'disabled' : ''}></td>`;
+      }).join('')}
       <td class="row-total">${money(lineTotal(it), '')}</td>
       <td>${editable ? `<button class="plain" onclick="removeRow(${idx})" type="button">✕</button>` : ''}</td>
     </tr>
@@ -347,6 +400,58 @@ function renderItemsBody(editable) {
       inp.addEventListener('input', onFieldChange);
     });
   }
+}
+
+// Panel letting the user show/hide and relabel the 4 underlying fields
+// instead of being stuck with the current Format's own preset (2026-11-18).
+function renderColumnsCustomizer() {
+  const panel = document.getElementById('columns-customizer');
+  if (!panel) return;
+  const active = currentColumns();
+  const defaults = presetColumns(currentFormat());
+  panel.innerHTML = `
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; padding:8px; background:#F8F5F0; border-radius:6px;">
+      ${ALL_FIELDS.map((key) => {
+        const shown = active.find((c) => c.key === key);
+        const defaultLabel = (defaults.find((c) => c.key === key) || {}).label || key;
+        return `
+          <label style="display:flex; align-items:center; gap:4px; font-size:13px;">
+            <input type="checkbox" class="col-toggle" data-key="${key}" ${shown ? 'checked' : ''}>
+            <input type="text" class="col-label" data-key="${key}" value="${(shown && shown.label) || defaultLabel}" style="width:110px;" ${shown ? '' : 'disabled'}>
+          </label>`;
+      }).join('')}
+    </div>`;
+
+  panel.querySelectorAll('.col-toggle').forEach((cb) => cb.addEventListener('change', onColumnToggle));
+  panel.querySelectorAll('.col-label').forEach((inp) => inp.addEventListener('input', onColumnLabelChange));
+}
+
+// Rebuilds window.__columnConfig from the panel's current checkbox/label
+// state, in the fixed ALL_FIELDS order, whenever either changes.
+function syncColumnConfigFromPanel() {
+  const panel = document.getElementById('columns-customizer');
+  const cols = ALL_FIELDS
+    .map((key) => {
+      const cb = panel.querySelector(`.col-toggle[data-key="${key}"]`);
+      const label = panel.querySelector(`.col-label[data-key="${key}"]`);
+      return cb && cb.checked ? { key, label: (label.value || key).trim() } : null;
+    })
+    .filter(Boolean);
+  window.__columnConfig = cols;
+}
+
+function onColumnToggle(e) {
+  const labelInput = e.target.closest('label').querySelector('.col-label');
+  labelInput.disabled = !e.target.checked;
+  syncColumnConfigFromPanel();
+  renderItemsHead();
+  renderItemsBody(true);
+  recalcTotals();
+}
+
+function onColumnLabelChange() {
+  syncColumnConfigFromPanel();
+  renderItemsHead();
 }
 
 function lineTotal(it) {
@@ -449,6 +554,7 @@ function currentFormValues() {
     venue: val('f-venue'),
     po_number: val('f-po') || null,
     due_date: val('f-due') || null,
+    payment_type: document.getElementById('f-payment-type') ? val('f-payment-type') : undefined,
     valid_until: val('f-valid-until') || null,
     service_dates: val('f-service-dates') || null,
     currency: val('f-currency'),

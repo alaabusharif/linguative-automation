@@ -15,8 +15,10 @@ const FORMATS = {
     label: { en: 'Event / Interpretation', ar: 'الفعاليات والترجمة الفورية' },
     cols: ['days', 'qty', 'unit', 'unitPrice'],
     labels: {
-      en: { days: 'Days', qty: 'Qty', unit: 'Unit', unitPrice: 'Unit Price' },
-      ar: { days: 'الأيام', qty: 'الكمية', unit: 'الوحدة', unitPrice: 'سعر الوحدة' },
+      // "Price", not "Unit Price" — matches the reference design's column
+      // header exactly (Q-2026-109 / FHI 360 STRIDES quote, 2026-11-18).
+      en: { days: 'Days', qty: 'Qty', unit: 'Unit', unitPrice: 'Price' },
+      ar: { days: 'الأيام', qty: 'الكمية', unit: 'الوحدة', unitPrice: 'السعر' },
     },
   },
   translation: {
@@ -43,9 +45,25 @@ function formatFor(id) {
   return FORMATS[id] || FORMATS.event;
 }
 
+// The only 4 underlying fields any line item has (see document_items'
+// schema) — a custom column selection can only reorder/relabel/hide among
+// these, not invent a new one, since there's nowhere to store extra data.
+const ALL_FIELDS = ['days', 'qty', 'unit', 'unitPrice'];
+
 // Ordered list of { key, label } for the columns this format shows
 // (excluding Description and Total, which every format always shows).
-function columnsFor(id, language) {
+// `customCols` (added 2026-11-18) is an optional per-document override —
+// an ordered array of { field, label } from a document's column_config —
+// letting a user show/hide/relabel/reorder the 4 underlying fields
+// instead of being stuck with one of the 3 fixed presets.
+function columnsFor(id, language, customCols) {
+  if (Array.isArray(customCols) && customCols.length) {
+    const f = formatFor(id);
+    const defaultLabels = f.labels[language] || f.labels.en;
+    return customCols
+      .filter((c) => c && ALL_FIELDS.includes(c.field))
+      .map((c) => ({ key: c.field, label: c.label || defaultLabels[c.field] || c.field }));
+  }
   const f = formatFor(id);
   const labels = f.labels[language] || f.labels.en;
   return f.cols.map((key) => ({ key, label: labels[key] }));
@@ -55,4 +73,4 @@ function allFormats(language) {
   return Object.values(FORMATS).map((f) => ({ id: f.id, label: f.label[language] || f.label.en }));
 }
 
-module.exports = { FORMATS, formatFor, columnsFor, allFormats };
+module.exports = { FORMATS, ALL_FIELDS, formatFor, columnsFor, allFormats };

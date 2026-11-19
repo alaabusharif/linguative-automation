@@ -49,6 +49,13 @@ function bidiLineWidth(doc, text) {
 }
 
 // Draws one right-to-left line at (x, y), right-aligned within `width`.
+//
+// pdfkit's `lineBreak: false` (needed so a run never gets re-wrapped out
+// from under our own manual run-ordering) also means pdfkit never advances
+// `doc.y` for this line on its own — callers that go on to use `pdf.y`
+// (directly, or via `pdf.moveDown()`) must account for this line's own
+// height themselves. See the heading-to-content gaps in lib/pdf.js's
+// Arabic renderer for where that's done.
 function drawBidiLine(doc, text, x, y, width, opts = {}) {
   const runs = splitRuns(mirrorArabicParens(text)).reverse();
   if (!runs.length) return;
@@ -62,4 +69,39 @@ function drawBidiLine(doc, text, x, y, width, opts = {}) {
   });
 }
 
-module.exports = { splitRuns, drawBidiLine, bidiLineWidth, ARABIC_RE };
+// Greedily wraps `text` into lines that each fit within `width`, breaking
+// on whitespace only (simple word-wrap — good enough for item descriptions,
+// which are plain sentences, not justified typography). A single word
+// wider than `width` on its own is kept whole rather than broken mid-word.
+function wrapBidiLines(doc, text, width) {
+  const words = String(text).split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+  const lines = [];
+  let current = words[0];
+  for (let i = 1; i < words.length; i++) {
+    const candidate = `${current} ${words[i]}`;
+    if (bidiLineWidth(doc, candidate) <= width) {
+      current = candidate;
+    } else {
+      lines.push(current);
+      current = words[i];
+    }
+  }
+  lines.push(current);
+  return lines;
+}
+
+// Draws a right-to-left block of text, word-wrapped to fit `width`, at
+// (x, y), right-aligned within `width`. Returns the total height drawn so
+// the caller can size a row/background to match (unlike drawBidiLine,
+// which only ever draws one line and leaves overflow text run off the
+// page — see lib/pdf.js's Arabic item table, which previously called
+// drawBidiLine directly on item descriptions with no wrapping at all).
+function drawBidiWrapped(doc, text, x, y, width, opts = {}) {
+  const lineHeight = opts.lineGap ? doc.currentLineHeight() + opts.lineGap : doc.currentLineHeight();
+  const lines = wrapBidiLines(doc, text, width);
+  lines.forEach((line, i) => drawBidiLine(doc, line, x, y + i * lineHeight, width, opts));
+  return lines.length * lineHeight;
+}
+
+module.exports = { splitRuns, drawBidiLine, drawBidiWrapped, wrapBidiLines, bidiLineWidth, ARABIC_RE };

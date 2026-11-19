@@ -9,7 +9,7 @@ const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
   WidthType, AlignmentType, BorderStyle, ImageRun, ShadingType,
 } = require('docx');
-const { labelsFor, formatDate, taxLabel } = require('./labels');
+const { labelsFor, formatDate, taxLabel, paymentTypeLabel } = require('./labels');
 const { columnsFor } = require('./itemFormats');
 
 const NAVY = '071A2E';
@@ -73,6 +73,9 @@ async function buildDocumentDocx(doc, items) {
   if (doc.kind === 'invoice' && doc.due_date) {
     detailsRows.push([L.dueDate, formatDate(doc.due_date, language)]);
   }
+  if (doc.kind === 'invoice') {
+    detailsRows.push([L.paymentType, paymentTypeLabel(doc.payment_type, language)]);
+  }
   if (doc.kind === 'quote' && doc.valid_until) {
     detailsRows.push([L.validUntil, formatDate(doc.valid_until, language)]);
   }
@@ -102,7 +105,8 @@ async function buildDocumentDocx(doc, items) {
   // Pair/Word Count/Rate for a translation, etc.) comes from the
   // document's item_format — see lib/itemFormats.js.
   const itemFormat = doc.item_format || 'event';
-  const formatCols = columnsFor(itemFormat, language);
+  const customCols = doc.column_config ? JSON.parse(doc.column_config) : null;
+  const formatCols = columnsFor(itemFormat, language, customCols);
   const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
 
   const itemHeader = new TableRow({

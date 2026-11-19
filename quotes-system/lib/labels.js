@@ -22,6 +22,9 @@ const EN = {
   invoiceNo: 'Invoice No.:',
   date: 'Date:',
   dueDate: 'Due Date:',
+  paymentType: 'Invoice Type:',
+  paymentTypeCash: 'Cash',
+  paymentTypePayable: 'Payable (Credit)',
   validUntil: 'Valid Until:',
   serviceDates: 'Service Dates:',
   preparedBy: 'Prepared By:',
@@ -68,6 +71,9 @@ const AR = {
   invoiceNo: 'رقم الفاتورة:',
   date: 'التاريخ:',
   dueDate: 'تاريخ الاستحقاق:',
+  paymentType: 'نوع الفاتورة:',
+  paymentTypeCash: 'نقدًا',
+  paymentTypePayable: 'آجل (على الحساب)',
   validUntil: 'صالح حتى:',
   serviceDates: 'تاريخ الخدمة:',
   preparedBy: 'أعده:',
@@ -115,4 +121,9 @@ function taxLabel(taxType, language) {
   return '16%';
 }
 
-module.exports = { EN, AR, labelsFor, formatDate, taxLabel };
+function paymentTypeLabel(paymentType, language) {
+  const L = labelsFor(language);
+  return paymentType === 'cash' ? L.paymentTypeCash : L.paymentTypePayable;
+}
+
+module.exports = { EN, AR, labelsFor, formatDate, taxLabel, paymentTypeLabel };

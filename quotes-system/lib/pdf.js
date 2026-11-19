@@ -12,8 +12,8 @@ const PDFDocument = require('pdfkit');
 // finds the exact copy it uses, wherever npm actually put it.
 const PNGJS = require(require.resolve('png-js', { paths: [path.dirname(require.resolve('pdfkit'))] }));
 const qrcodeGen = require('qrcode-generator');
-const { drawBidiLine } = require('./bidi');
-const { labelsFor, formatDate, taxLabel } = require('./labels');
+const { drawBidiLine, drawBidiWrapped, wrapBidiLines } = require('./bidi');
+const { labelsFor, formatDate, taxLabel, paymentTypeLabel } = require('./labels');
 const { getCompanySettings, bankDetailsFor } = require('./settings');
 const { columnsFor } = require('./itemFormats');
 
@@ -32,6 +32,82 @@ const AR_LAYOUT = {
   translation: { total: 40, totalW: 85, unitPrice: 130, unitPriceW: 75, qty: 210, qtyW: 55, unit: 270, unitW: 75, desc: 355, descW: 200 },
   hourly: { total: 40, totalW: 85, unitPrice: 130, unitPriceW: 80, qty: 215, qtyW: 45, desc: 265, descW: 290 },
 };
+
+// Evenly-spaced fallback layout for a custom column_config whose field set
+// doesn't match one of the 3 fixed presets above (added 2026-11-18, so a
+// user picking a non-preset combination of columns still gets a sane,
+// non-overlapping table instead of undefined column positions).
+const TABLE_LEFT = 40, TABLE_WIDTH = 515, DYN_TOTAL_W = 85, DYN_DESC_MIN = 150;
+function dynamicLayout(colKeys, isArabic) {
+  const n = colKeys.length;
+  const fieldsW = Math.max(TABLE_WIDTH - DYN_TOTAL_W - DYN_DESC_MIN, 0);
+  const colW = n ? fieldsW / n : 0;
+  const descW = TABLE_WIDTH - DYN_TOTAL_W - n * colW;
+  if (!isArabic) {
+    const layout = { desc: TABLE_LEFT, descW };
+    let x = TABLE_LEFT + descW;
+    for (const key of colKeys) { layout[key] = x; x += colW; }
+    layout.total = x;
+    return layout;
+  }
+  let x = TABLE_LEFT;
+  const layout = { total: x, totalW: DYN_TOTAL_W };
+  x += DYN_TOTAL_W;
+  for (const key of colKeys) { layout[key] = x; layout[`${key}W`] = colW; x += colW; }
+  layout.desc = x;
+  layout.descW = descW;
+  return layout;
+}
+
+// Renders a borderless 2-column label/value table (bold navy label, wrapped
+// charcoal value) starting at (x, y), matching the reference design's
+// "PREPARED FOR" block — label and value each wrap independently, and the
+// row height follows whichever of the two is taller.
+function drawLabelValueTable(pdf, rows, x, y, labelW, valueW) {
+  let cy = y;
+  for (const [label, value] of rows) {
+    const labelH = pdf.font('Helvetica-Bold').fontSize(10.5).heightOfString(label, { width: labelW });
+    const valueH = pdf.font('Helvetica').fontSize(10.5).heightOfString(value, { width: valueW });
+    pdf.font('Helvetica-Bold').fillColor(BRAND.navy).text(label, x, cy, { width: labelW });
+    pdf.font('Helvetica').fillColor(BRAND.charcoal).text(value, x + labelW, cy, { width: valueW });
+    cy += Math.max(labelH, valueH) + 4;
+  }
+  pdf.y = cy;
+}
+
+// Arabic equivalent of drawLabelValueTable — label sits on the right
+// portion of the row (read first in RTL), value on the left, each wrapping
+// independently via lib/bidi.js's wrapBidiLines.
+function drawBidiLabelValueTable(pdf, rows, x, y, labelW, valueW) {
+  let cy = y;
+  for (const [label, value] of rows) {
+    const labelLines = wrapBidiLines(pdf, label, labelW);
+    const valueLines = wrapBidiLines(pdf, value, valueW);
+    const lineHeight = pdf.currentLineHeight();
+    const rowLines = Math.max(labelLines.length, valueLines.length, 1);
+    pdf.fillColor(BRAND.navy);
+    labelLines.forEach((line, i) => drawBidiLine(pdf, line, x + valueW, cy + i * lineHeight, labelW));
+    pdf.fillColor(BRAND.charcoal);
+    valueLines.forEach((line, i) => drawBidiLine(pdf, line, x, cy + i * lineHeight, valueW));
+    cy += rowLines * lineHeight + 4;
+  }
+  pdf.y = cy;
+}
+
+// A format's fixed layout is pixel-tuned for exactly that format's own
+// default column set shown together — e.g. event's qty/unit/unitPrice sit
+// only ~30-45px apart because days normally fills the gap before them. So
+// reuse those fixed positions only when the selected columns are literally
+// that preset's own default, same set AND same order; any customization
+// (a dropped column, a reorder, or borrowing another format's columns)
+// needs the evenly-spaced dynamic layout above instead, or the leftover
+// columns stay jammed at their old (now too-close) positions.
+function layoutFor(table, format, cols, isArabic, defaultKeys) {
+  const preset = table[format] || table.event;
+  const keys = cols.map((c) => c.key);
+  const matchesPreset = keys.length === defaultKeys.length && keys.every((k, i) => k === defaultKeys[i]);
+  return matchesPreset ? preset : dynamicLayout(keys, isArabic);
+}
 
 const BRAND = {
   navy: '#071A2E',
@@ -74,7 +150,12 @@ function fmtMoney(n, currency) {
 function renderDocumentPdf(doc, items, res) {
   if (doc.language === 'ar') return renderDocumentPdfAr(doc, items, res);
 
-  const pdf = new PDFDocument({ size: 'A4', margin: 40 });
+  // bufferPages lets us go back and stamp the footer on every page once we
+  // know how many pages the content actually produced (see the
+  // bufferedPageRange() loop at the end) — otherwise the footer can only
+  // ever be drawn on whichever page happens to be "current" when the
+  // function finishes, i.e. only the last one.
+  const pdf = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
   pdf.pipe(res);
 
   // Header
@@ -86,40 +167,60 @@ function renderDocumentPdf(doc, items, res) {
   pdf.fillColor('#555555').fontSize(8.5).font('Helvetica')
     .text(COMPANY.address, 40, 100, { width: 260 })
     .text(`${COMPANY.phones}   |   ${COMPANY.email}`, 40, pdf.y, { width: 260 });
-  pdf.fillColor(BRAND.navy)
-    .fontSize(22)
+  // Bold and larger, matching the agreed reference design (Q-2026-109 /
+  // FHI 360 STRIDES quote, 2026-11-18) — this was previously thin/smaller
+  // because no bold font was set before it.
+  pdf.fillColor(BRAND.navy).font('Helvetica-Bold')
+    .fontSize(26)
     .text(doc.kind === 'invoice' ? 'INVOICE' : 'QUOTATION', 0, 40, { align: 'right' });
-  pdf.fillColor(BRAND.charcoal)
+  pdf.fillColor(BRAND.charcoal).font('Helvetica')
     .fontSize(11)
     .text(`${doc.number}${doc.version > 1 ? `  (v${doc.version})` : ''}`, { align: 'right' })
     .text(new Date(doc.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }), { align: 'right' });
+  // Cash/Payable — bold and right under the date so it's seen at a glance,
+  // not just buried as one more row in the BILL TO block below (Ala
+  // couldn't find it there, 2026-11-18).
+  if (doc.kind === 'invoice') {
+    pdf.fillColor(BRAND.gold).font('Helvetica-Bold').fontSize(11)
+      .text(paymentTypeLabel(doc.payment_type, 'en').toUpperCase(), { align: 'right' });
+  }
   if (doc.prepared_by) {
-    pdf.text(`Prepared By: ${doc.prepared_by}`, { align: 'right' });
+    pdf.fillColor(BRAND.charcoal).font('Helvetica').fontSize(11)
+      .text(`Prepared By: ${doc.prepared_by}`, { align: 'right' });
   }
 
   pdf.moveDown(3);
-  pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
+  pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(2).stroke();
   pdf.moveDown(1);
 
   // Client block — explicit x=40 here matters: the header above left the
   // text cursor parked at x=0 (from the right-aligned title block), so
   // without it this heading and the whole block under it render flush with
-  // the page edge, outside the left margin.
-  pdf.fillColor(BRAND.navy).fontSize(13).text(doc.kind === 'invoice' ? 'BILL TO' : 'PREPARED FOR', 40, pdf.y, { continued: false });
-  pdf.fillColor(BRAND.charcoal).fontSize(11);
-  pdf.text(`Client / Organization: ${doc.client_name || ''}`);
-  if (doc.contact_person) pdf.text(`Contact Person: ${doc.contact_person}`);
-  if (doc.project_title) pdf.text(`Project / Event: ${doc.project_title}`);
-  if (doc.venue) pdf.text(`Venue: ${doc.venue}`);
-  if (doc.po_number) pdf.text(`PO Number: ${doc.po_number}`);
-  if (doc.service_dates) pdf.text(`Service Dates: ${doc.service_dates}`);
+  // the page edge, outside the left margin. Laid out as a 2-column
+  // label/value table (bold navy label | charcoal value), matching the
+  // reference design, rather than single "Label: value" lines.
+  pdf.fillColor(BRAND.navy).font('Helvetica-Bold').fontSize(13).text(doc.kind === 'invoice' ? 'BILL TO' : 'PREPARED FOR', 40, pdf.y, { continued: false });
+  pdf.moveDown(0.5);
+  const preparedForRows = [['Client / Organization:', doc.client_name || '']];
+  if (doc.contact_person) preparedForRows.push(['Contact Person:', doc.contact_person]);
+  if (doc.project_title) preparedForRows.push(['Project / Event:', doc.project_title]);
+  if (doc.venue) preparedForRows.push(['Venue:', doc.venue]);
+  if (doc.po_number) preparedForRows.push(['PO Number:', doc.po_number]);
+  if (doc.service_dates) preparedForRows.push(['Service Dates:', doc.service_dates]);
   if (doc.kind === 'invoice' && doc.due_date) {
-    pdf.text(`Due Date: ${new Date(doc.due_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`);
+    preparedForRows.push(['Due Date:', new Date(doc.due_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })]);
+  }
+  if (doc.kind === 'invoice') {
+    preparedForRows.push(['Invoice Type:', paymentTypeLabel(doc.payment_type, 'en')]);
   }
   if (doc.kind === 'quote' && doc.valid_until) {
-    pdf.text(`Valid Until: ${new Date(doc.valid_until).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`);
+    preparedForRows.push(['Valid Until:', new Date(doc.valid_until).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })]);
   }
-  pdf.moveDown(1.2);
+  drawLabelValueTable(pdf, preparedForRows, 40, pdf.y, 140, 375);
+  pdf.moveDown(1);
+
+  pdf.fillColor(BRAND.navy).font('Helvetica-Bold').fontSize(13).text('SCOPE & PRICING', 40, pdf.y);
+  pdf.moveDown(0.5);
 
   // Items table — all header cells share one explicit y so they can never
   // drift apart, instead of each one re-deriving it from pdf.y after the
@@ -130,26 +231,65 @@ function renderDocumentPdf(doc, items, res) {
   // event, or Language Pair/Word Count/Rate for a translation, etc.) comes
   // from the document's item_format — see lib/itemFormats.js.
   const format = doc.item_format || 'event';
-  const colX = EN_LAYOUT[format] || EN_LAYOUT.event;
-  const cols = columnsFor(format, 'en');
+  const customCols = doc.column_config ? JSON.parse(doc.column_config) : null;
+  const cols = columnsFor(format, 'en', customCols);
+  const colX = layoutFor(EN_LAYOUT, format, cols, false, columnsFor(format, 'en').map((c) => c.key));
   const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
+
+  // A continuation page used to start blank (no logo/title at all) — just
+  // the items-table header band — which read as a stray, unbranded page
+  // (Ala, 2026-11-18). Every page past the first now repeats a small logo
+  // + number/date — not the full bold title again, just enough to show
+  // which document this still is (Ala, 2026-11-18: "doesn't have to repeat
+  // the same thing ... logo, the quotation number and date, smaller"). The
+  // page number itself is added afterward, once the final page count is
+  // known — see the bufferedPageRange() loop at the end.
+  function newPage() {
+    pdf.addPage();
+    if (fs.existsSync(LOGO_PATH)) pdf.image(LOGO_PATH, 40, 30, { width: 85 });
+    pdf.fillColor(BRAND.charcoal).font('Helvetica').fontSize(9.5)
+      .text(`${doc.number}${doc.version > 1 ? ` (v${doc.version})` : ''}`, 0, 38, { align: 'right' })
+      .text(new Date(doc.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }), { align: 'right' });
+    pdf.moveTo(40, 62).lineTo(555, 62).strokeColor(BRAND.gold).lineWidth(1).stroke();
+    pdf.y = 76;
+    pdf.font('Helvetica').fontSize(10.5).fillColor(BRAND.charcoal);
+  }
+
   // Solid navy header band with white text, matching the reference quote
   // design's color palette (Ala, 2026-11-18) — previously this row was just
   // navy text on white, which read as inconsistent with the rest of the
   // brand's navy/gold/white usage.
-  const tableHeaderY = pdf.y;
-  pdf.rect(40, tableHeaderY - 4, 515, 20).fill(BRAND.navy);
-  pdf.fillColor('#FFFFFF').fontSize(10).font('Helvetica-Bold');
-  pdf.text('Description', colX.desc, tableHeaderY);
-  for (const { key, label } of cols) pdf.text(label, colX[key], tableHeaderY);
-  pdf.text('Total', colX.total, tableHeaderY);
-  pdf.y = tableHeaderY + 20;
-  pdf.moveDown(0.3);
+  function drawItemsTableHeader() {
+    const tableHeaderY = pdf.y;
+    pdf.rect(40, tableHeaderY - 4, 515, 20).fill(BRAND.navy);
+    pdf.fillColor('#FFFFFF').fontSize(10).font('Helvetica-Bold');
+    pdf.text('Description', colX.desc, tableHeaderY);
+    for (const { key, label } of cols) pdf.text(label, colX[key], tableHeaderY);
+    pdf.text('Total', colX.total, tableHeaderY);
+    pdf.y = tableHeaderY + 20;
+    pdf.moveDown(0.3);
+    pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10.5);
+  }
+  drawItemsTableHeader();
 
-  pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10.5);
+  // A long item list used to just run off the bottom of the page: pdfkit's
+  // own overflow handling only kicks in per individual .text() call, which
+  // for a row drawn cell-by-cell at explicit x/y meant each cell silently
+  // started its own new, mostly-blank page once it crossed the margin — a
+  // 40-item quote produced 122 pages this way (Ala, 2026-11-18). Checking
+  // remaining space ourselves and starting the page (with the table header
+  // repeated) before a row is drawn, instead of mid-row, fixes that.
+  // -40 leaves clear room for drawPageFooter's own ~34px-tall band (divider
+  // + two text lines) that gets stamped onto every page afterward — without
+  // it, a row right at the old limit visually ran into the footer text.
+  const BOTTOM_LIMIT = pdf.page.height - pdf.page.margins.bottom - 40;
   items.forEach((it, idx) => {
-    const y = pdf.y;
     const rowHeight = Math.max(pdf.heightOfString(it.description, { width: colX.descW }), 15);
+    if (pdf.y + rowHeight + 4 > BOTTOM_LIMIT) {
+      newPage();
+      drawItemsTableHeader();
+    }
+    const y = pdf.y;
     // Zebra striping with the brand's ivory, matching the reference quote
     // design's color palette (Ala, 2026-11-18) — alternate rows only.
     if (idx % 2 === 1) {
@@ -168,7 +308,13 @@ function renderDocumentPdf(doc, items, res) {
   });
 
   pdf.moveDown(1);
+  // The summary block is short but still drawn at explicit x/y like the item
+  // rows above — give it a fresh page rather than letting it run off the
+  // bottom of a nearly-full one.
+  if (pdf.y + 90 > BOTTOM_LIMIT) newPage();
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
+  pdf.moveDown(0.5);
+  pdf.fillColor(BRAND.navy).font('Helvetica-Bold').fontSize(13).text('CALCULATION SUMMARY', 40, pdf.y);
   pdf.moveDown(0.5);
 
   // Totals
@@ -183,20 +329,64 @@ function renderDocumentPdf(doc, items, res) {
   pdf.font('Helvetica-Bold').fillColor(BRAND.navy).fontSize(14)
     .text(`Grand Total: ${fmtMoney(doc.grand_total, doc.currency)}`, totalsX, pdf.y, { width: totalsW, align: 'right' });
 
+  // Everything from here down is drawn line-by-line at explicit x/y like the
+  // items table was, so it needs the same per-line page-break check — a
+  // single long block (cancellation policy, bank rows) can still run into
+  // the footer otherwise, same root cause as the items table.
+  function ensureSpace(neededHeight) {
+    if (pdf.y + neededHeight > BOTTOM_LIMIT) newPage();
+  }
+
   if (doc.notes) {
-    pdf.moveDown(2).font('Helvetica').fontSize(10.5).fillColor(BRAND.charcoal).text(doc.notes, 40, pdf.y, { width: 515 });
+    const notesHeight = pdf.font('Helvetica').fontSize(10.5).heightOfString(doc.notes, { width: 515 });
+    pdf.moveDown(2);
+    ensureSpace(notesHeight);
+    pdf.fillColor(BRAND.charcoal).text(doc.notes, 40, pdf.y, { width: 515 });
   }
 
   // Standard cancellation policy — event/interpretation quotes only, shown
   // automatically rather than requiring it be typed into Notes each time.
+  // Kept together as one block: starting it right at the bottom of a page
+  // and splitting after just the heading read worse than pushing the whole
+  // thing to a fresh page (Ala, 2026-11-18).
   if (doc.kind === 'quote' && format === 'event') {
     const L = labelsFor('en');
-    pdf.moveDown(1.5).font('Helvetica-Bold').fontSize(11).fillColor(BRAND.navy).text(L.cancellationHeading, 40, pdf.y, { width: 515 });
+    pdf.moveDown(1.5);
+    const headingH = pdf.font('Helvetica-Bold').fontSize(11).heightOfString(L.cancellationHeading, { width: 515 });
+    pdf.font('Helvetica').fontSize(9.5);
+    const linesH = L.cancellationLines.reduce((sum, line) => sum + pdf.heightOfString(`•  ${line}`, { width: 515 }) + pdf.currentLineHeight() * 0.15, 0);
+    ensureSpace(headingH * 1.3 + linesH);
+    pdf.font('Helvetica-Bold').fontSize(11).fillColor(BRAND.navy).text(L.cancellationHeading, 40, pdf.y, { width: 515 });
     pdf.moveDown(0.3).font('Helvetica').fontSize(9.5).fillColor(BRAND.charcoal);
     for (const line of L.cancellationLines) {
       pdf.text(`•  ${line}`, 40, pdf.y, { width: 515 });
       pdf.moveDown(0.15);
     }
+  }
+
+  // Signature block — quotes only (every format, not just event/interp.),
+  // placed right under the cancellation policy when there is one. Fixed
+  // signatory (Ala, GM) rather than doc.prepared_by, which is "who drafted
+  // this document" and can be a different person (Ala, 2026-11-18).
+  if (doc.kind === 'quote') {
+    // No shading (Ala, 2026-11-19) — just labels with colons aligned in
+    // one column, every value line left blank for Ala to fill in by hand,
+    // each with its own dotted line underneath.
+    const sigRows = ['For Linguative', 'Position', 'Signature and stamp'];
+    const rowH = 16;
+    const labelW = 150, colonX = 40 + labelW, valueX = colonX + 15, valueEnd = 40 + 515 - 10;
+    pdf.moveDown(2);
+    ensureSpace(90);
+    pdf.font('Helvetica-Bold').fontSize(10.5).fillColor(BRAND.charcoal);
+    sigRows.forEach((label, i) => {
+      if (i === 2) pdf.moveDown(1);
+      const y = pdf.y;
+      pdf.text(label, 40, y, { width: labelW, lineBreak: false });
+      pdf.text(':', colonX, y, { lineBreak: false });
+      pdf.save().dash(1, { space: 2 }).moveTo(valueX, y + 11).lineTo(valueEnd, y + 11).strokeColor('#555555').lineWidth(0.75).stroke();
+      pdf.undash().restore();
+      pdf.y = y + rowH;
+    });
   }
 
   // Payment Details — invoices only, and only once the server's .env has
@@ -205,6 +395,7 @@ function renderDocumentPdf(doc, items, res) {
     const bank = bankDetailsFor(doc.currency);
     if (bank) {
       pdf.moveDown(1.5);
+      ensureSpace(25);
       pdf.fillColor(BRAND.navy).fontSize(12).font('Helvetica-Bold').text('PAYMENT DETAILS', 40, pdf.y);
       pdf.moveDown(0.4);
       pdf.font('Helvetica').fillColor(BRAND.charcoal).fontSize(10);
@@ -214,6 +405,7 @@ function renderDocumentPdf(doc, items, res) {
       ];
       for (const [label, value] of rows) {
         if (!value) continue;
+        ensureSpace(14);
         pdf.text(`${label} ${value}`, 40, pdf.y, { width: 515 });
         pdf.moveDown(0.2);
       }
@@ -222,10 +414,19 @@ function renderDocumentPdf(doc, items, res) {
 
   drawJofotaraQr(pdf, doc);
 
-  pdf.moveDown(2);
-  pdf.fontSize(9.5).fillColor(BRAND.gold).text('COMMUNICATION BEYOND LANGUAGE.', 40, pdf.y);
-
-  drawPageFooter(pdf);
+  // No separate "Communication Beyond Language" tagline here — it's already
+  // in the logo file itself (under the wordmark) and in drawPageFooter()
+  // below; a third copy read as a stray duplicate (Ala, 2026-11-18).
+  //
+  // Stamp the footer on every page the content actually produced, not just
+  // whichever page happened to be "current" when we got here — needs
+  // bufferPages (set above) so we can switch back to earlier pages at all.
+  const pageRange = pdf.bufferedPageRange();
+  for (let i = pageRange.start; i < pageRange.start + pageRange.count; i++) {
+    pdf.switchToPage(i);
+    const pageLabel = pageRange.count > 1 ? `Page ${i - pageRange.start + 1} of ${pageRange.count}` : null;
+    drawPageFooter(pdf, pageLabel);
+  }
   pdf.end();
 }
 
@@ -286,6 +487,7 @@ function drawJofotaraQr(pdf, doc) {
     const base64 = doc.jofotara_qr.includes(',') ? doc.jofotara_qr.split(',').pop() : doc.jofotara_qr;
     const buffer = Buffer.from(base64, 'base64');
     pdf.moveDown(1);
+    if (pdf.y + 100 > pdf.page.height - pdf.page.margins.bottom - 40) pdf.addPage();
     const top = pdf.y;
     if (isValidPng(buffer)) {
       pdf.image(buffer, 40, top, { width: 90, height: 90 });
@@ -303,15 +505,25 @@ function drawJofotaraQr(pdf, doc) {
   }
 }
 
-// Master template's footer, pinned near the bottom of the page. Stays just
-// above the page's bottom margin — pdfkit silently starts a new page if
-// text would land inside the margin, even with an explicit y.
-function drawPageFooter(pdf) {
+// Master template's footer, pinned at the very bottom of the page, with a
+// thin gold divider above it (Ala, 2026-11-18) — on both quotes and
+// invoices alike (Q-2026-002 shows the Registration/Tax line on a quote
+// too, not just invoices).
+function drawPageFooter(pdf, pageLabel) {
   const { taxNo, registrationNo } = getCompanySettings();
-  const y = pdf.page.height - pdf.page.margins.bottom - 24;
+  const bottom = pdf.page.height - pdf.page.margins.bottom;
+  const y = bottom - 26;
+  pdf.moveTo(40, y - 8).lineTo(555, y - 8).strokeColor(BRAND.gold).lineWidth(1).stroke();
   pdf.fontSize(8.5).fillColor('#777777').font('Helvetica')
     .text(`${registrationNo ? `Registration No. ${registrationNo}   |   ` : ''}Tax No. ${taxNo}`, 40, y, { width: 515, align: 'center', lineBreak: false })
     .text('linguative.net   |   Amman, Jordan   |   Communication Beyond Language', 40, y + 12, { width: 515, align: 'center', lineBreak: false });
+  // Page number — only shown once there's more than one page, sitting at
+  // the bottom-right next to the footer band so it never collides with
+  // page 1's big "QUOTATION/INVOICE" title up top (Ala, 2026-11-18).
+  if (pageLabel) {
+    pdf.fontSize(8.5).fillColor('#777777').font('Helvetica')
+      .text(pageLabel, 40, y + 12, { width: 515, align: 'right', lineBreak: false });
+  }
 }
 
 // Arabic layout: same brand system and page geometry as the English one,
@@ -319,7 +531,7 @@ function drawPageFooter(pdf) {
 // numbers, dates and money amounts stay in normal reading order.
 function renderDocumentPdfAr(doc, items, res) {
   const L = labelsFor('ar');
-  const pdf = new PDFDocument({ size: 'A4', margin: 40 });
+  const pdf = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
   pdf.pipe(res);
   pdf.registerFont('Cairo', ARABIC_FONT_PATH);
   pdf.font('Cairo');
@@ -337,24 +549,29 @@ function renderDocumentPdfAr(doc, items, res) {
   pdf.font('Helvetica').fillColor('#555555').fontSize(8.5)
     .text(COMPANY.address, 40, 100, { width: 260 })
     .text(`${COMPANY.phones}   |   ${COMPANY.email}`, 40, pdf.y, { width: 260 });
-  pdf.font('Cairo').fillColor(BRAND.navy).fontSize(22);
+  pdf.font('Cairo').fillColor(BRAND.navy).fontSize(26);
   drawBidiLine(pdf, doc.kind === 'invoice' ? L.invoice : L.quotation, LEFT, 40, FULL);
   pdf.fillColor(BRAND.charcoal).fontSize(11);
-  drawBidiLine(pdf, `${doc.number}${doc.version > 1 ? `  (v${doc.version})` : ''}`, LEFT, 66, FULL);
-  drawBidiLine(pdf, formatDate(doc.created_at, 'ar'), LEFT, 80, FULL);
+  drawBidiLine(pdf, `${doc.number}${doc.version > 1 ? `  (v${doc.version})` : ''}`, LEFT, 70, FULL);
+  drawBidiLine(pdf, formatDate(doc.created_at, 'ar'), LEFT, 84, FULL);
   if (doc.prepared_by) {
-    drawBidiLine(pdf, `${L.preparedBy} ${doc.prepared_by}`, LEFT, 94, FULL);
+    drawBidiLine(pdf, `${L.preparedBy} ${doc.prepared_by}`, LEFT, 98, FULL);
   }
 
-  pdf.y = 118;
-  pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
+  pdf.y = 122;
+  pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(2).stroke();
   pdf.moveDown(1);
 
-  // Client block
+  // Client block — 2-column label/value table (see drawBidiLabelValueTable),
+  // matching the reference design rather than one "label value" line each.
   pdf.fillColor(BRAND.navy).fontSize(13);
   drawBidiLine(pdf, doc.kind === 'invoice' ? L.billTo : L.preparedFor, LEFT, pdf.y, FULL);
+  // drawBidiLine uses lineBreak:false so pdfkit never advances pdf.y for the
+  // line it just drew — add that back before moveDown(), or this heading's
+  // own text overlaps the content drawn right after it.
+  pdf.y += pdf.currentLineHeight();
   pdf.moveDown(0.6);
-  pdf.fillColor(BRAND.charcoal).fontSize(11);
+  pdf.fontSize(10.5);
   const rows = [[L.client, doc.client_name || '']];
   if (doc.contact_person) rows.push([L.contact, doc.contact_person]);
   if (doc.project_title) rows.push([L.project, doc.project_title]);
@@ -362,12 +579,15 @@ function renderDocumentPdfAr(doc, items, res) {
   if (doc.po_number) rows.push([L.poNumber, doc.po_number]);
   if (doc.service_dates) rows.push([L.serviceDates, doc.service_dates]);
   if (doc.kind === 'invoice' && doc.due_date) rows.push([L.dueDate, formatDate(doc.due_date, 'ar')]);
+  if (doc.kind === 'invoice') rows.push([L.paymentType, paymentTypeLabel(doc.payment_type, 'ar')]);
   if (doc.kind === 'quote' && doc.valid_until) rows.push([L.validUntil, formatDate(doc.valid_until, 'ar')]);
-  for (const [label, value] of rows) {
-    drawBidiLine(pdf, `${label} ${value}`, LEFT, pdf.y, FULL);
-    pdf.moveDown(0.5);
-  }
-  pdf.moveDown(0.7);
+  drawBidiLabelValueTable(pdf, rows, LEFT, pdf.y, 140, FULL - 140);
+  pdf.moveDown(1);
+
+  pdf.fillColor(BRAND.navy).fontSize(13);
+  drawBidiLine(pdf, L.scopePricing, LEFT, pdf.y, FULL);
+  pdf.y += pdf.currentLineHeight();
+  pdf.moveDown(0.6);
 
   // Items table — headers right-aligned per column, columns kept in the
   // same left-to-right order as the English layout for consistency. Total/
@@ -375,28 +595,58 @@ function renderDocumentPdfAr(doc, items, res) {
   // onto a second line in a too-narrow column and throws the row out of
   // alignment with its neighbors otherwise.
   const format = doc.item_format || 'event';
-  const colX = AR_LAYOUT[format] || AR_LAYOUT.event;
-  const cols = columnsFor(format, 'ar');
+  const customCols = doc.column_config ? JSON.parse(doc.column_config) : null;
+  const cols = columnsFor(format, 'ar', customCols);
+  const colX = layoutFor(AR_LAYOUT, format, cols, true, columnsFor(format, 'ar').map((c) => c.key));
   const fieldFor = (key) => (key === 'unitPrice' ? 'unit_price' : key);
+
+  // Same "continuation page was blank/unbranded" fix as the English
+  // renderer's newPage().
+  function newPageAr() {
+    pdf.addPage();
+    if (fs.existsSync(LOGO_PATH)) pdf.image(LOGO_PATH, 40, 30, { width: 110 });
+    pdf.fillColor(BRAND.navy).fontSize(14);
+    drawBidiLine(pdf, `${doc.kind === 'invoice' ? L.invoice : L.quotation} ${doc.number}${doc.version > 1 ? ` (v${doc.version})` : ''}`, LEFT, 40, FULL);
+    pdf.moveTo(40, 68).lineTo(555, 68).strokeColor(BRAND.gold).lineWidth(1).stroke();
+    pdf.y = 82;
+    pdf.fillColor(BRAND.charcoal).fontSize(10.5);
+  }
+
   // Solid navy header band with white text, matching the reference quote
   // design's color palette (Ala, 2026-11-18) — see the English render for
   // the same change.
-  const headerY = pdf.y;
-  pdf.rect(40, headerY - 4, 515, 20).fill(BRAND.navy);
-  pdf.fillColor('#FFFFFF').fontSize(10);
-  drawBidiLine(pdf, L.col.total, colX.total, headerY, colX.totalW);
-  for (const { key, label } of cols) drawBidiLine(pdf, label, colX[key], headerY, colX[`${key}W`]);
-  drawBidiLine(pdf, L.col.item, colX.desc, headerY, colX.descW);
-  pdf.y = headerY + 20;
-  pdf.moveDown(0.3);
+  function drawItemsTableHeaderAr() {
+    const headerY = pdf.y;
+    pdf.rect(40, headerY - 4, 515, 20).fill(BRAND.navy);
+    pdf.fillColor('#FFFFFF').fontSize(10);
+    drawBidiLine(pdf, L.col.total, colX.total, headerY, colX.totalW);
+    for (const { key, label } of cols) drawBidiLine(pdf, label, colX[key], headerY, colX[`${key}W`]);
+    drawBidiLine(pdf, L.col.item, colX.desc, headerY, colX.descW);
+    pdf.y = headerY + 20;
+    pdf.moveDown(0.3);
+    pdf.fillColor(BRAND.charcoal).fontSize(10.5);
+  }
+  drawItemsTableHeaderAr();
 
-  pdf.fillColor(BRAND.charcoal).fontSize(10.5);
+  // Same page-overflow bug and fix as the English renderer — see its
+  // comment above the equivalent BOTTOM_LIMIT/items.forEach.
+  const BOTTOM_LIMIT = pdf.page.height - pdf.page.margins.bottom - 40;
   items.forEach((it, idx) => {
+    // Row height follows the description once wrapped — it's the one
+    // field that can run long — so the row (and its zebra background)
+    // grows to fit instead of the text overflowing past the page edge,
+    // which is what drawBidiLine alone did (Ala, 2026-11-18).
+    const descLines = wrapBidiLines(pdf, it.description, colX.descW);
+    const rowHeight = Math.max(descLines.length * pdf.currentLineHeight(), 15);
+    if (pdf.y + rowHeight + 4 > BOTTOM_LIMIT) {
+      newPageAr();
+      drawItemsTableHeaderAr();
+    }
     const y = pdf.y;
     // Zebra striping with the brand's ivory, matching the reference quote
     // design's color palette (Ala, 2026-11-18) — alternate rows only.
     if (idx % 2 === 1) {
-      pdf.rect(40, y - 2, 515, 19).fill(BRAND.ivory);
+      pdf.rect(40, y - 2, 515, rowHeight + 4).fill(BRAND.ivory);
       pdf.fillColor(BRAND.charcoal);
     }
     drawBidiLine(pdf, fmtMoney(it.line_total, doc.currency), colX.total, y, colX.totalW);
@@ -405,40 +655,59 @@ function renderDocumentPdfAr(doc, items, res) {
       const value = field === 'unit_price' ? fmtMoney(it.unit_price, doc.currency) : String(it[field]);
       drawBidiLine(pdf, value, colX[key], y, colX[`${key}W`]);
     }
-    drawBidiLine(pdf, it.description, colX.desc, y, colX.descW);
-    pdf.y = Math.max(pdf.y, y + 15);
+    drawBidiWrapped(pdf, it.description, colX.desc, y, colX.descW);
+    pdf.y = y + rowHeight + 5;
   });
 
   pdf.moveDown(1);
+  if (pdf.y + 90 > BOTTOM_LIMIT) newPageAr();
   pdf.moveTo(40, pdf.y).lineTo(555, pdf.y).strokeColor(BRAND.gold).lineWidth(1).stroke();
   pdf.moveDown(0.5);
+  pdf.fillColor(BRAND.navy).fontSize(13);
+  drawBidiLine(pdf, L.calcSummary, LEFT, pdf.y, FULL);
+  pdf.y += pdf.currentLineHeight();
+  pdf.moveDown(0.6);
 
   // Totals
   const totalsW = 295;
   pdf.fontSize(11).fillColor(BRAND.charcoal);
   drawBidiLine(pdf, `${L.subtotal}: ${fmtMoney(doc.subtotal, doc.currency)}`, LEFT + FULL - totalsW, pdf.y, totalsW);
-  pdf.moveDown(0.5);
+  pdf.moveDown(1);
   if (doc.discount_amount > 0) {
     drawBidiLine(pdf, `${L.discount}: -${fmtMoney(doc.discount_amount, doc.currency)}`, LEFT + FULL - totalsW, pdf.y, totalsW);
-    pdf.moveDown(0.5);
+    pdf.moveDown(1);
   }
   drawBidiLine(pdf, `${L.taxStatus} (${taxLabel(doc.tax_type, 'ar')}): ${fmtMoney(doc.tax_amount, doc.currency)}`, LEFT + FULL - totalsW, pdf.y, totalsW);
-  pdf.moveDown(0.5);
+  pdf.moveDown(1);
   pdf.fillColor(BRAND.navy).fontSize(14);
   drawBidiLine(pdf, `${L.grandTotal}: ${fmtMoney(doc.grand_total, doc.currency)}`, LEFT + FULL - totalsW, pdf.y, totalsW);
+
+  // Same per-line page-break guard as the English renderer — see its
+  // ensureSpace() comment above.
+  function ensureSpaceAr(neededHeight) {
+    if (pdf.y + neededHeight > BOTTOM_LIMIT) newPageAr();
+  }
 
   if (doc.notes) {
     pdf.moveDown(2).fontSize(10.5).fillColor(BRAND.charcoal);
     doc.notes.split('\n').forEach((line) => {
+      ensureSpaceAr(pdf.currentLineHeight());
       drawBidiLine(pdf, line, LEFT, pdf.y, FULL);
-      pdf.moveDown(0.5);
+      pdf.moveDown(1);
     });
   }
 
   // Standard cancellation policy — event/interpretation quotes only, shown
   // automatically rather than requiring it be typed into Notes each time.
+  // Kept together as one block — see the English renderer's comment above.
   if (doc.kind === 'quote' && format === 'event') {
-    pdf.moveDown(1.5).fillColor(BRAND.navy).fontSize(11);
+    pdf.moveDown(1.5);
+    pdf.fontSize(11);
+    const headingLH = pdf.currentLineHeight();
+    pdf.fontSize(9.5);
+    const lineLH = pdf.currentLineHeight();
+    ensureSpaceAr(headingLH * 2 + L.cancellationLines.length * lineLH);
+    pdf.fillColor(BRAND.navy).fontSize(11);
     drawBidiLine(pdf, L.cancellationHeading, LEFT, pdf.y, FULL);
     pdf.moveDown(1).fillColor(BRAND.charcoal).fontSize(9.5);
     for (const line of L.cancellationLines) {
@@ -453,8 +722,10 @@ function renderDocumentPdfAr(doc, items, res) {
     const bank = bankDetailsFor(doc.currency);
     if (bank) {
       pdf.moveDown(1.5);
+      ensureSpaceAr(25);
       pdf.fillColor(BRAND.navy).fontSize(12);
       drawBidiLine(pdf, L.paymentDetails, LEFT, pdf.y, FULL);
+      pdf.y += pdf.currentLineHeight();
       pdf.moveDown(0.5);
       pdf.fillColor(BRAND.charcoal).fontSize(10);
       const rows = [
@@ -463,19 +734,22 @@ function renderDocumentPdfAr(doc, items, res) {
       ];
       for (const [label, value] of rows) {
         if (!value) continue;
+        ensureSpaceAr(pdf.currentLineHeight());
         drawBidiLine(pdf, `${label} ${value}`, LEFT, pdf.y, FULL);
-        pdf.moveDown(0.5);
+        pdf.moveDown(1);
       }
     }
   }
 
   drawJofotaraQr(pdf, doc);
 
-  pdf.moveDown(2);
-  // Tagline stays in English exactly as locked in the brand guide.
-  pdf.fontSize(9.5).fillColor(BRAND.gold).font('Helvetica').text('COMMUNICATION BEYOND LANGUAGE.', 40, pdf.y);
-
-  drawPageFooter(pdf);
+  // No separate tagline here — see the English render's comment; it's
+  // already in the logo file and in drawPageFooter() below.
+  const pageRangeAr = pdf.bufferedPageRange();
+  for (let i = pageRangeAr.start; i < pageRangeAr.start + pageRangeAr.count; i++) {
+    pdf.switchToPage(i);
+    drawPageFooter(pdf);
+  }
   pdf.end();
 }
 

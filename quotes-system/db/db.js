@@ -130,6 +130,15 @@ for (const [table, column, ddl] of [
   ['documents', 'po_file_name', 'ALTER TABLE documents ADD COLUMN po_file_name TEXT'],
   // Which line-item table layout this document uses — see lib/itemFormats.js.
   ['documents', 'item_format', "ALTER TABLE documents ADD COLUMN item_format TEXT NOT NULL DEFAULT 'event'"],
+  // Per-document override of which of the 4 line-item fields show, their
+  // labels and their order — JSON array of {field, label}, or NULL to use
+  // item_format's own preset unchanged. See lib/itemFormats.js's columnsFor().
+  ['documents', 'column_config', 'ALTER TABLE documents ADD COLUMN column_config TEXT'],
+  // Invoices only: 'cash' | 'payable' (credit/on-account) — distinct from
+  // payment_status (whether it's actually been paid yet). Drives JoFotara's
+  // invoice-type-name (012 cash / 022 credit sales) and PaymentMeansCode
+  // (10 cash / 30 credit) in lib/jofotara.js.
+  ['documents', 'payment_type', "ALTER TABLE documents ADD COLUMN payment_type TEXT NOT NULL DEFAULT 'payable'"],
 ]) {
   const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
   if (!cols.includes(column)) db.exec(ddl);

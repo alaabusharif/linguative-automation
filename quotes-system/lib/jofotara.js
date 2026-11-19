@@ -23,9 +23,11 @@ function xmlEscape(s) {
 }
 
 // JoFotara's invoice-type-code "name" attribute encodes payment means:
-// 011/021 cash/credit income, 012/022 cash/credit sales — Linguative's
-// invoices are services on credit terms (due date, bank transfer), so 022.
-const INVOICE_TYPE_NAME = '022';
+// 011/021 cash/credit income, 012/022 cash/credit sales. Linguative invoices
+// are services, so it's always the "sales" pair (01_) vs. the "income" pair
+// (02_) — 012 for a cash sale, 022 for a sale on credit/payable terms — set
+// per invoice via doc.payment_type ('cash' | 'payable', default 'payable').
+const INVOICE_TYPE_NAME_BY_PAYMENT_TYPE = { cash: '012', payable: '022' };
 
 // Only these rates are accepted for a standard ("S") tax category line.
 // Linguative's other two tax_type values are both 0%, but ISTD treats them
@@ -45,6 +47,7 @@ function buildInvoiceXml(doc, items) {
   const issueDate = (doc.created_at || new Date().toISOString()).slice(0, 10);
   const uuid = doc.jofotara_uuid || crypto.randomUUID();
   const taxed = doc.tax_type === '16';
+  const invoiceTypeName = INVOICE_TYPE_NAME_BY_PAYMENT_TYPE[doc.payment_type] || INVOICE_TYPE_NAME_BY_PAYMENT_TYPE.payable;
   const taxCategoryId = TAX_CATEGORY_BY_TYPE[doc.tax_type] || 'O';
   const cur = doc.currency;
   // JOD is quoted to 3 decimals (fils) by convention; other currencies to 2.
@@ -126,7 +129,7 @@ function buildInvoiceXml(doc, items) {
   <cbc:ID>${xmlEscape(doc.number)}</cbc:ID>
   <cbc:UUID>${uuid}</cbc:UUID>
   <cbc:IssueDate>${issueDate}</cbc:IssueDate>
-  <cbc:InvoiceTypeCode name="${INVOICE_TYPE_NAME}">388</cbc:InvoiceTypeCode>
+  <cbc:InvoiceTypeCode name="${invoiceTypeName}">388</cbc:InvoiceTypeCode>
   <cbc:Note></cbc:Note>
   <cbc:DocumentCurrencyCode>${cur}</cbc:DocumentCurrencyCode>
   <cbc:TaxCurrencyCode>${cur}</cbc:TaxCurrencyCode>
@@ -157,7 +160,7 @@ function buildInvoiceXml(doc, items) {
     </cac:Party>
   </cac:SellerSupplierParty>
   <cac:PaymentMeans>
-    <cbc:PaymentMeansCode listID="UN/ECE 4461">${doc.payment_status === 'paid' ? '10' : '30'}</cbc:PaymentMeansCode>
+    <cbc:PaymentMeansCode listID="UN/ECE 4461">${doc.payment_type === 'cash' ? '10' : '30'}</cbc:PaymentMeansCode>
   </cac:PaymentMeans>
   <cac:AllowanceCharge>
     <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
