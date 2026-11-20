@@ -1,3 +1,5 @@
+> **ACTIVE FULL HANDOFF — 2026-11-20:** Ala instructed Claude to take over **ALL** remaining ChatGPT-owned Linguative work. **Claude must read [the full transfer ledger](migration/claude-full-takeover-2026-11-20.md) and [acceptance issue #158](https://github.com/alaabusharif/linguative-automation/issues/158) before new work.** The previously documented ChatGPT Marketing Manager ownership is being transferred module-by-module. **Do not turn off nine live ChatGPT automations until Claude successors have been verified and accepted; do not duplicate running Claude functions.** The public repo must contain no private client/contact/rate/asset information. Verify latest 2026-11-20 hold in `marketing/production/2026-11-19-LNG-SOC-2026-023.md`: **DO NOT PUBLISH #023.** Record Claude's actual acknowledgement and acceptance in #158; this notice alone is not completion.
+
 # Linguative — shared context for all agents
 
 ## Company
