@@ -1,0 +1,122 @@
+name: Sync strategy changes to lead-scouting issue
+
+# Implements GitHub issue #76: automatic handoff from Marketing strategy /
+# lead-scouting behavior changes to the live lead-scouting intake issue
+# ("Lead scouting: new candidates"), so the two never silently drift apart.
+#
+# Trigger paths intentionally match issue #76's required minimum set.
+# Only runs on pushes to main (the authoritative/default branch), never on
+# PR branches, so draft/unmerged work never posts a premature handoff.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "marketing/strategy.md"
+      - "CLAUDE.md"
+      - ".claude/agents/sales-bd-operations.md"
+      - "crawler/sources.py"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Build and post handoff comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          SHA_SHORT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          # Changed files among the watched paths for this push only.
+          CHANGED=$(git diff --name-only HEAD^ HEAD -- \
+            marketing/strategy.md \
+            CLAUDE.md \
+            .claude/agents/sales-bd-operations.md \
+            crawler/sources.py)
+
+          if [ -z "$CHANGED" ]; then
+            echo "No watched paths changed in this push; nothing to sync."
+            exit 0
+          fi
+
+          SHORT_SHA="${SHA:0:7}"
+          COMMIT_URL="https://github.com/${REPO}/commit/${SHA}"
+
+          # Find the live lead-scouting intake issue by title, not a hardcoded
+          # number (it has been renumbered before).
+          ISSUE_NUMBER=$(gh api -X GET "repos/${REPO}/issues" \
+            -f state=open -f per_page=100 \
+            --jq '.[] | select(.title | test("Lead scouting: new candidates"; "i")) | .number' \
+            | head -n1)
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "::error::Could not find the open 'Lead scouting: new candidates' issue. Failing visibly per issue #76's requirement." >&2
+            exit 1
+          fi
+
+          # Dedup: never post twice for the same commit SHA.
+          EXISTING=$(gh api -X GET "repos/${REPO}/issues/${ISSUE_NUMBER}/comments" \
+            -f per_page=100 \
+            --jq ".[] | select(.body | test(\"${SHA}\")) | .id" | head -n1)
+
+          if [ -n "$EXISTING" ]; then
+            echo "A comment for commit ${SHA} already exists (comment ${EXISTING}); skipping duplicate."
+            exit 0
+          fi
+
+          DIFF=$(git diff HEAD^ HEAD -- \
+            marketing/strategy.md \
+            CLAUDE.md \
+            .claude/agents/sales-bd-operations.md \
+            crawler/sources.py)
+
+          # Deterministic, keyword-based categorization of the diff. This is
+          # intentionally not an LLM summary — issue #76 asks for a short
+          # structured delta, and a fixed keyword scan is cheap, auditable,
+          # and never invents detail that isn't actually in the diff.
+          declare -A HITS
+          check() {
+            local label="$1"; shift
+            for kw in "$@"; do
+              if echo "$DIFF" | grep -qiE "$kw"; then
+                HITS["$label"]=1
+                return
+              fi
+            done
+          }
+          check "target segments"      "segment|B2C|B2B|embass|diplomatic|NGO|government"
+          check "buyer personas"       "persona|procurement|protocol|public diplomacy|cultural affairs|economic section"
+          check "geography"            "Jordan|Amman|Gulf|MENA|KSA|regional"
+          check "outreach angle"       "positioning|outreach|lead with|angle|accountable (local )?partner"
+          check "qualification/prioritization" "qualif|priorit|bid-worthy|tier|classif"
+          check "source/scouting behavior" "crawler/sources.py|source|gtd.gov.jo|UNGM|WTO|WCO|tender-portal"
+
+          DIMENSIONS=""
+          for key in "target segments" "buyer personas" "geography" "outreach angle" "qualification/prioritization" "source/scouting behavior"; do
+            if [ "${HITS[$key]+x}" ]; then
+              DIMENSIONS="${DIMENSIONS}- ✅ ${key}\n"
+            fi
+          done
+          if [ -z "$DIMENSIONS" ]; then
+            DIMENSIONS="- No behavioral dimension matched by keyword scan — review the diff directly before assuming no change applies.\n"
+          fi
+
+          FILES_LIST=$(echo "$CHANGED" | sed 's/^/- `/; s/$/`/')
+
+          BODY=$(printf '**Marketing/lead-scouting strategy sync** (automated, issue #76)\n\nSource commit: [`%s`](%s)\n\nChanged file(s):\n%s\n\nLikely-affected dimensions (keyword scan, verify against the actual diff before acting):\n%b\n\n**Claude Sales & BD / lead scouting: apply this on your next discovery/outreach run** — read the current `marketing/strategy.md` and this changed content directly rather than relying on this summary alone.\n\n_Posted automatically from the default branch; this does not send outreach, create CRM records, or perform prospecting itself._' \
+            "$SHORT_SHA" "$COMMIT_URL" "$FILES_LIST" "$DIMENSIONS")
+
+          gh api -X POST "repos/${REPO}/issues/${ISSUE_NUMBER}/comments" -f body="$BODY"
